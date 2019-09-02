@@ -21,20 +21,33 @@ $(document).ready(function(){
     });
 
     
-    $('#edit-form').on('submit', function(){
+    $('#edit-form-users').on('submit', function(){
         return confirm('Are you sure that you want to edit this user?');
     });
 
-    $('#delete-form-1').on('submit', function(){
+    $('#delete-form-users-1').on('submit', function(){
         return confirm('Are you sure that you want to delete this user?');
     });
 
-    $('#delete-form-2').on('submit', function(){
+    $('#delete-form-users-2').on('submit', function(){
         return confirm('Are you sure that you want to delete this user?');
     });
 
     $('#generate-password').on('click', function(){
         return confirm('Are you sure that you want to generate a new password for this user?');
     });
+
+    $('#edit-form-roles').on('submit', function(){
+        return confirm('Are you sure that you want to edit this role?');
+    });
+
+    $('#delete-form-roles-1').on('submit', function(){
+        return confirm('Are you sure that you want to delete this role?');
+    });
+
+    $('#delete-form-roles-2').on('submit', function(){
+        return confirm('Are you sure that you want to delete this role?');
+    });
+
 
 });

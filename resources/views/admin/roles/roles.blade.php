@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Users</div>
+                <div class="card-header">Roles</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -32,38 +32,29 @@
                             <th scope="col">
                                 Name
                             </th>
-                            <th scope="col">
-                                Email
-                            </th>
-                            <th scope="col">
-                                Roles
+                            <th>
+                                Permissions
                             </th>
                             <th scope="col">
                                 Actions
                             </th>   
                         </tr>
-                        @foreach ($users as $user)
+                        @foreach ($roles as $role)
                             <tr>
                                 <td>
-                                    {{$user->id}}
+                                    {{$role->id}}
                                 </td>
                                 <td>
-                                    {{$user->name}}
+                                    {{ strtoupper($role->name) }}
                                 </td>
                                 <td>
-                                    {{$user->email}}
+                                    @foreach($role->permissions as $permission)
+                                        {{ $permission->name }} <br>
+                                    @endforeach
                                 </td>
                                 <td>
-                                    <?php
-                                        $userRoles = $user->roles;
-                                        foreach ($userRoles as $role) {
-                                            echo strtoupper($role->name) . ' <br> ';
-                                        }
-                                    ?>
-                                </td>
-                                <td>
-                                    <a href="{{ url('admin/dashboard/user/' . $user->id) }}" class="btn btn-success">Show/Edit</a>
-                                    <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users-1">
+                                    <a href="{{ url('admin/dashboard/role/' . $role->id) }}" class="btn btn-success">Show/Edit</a>
+                                    <form action="{{ route('admin.delete.role', ['id' => $role->id]) }}" method="POST" id="delete-form-roles-1">
                                         {!! csrf_field() !!}
                                         {!! method_field('DELETE') !!}
                                         <button class="btn btn-danger" type="submit">Delete</button>
@@ -72,20 +63,20 @@
                             </tr>
                         @endforeach
                     </table>
-                    {{ $users->links() }}
+                    {{ $roles->links() }}
                 </div>
             </div>
             <div class="block-button">
-                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addModal">Add User</button>
+                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addModal">Add Role</button>
             </div>
 
             <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                    <form method="POST" action="{{ route('admin.add.user') }}">
+                    <form method="POST" action="{{ route('admin.add.role') }}">
                             {!! csrf_field() !!}
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Add Role</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -96,18 +87,12 @@
                                     <div class="form-group">
                                         <input class="form-control" type="text" name="name"  value="{{ old('name') }}" placeholder="Name" />
                                     </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="email" name="email"  value="{{ old('email') }}" placeholder="Email" />
-                                    </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="password"  value="{{ old('password') }}" placeholder="Password" />
-                                    </div>
                                     <div>
-                                        <select multiple class="form-control" id="usersSelect" name="roles[]">
-                                            @foreach($roles as $role)
-                                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                        <select multiple class="form-control" id="permissionsSelect" name="permissions[]">
+                                            @foreach($permissions as $permission)
+                                                <option value="{{ $permission->name }}">{{ $permission->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

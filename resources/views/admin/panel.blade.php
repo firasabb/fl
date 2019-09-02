@@ -36,8 +36,13 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{  route('admin.users')  }}">Users</a>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre> Users <span class="caret"></span></a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{  route('admin.show.users')  }}">Users</a>
+                                <a class="dropdown-item" href="{{  route('admin.show.roles')  }}">Roles</a>
+                                <a class="dropdown-item" href="#">Permissions</a>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Questions</a>

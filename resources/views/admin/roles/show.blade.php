@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{$user->name}}</div>
+                <div class="card-header">{{strtoupper($role->name)}}</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -24,47 +24,43 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.edit.user', ['id' => $user->id]) }}" id="edit-form-users">
+                    <form method="POST" action="{{ route('admin.edit.role', ['id' => $role->id]) }}" id="edit-form-roles">
                         {!! csrf_field() !!}
                         {!! method_field('PUT') !!}
 
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <input class="form-control enabled-disabled" type="text" name="name"  value="{{ $user->name }}" placeholder="Name" disabled/>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control enabled-disabled" type="email" name="email"  value="{{ $user->email }}" placeholder="Email" disabled/>
+                                    <input class="form-control enabled-disabled" type="text" name="name"  value="{{ strtoupper($role->name) }}" placeholder="Name" disabled/>
                                 </div>
                             </div>
                             <div class="col">
                                 <div>
-                                    <select multiple class="form-control enabled-disabled" id="usersSelect" name="roles[]" disabled>
-                                        @foreach($roles as $role)
-                                            <option <?php $user->hasRole($role->name) ? print('selected') : print(' ')  ?> value="{{ $role->name }}">{{ $role->name }}</option>
+                                    <select multiple class="form-control enabled-disabled" id="rolesSelect" name="permissions[]" disabled>
+                                        @foreach($permissions as $permission)
+                                            <option <?php $role->hasPermissionTo($permission->name) ? print('selected') : print(' ') ?> value="{{ $permission->name }}">{{ $permission->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
+                            <div class="col submit-btn-roles">
                                 <button type="submit" class="btn btn-primary submit-edit-btn enabled-disabled" disabled>Submit</button>
-                                <a href=" {{ route('admin.generate.password.user', ['id' => $user->id]) }} " class="btn btn-danger submit-edit-btn disabled" id="generate-password">Generate Password</a>
                             </div>
                         </div>
                         <div class="row info-row">
                             <div class="col">
                                 <h4>Roles:</h4>
-                                @foreach($user->roles as $role)
-                                    <p> {{ strtoupper($role->name) }} </p>
+                                @foreach($role->permissions as $permission)
+                                    <p>{{ $permission->name }}</p>
                                 @endforeach
                             </div>
                             <div class="col">
                                 <h5>Created at:</h1>
-                                <p>{{ $user->created_at }}</p>
+                                <p>{{ $role->created_at }}</p>
                                 <h5>Updated at:</h1>
-                                <p>{{ $user->updated_at }}</p>
+                                <p>{{ $role->updated_at }}</p>
                             </div>
                         </div>
                     </form>
@@ -72,11 +68,11 @@
             </div>
 
             <div class="block-button">
-                <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit User</button>
-                <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users-2">
+                <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit Role</button>
+                <form action="{{ route('admin.delete.role', ['id' => $role->id]) }}" method="POST" id="delete-form-roles-2">
                     {!! csrf_field() !!}
                     {!! method_field('DELETE') !!}
-                    <button type="submit" class="btn btn-danger btn-lg btn-block">Delete User</button>
+                    <button type="submit" class="btn btn-danger btn-lg btn-block">Delete Role</button>
                 </form>
             </div>
 

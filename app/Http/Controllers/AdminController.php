@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\User;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 
@@ -31,6 +32,18 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
+
+    /********* 
+     * 
+     * 
+     * 
+     *      Users
+     * 
+     * 
+     * 
+     * 
+    */
+
     public function showUsers(){
 
         $users = User::orderBy('id', 'DESC')->paginate(20);
@@ -53,14 +66,14 @@ class AdminController extends Controller
     public function addUser(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'name' => 'min:3|max:30',
-            'email' => 'email',
-            'password' => 'min:6|max:50',
-            'roles' => 'array'
+            'name' => 'min:3|max:30|required',
+            'email' => 'email|required',
+            'password' => 'min:6|max:50|required',
+            'roles' => 'array|required'
         ]);
 
         if ($validator->fails()) {
-            return redirect('/admin/dashboard/users')->withErrors($validator)->withInput(Input::except('password'));
+            return redirect('/admin/dashboard/users/')->withErrors($validator)->withInput(Input::except('password'));
         }
 
         $user = new User();
@@ -69,16 +82,15 @@ class AdminController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        $rolesIDs = $request->roles;
+        $roles = $request->roles;
 
-        foreach($rolesIDs as $roleID){
+        foreach($roles as $role){
 
-            $role = Role::findOrFail($roleID);
             $user->assignRole($role);
 
         }
 
-        return redirect('/admin/dashboard/users')->with('status', 'User has been added successfully!');
+        return redirect('/admin/dashboard/users/')->with('status', 'User has been added successfully!');
 
     }
 
@@ -101,18 +113,9 @@ class AdminController extends Controller
         $user->email = $request->email;
         $user->save();
 
-        $rolesIDs = $request->roles;
+        $roles = $request->roles;
 
-        $rolesArr = [];
-
-        foreach($rolesIDs as $roleID){
-
-            $role = Role::findOrFail($roleID);
-            array_push($rolesArr, $role);
-
-        }
-
-        $user->syncRoles($rolesArr);
+        $user->syncRoles($roles);
 
 
         return redirect('/admin/dashboard/user/' . $user->id)->with('status', 'User has been edited successfully!');
@@ -150,4 +153,100 @@ class AdminController extends Controller
         }
         return $generatedString;
     }
+
+    /********
+     * 
+     * 
+     * 
+     * 
+     * Roles
+     * 
+     * 
+     * 
+     * 
+     */
+
+
+     public function showRoles(){
+
+        $roles = Role::orderBy('id', 'desc')->paginate(20);
+        $permissions = Permission::all();
+        return view('admin.roles.roles', ['roles' => $roles, 'permissions' => $permissions]);
+
+     }
+
+
+     
+     public function addRole(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'permissions' => 'array'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/admin/dashboard/roles/')->withErrors($validator)->withInput();
+        }
+
+        $role = new Role();
+        $role->name = strtolower($request->name);
+        $role->save();
+
+        $permissions = $request->permissions;
+
+        foreach ($permissions as $permission) {
+            
+            $role->givePermissionTo($permission);
+
+        }
+
+        return redirect('/admin/dashboard/roles/')->with('status', 'Role has been added successfully!');
+
+    }
+
+
+     public function showRole($id){
+
+        $role = Role::findOrFail($id);
+        $permissions = Permission::all();
+        return view('admin.roles.show', ['role' => $role, 'permissions' => $permissions]);
+
+     }
+
+
+     public function editRole(Request $request, $id){
+
+        $role = Role::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'permissions' => 'array'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/admin/dashboard/role/' . $role->id)->withErrors($validator)->withInput();
+        }
+
+        $role->name = strtolower($request->name);
+        $role->save();
+
+        $permissions = $request->permissions;
+
+        $role->syncPermissions($permissions);
+
+        return redirect('/admin/dashboard/role/' . $role->id)->with('status', 'Role has been edited successfully!');
+
+     }
+
+
+     public function destroyRole($id){
+
+        $role = Role::findOrFail($id);
+
+        $role->delete();
+
+        return redirect('/admin/dashboard/roles/')->with('status', 'Role has been deleted successfully!');
+
+     }
+
 }
