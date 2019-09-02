@@ -44,7 +44,7 @@ class AdminController extends Controller
      * 
     */
 
-    public function showUsers(){
+    public function indexUsers(){
 
         $users = User::orderBy('id', 'DESC')->paginate(20);
         $roles = Role::all();
@@ -84,11 +84,7 @@ class AdminController extends Controller
 
         $roles = $request->roles;
 
-        foreach($roles as $role){
-
-            $user->assignRole($role);
-
-        }
+        $user->assignRole($roles);
 
         return redirect('/admin/dashboard/users/')->with('status', 'User has been added successfully!');
 
@@ -167,7 +163,7 @@ class AdminController extends Controller
      */
 
 
-     public function showRoles(){
+     public function indexRoles(){
 
         $roles = Role::orderBy('id', 'desc')->paginate(20);
         $permissions = Permission::all();
@@ -194,11 +190,7 @@ class AdminController extends Controller
 
         $permissions = $request->permissions;
 
-        foreach ($permissions as $permission) {
-            
-            $role->givePermissionTo($permission);
-
-        }
+        $role->givePermissionTo($permissions);    
 
         return redirect('/admin/dashboard/roles/')->with('status', 'Role has been added successfully!');
 
@@ -246,6 +238,106 @@ class AdminController extends Controller
         $role->delete();
 
         return redirect('/admin/dashboard/roles/')->with('status', 'Role has been deleted successfully!');
+
+     }
+
+
+
+
+    /*********
+     * 
+     * 
+     * 
+     * 
+     * Permissions
+     * 
+     * 
+     * 
+     * 
+     *  */ 
+    
+
+
+
+     public function indexPermissions(){
+
+        $permissions = Permission::orderBy('id', 'desc')->paginate(20);
+        $roles = Role::all();
+        return view('admin.permissions.permissions', ['permissions' => $permissions, 'roles' => $roles]);
+
+     }
+
+
+     public function addPermission(Request $request){
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'roles' => 'array',
+        ]);
+
+        if($validator->fails()){
+
+            return redirect('admin/dashboard/permissions')->withErrors($validator)->withInput();
+
+        }
+
+        $permission = new Permission();
+        $permission->name = strToLower($request->name);
+        $permission->save();
+
+        $roles = $request->roles;
+
+        $permission->assignRole($roles);
+
+        return redirect('/admin/dashboard/permissions/')->with('status', 'Permission has been added successfully!');
+
+     }
+
+
+     public function showPermission($id){
+
+        $permission = Permission::findOrFail($id);
+        $roles = Role::all();
+
+        return view('admin.permissions.show', ['permission' => $permission, 'roles' => $roles]);
+
+
+     }
+
+
+     public function editPermission(Request $request, $id){
+
+        $permission = Permission::findOrFail($id);
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'roles' => 'array'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/admin/dashboard/permission/' . $permission->id)->withErrors($validator)->withInput();
+        }
+
+        $permission->name = strToLower($request->name);
+        $permission->save();
+
+        $roles = $request->roles;
+
+        $permission->syncRoles($roles);
+
+        return redirect('/admin/dashboard/permission/' . $permission->id)->with('status', 'Permission has been edited successfully!');
+
+
+     }
+
+
+     public function destroyPermission($id){
+
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
+
+        return redirect('/admin/dashboard/permissions/')->with('status', 'Permission has been deleted!');
 
      }
 

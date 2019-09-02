@@ -132,6 +132,15 @@ $(document).ready(function () {
   $('#delete-form-roles-2').on('submit', function () {
     return confirm('Are you sure that you want to delete this role?');
   });
+  $('#edit-form-permissions').on('submit', function () {
+    return confirm('Are you sure that you want to edit this permission?');
+  });
+  $('#delete-form-permissions-1').on('submit', function () {
+    return confirm('Are you sure that you want to delete this permission?');
+  });
+  $('#delete-form-permissions-2').on('submit', function () {
+    return confirm('Are you sure that you want to delete this permission?');
+  });
 });
 
 /***/ }),
