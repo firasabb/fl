@@ -18,8 +18,13 @@
                             </ul>
                         </div>
                     @endif
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
-                    <form method="POST" action="{{ route('admin.edit.user', ['id' => $user->id]) }}">
+                    <form method="POST" action="{{ route('admin.edit.user', ['id' => $user->id]) }}" id="edit-form">
                         {!! csrf_field() !!}
                         {!! method_field('PUT') !!}
 
@@ -45,7 +50,21 @@
                         <div class="row">
                             <div class="col">
                                 <button type="submit" class="btn btn-primary submit-edit-btn enabled-disabled" disabled>Submit</button>
-                                <button type="button" class="btn btn-danger submit-edit-btn enabled-disabled" disabled>Generate Password</button>
+                                <a href=" {{ route('admin.generate.password.user', ['id' => $user->id]) }} " class="btn btn-danger submit-edit-btn disabled" id="generate-password">Generate Password</a>
+                            </div>
+                        </div>
+                        <div class="row info-row">
+                            <div class="col">
+                                <h4>Roles:</h4>
+                                @foreach($user->roles as $role)
+                                    <p> {{ strtoupper($role->name) }} </p>
+                                @endforeach
+                            </div>
+                            <div class="col">
+                                <h5>Created at:</h1>
+                                <p>{{ $user->created_at }}</p>
+                                <h5>Updated at:</h1>
+                                <p>{{ $user->updated_at }}</p>
                             </div>
                         </div>
                     </form>
@@ -54,7 +73,11 @@
 
             <div class="block-button">
                 <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit User</button>
-                <button type="button" class="btn btn-danger btn-lg btn-block">Delete User</button>
+                <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-2">
+                    {!! csrf_field() !!}
+                    {!! method_field('DELETE') !!}
+                    <button type="submit" class="btn btn-danger btn-lg btn-block">Delete User</button>
+                </form>
             </div>
 
         </div>

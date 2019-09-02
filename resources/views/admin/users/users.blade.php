@@ -18,6 +18,11 @@
                             </ul>
                         </div>
                     @endif
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
                     <table class="table">
                         <tr>
@@ -32,12 +37,6 @@
                             </th>
                             <th scope="col">
                                 Roles
-                            </th>
-                            <th scope="col">
-                                Date Created
-                            </th>
-                            <th scope="col">
-                                Date Updated
                             </th>
                             <th scope="col">
                                 Actions
@@ -63,14 +62,8 @@
                                     ?>
                                 </td>
                                 <td>
-                                    {{$user->created_at}}
-                                </td>
-                                <td>
-                                    {{$user->updated_at}}
-                                </td>
-                                <td>
                                     <a href="{{ url('admin/dashboard/user/' . $user->id) }}" class="btn btn-success">Show/Edit</a>
-                                    <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST">
+                                    <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-1">
                                         {!! csrf_field() !!}
                                         {!! method_field('DELETE') !!}
                                         <button class="btn btn-danger" type="submit">Delete</button>
