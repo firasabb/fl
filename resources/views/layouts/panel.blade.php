@@ -45,6 +45,12 @@
                             </div>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="#">Questions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Answers</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#">Settings</a>
                         </li>
 
