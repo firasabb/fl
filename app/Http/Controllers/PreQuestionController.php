@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\PreQuestion;
+use App\PreChoice;
 use Illuminate\Http\Request;
+use Validator;
 
 class PreQuestionController extends Controller
 {
@@ -24,7 +26,7 @@ class PreQuestionController extends Controller
      */
     public function index()
     {
-        $prequestions = PreQuestion::orderBy('id', 'desc')->paginate(15); 
+        $prequestions = PreQuestion::orderBy('id', 'desc')->paginate(1); 
         return view('admin.prequestions.prequestions', ['prequestions' => $prequestions]);
     }
 
@@ -35,7 +37,7 @@ class PreQuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('prequestions.create');
     }
 
     /**
@@ -44,9 +46,36 @@ class PreQuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, PreQuestion $preQuestion)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:15|max:200',
+            'description' => 'string|max:500|nullable',
+            'options' => 'array',
+            'options.*' => 'string|max:200'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/create/question/')->withErrors($validator)->withInput();
+        }
+
+        $prequestion = new PreQuestion();
+        $prequestion->title = $request->title;
+        $prequestion->description = $request->description;
+        $prequestion->save();
+
+        if($request->options){
+            $options = $request->options;
+            foreach($options as $option){
+                $choice = new PreChoice();
+                $choice->choice = $option;
+                $choice->save();
+                $prequestion->choices()->save($choice);
+            }
+        }
+
+        return redirect('/home')->with('status', 'Your Question Has Been Created! Once it is approved, it is going to be public...');
+
     }
 
     /**

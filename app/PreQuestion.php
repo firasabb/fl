@@ -10,7 +10,7 @@ class PreQuestion extends Model
 
     public function choices(){
 
-        return $this->hasMany('\App\Choice', 'question_id');
+        return $this->hasMany('\App\PreChoice', 'pre_question_id');
 
     }
 

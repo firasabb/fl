@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePreQuestionsTable extends Migration
+class CreateQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePreQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pre_questions', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('title');
             $table->text('description')->nullable();
@@ -28,6 +28,6 @@ class CreatePreQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pre_questions');
+        Schema::dropIfExists('questions');
     }
 }

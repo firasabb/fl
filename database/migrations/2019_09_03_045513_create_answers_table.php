@@ -16,9 +16,15 @@ class CreateAnswersTable extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('title');
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('question_id');
             $table->boolean('best')->default(0);
             $table->timestamps();
+
+            $table->foreign('question_id')
+                  ->references('id')
+                  ->on('questions')
+                  ->onDelete('cascade');
         });
     }
 
@@ -30,5 +36,6 @@ class CreateAnswersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('answers');
+        
     }
 }
