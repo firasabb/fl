@@ -5,7 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card border-light question-card">
-                <div class="card-header bg-light"></div>
+                <div class="card-header bg-light">
+                    <a><img class="avatar-pic" src=""/></a>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -17,9 +19,8 @@
                     @if($question->description)
                         <p class="card-text">{{$question->description}}</p>
                     @endif
-                    @svg('heart')
                 </div>
-                <div class="card-footer bg-light">@svg('heart')</div>
+                <div class="card-footer bg-light">@svg('heart', 'heart-icon')</div>
             </div>
         </div>
     </div>

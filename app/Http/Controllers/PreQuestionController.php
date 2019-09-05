@@ -9,6 +9,7 @@ use App\Choice;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
+use Auth;
 
 class PreQuestionController extends Controller
 {
@@ -62,9 +63,12 @@ class PreQuestionController extends Controller
             return redirect('/create/question/')->withErrors($validator)->withInput();
         }
 
+        $user = Auth::user();
+
         $prequestion = new PreQuestion();
         $prequestion->title = $request->title;
         $prequestion->description = $request->description;
+        $prequestion->user_id = $user->id;
         $prequestion->save();
 
         if($request->options){
@@ -138,7 +142,8 @@ class PreQuestionController extends Controller
             'question_id' => 'required|integer',
             'description' => 'string|max:500|nullable',
             'options' => 'array',
-            'options.*' => 'string|max:200'
+            'options.*' => 'string|max:200',
+            'user_id' => 'required|integer'
         ]);
 
         if($validator->fails()){
@@ -154,6 +159,7 @@ class PreQuestionController extends Controller
         $question->title = $request->title;
         $question->description = $request->description;
         $question->url = Str::slug(htmlspecialchars($request->title), '-');
+        $question->user_id = $request->user_id;
         $question->save(); 
 
         if($request->options){

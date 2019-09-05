@@ -16,8 +16,13 @@ class CreatePreQuestionsTable extends Migration
         Schema::create('pre_questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('title');
+            $table->unsignedBigInteger('user_id');
             $table->text('description')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                    ->references('id')->on('users')
+                    ->onDelete('cascade');
         });
     }
 

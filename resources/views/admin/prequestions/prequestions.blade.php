@@ -33,6 +33,7 @@
                                 <div class="col-sm-10">
                                     <input class="form-control enabled-disabled" name="title" disabled type="text" value="{{ $prequestion->title }}"/>
                                     <input type="hidden" name="question_id" value="{{ $prequestion->id }}">
+                                    <input type="hidden" name="user_id" value="{{ $prequestion->user_id }}">
                                 </div>
                             </div>
                             <div class="form-group row">

@@ -17,8 +17,13 @@ class CreateQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->text('title');
             $table->text('url');
+            $table->unsignedBigInteger('user_id');
             $table->text('description')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                    ->references('id')->on('users')
+                    ->onDelete('cascade');
         });
     }
 

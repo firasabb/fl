@@ -14,3 +14,12 @@
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
+.heart-icon {
+  transition: all 0.2s ease;
+  fill: #ccc;
+}
+
+.heart-icon:hover {
+  fill: #fc79a0;
+}
+

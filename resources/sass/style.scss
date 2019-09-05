@@ -17,3 +17,23 @@
 .question-card{
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 }
+
+
+.heart-icon{
+    transition: all 0.2s ease;
+    fill: #ccc;
+}
+
+.heart-icon:hover{
+    fill: rgb(252, 121, 160);
+}
+
+
+.avatar-pic{
+    height: 25px;
+    width: 25px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%; 
+}
