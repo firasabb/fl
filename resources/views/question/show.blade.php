@@ -6,7 +6,14 @@
         <div class="col-md-8">
             <div class="card border-light question-card">
                 <div class="card-header bg-light">
-                    <a><img class="avatar-pic" src=""/></a>
+                    <div class="card-header-flex">
+                        <div class="card-header-img">
+                            <a href="#"><img class="avatar-pic" src="{{ $question->user->avatar_url }}"/></a>
+                        </div>
+                        <div class="card-header-text">
+                            <a href="#">{{ $question->user->name }}</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body">

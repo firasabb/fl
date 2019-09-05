@@ -17,7 +17,7 @@ class PreQuestionController extends Controller
 
     public function __construct(){
 
-        //$this->middleware('role:admin|moderator|user');
+        $this->middleware('role:admin|moderator|user');
 
     }
 
