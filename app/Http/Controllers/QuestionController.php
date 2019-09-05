@@ -44,9 +44,11 @@ class QuestionController extends Controller
      * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show(Question $question)
+    public function show($url)
     {
-        //
+        $question = Question::where('url', $url)->firstOrFail();
+
+        return view('question.show', ['question' => $question]);
     }
 
     /**

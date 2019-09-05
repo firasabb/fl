@@ -51,10 +51,16 @@ Route::post('/admin/dashboard/permissions', 'AdminController@addPermission')->na
 // Admin / PreQuestions
 
 Route::get('/admin/dashboard/prequestions/', 'PreQuestionController@index')->name('admin.index.prequestions');
-
+Route::delete('/admin/dashboard/prequestion/{id}', 'PreQuestionController@destroy')->name('admin.delete.prequestion');
+Route::post('/admin/dashboard/prequestions/', 'PreQuestionController@approve')->name('admin.approve.prequestion');
 
 
 // PreQuestions
 
 Route::get('/create/question', 'PreQuestionController@create')->name('create.prequestion');
 Route::post('/create/question', 'PreQuestionController@store')->name('store.prequestion');
+
+
+//Question
+
+Route::get('/question/{url}', 'QuestionController@show')->name('show.question');

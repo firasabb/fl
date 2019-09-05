@@ -17,7 +17,7 @@ class CreateChoicesTable extends Migration
             $table->bigIncrements('id');
             $table->text('choice');
             $table->boolean('right')->default(0);
-            $table->unsignedBigInteger('question_id')->nullable();
+            $table->unsignedBigInteger('question_id');
             $table->timestamps();
 
             $table->foreign('question_id')

@@ -17,7 +17,7 @@ class CreatePreChoicesTable extends Migration
             $table->bigIncrements('id');
             $table->text('choice');
             $table->boolean('right')->default(0);
-            $table->unsignedBigInteger('pre_question_id')->nullable();
+            $table->unsignedBigInteger('pre_question_id');
             $table->timestamps();
 
             $table->foreign('pre_question_id')

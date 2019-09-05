@@ -94,7 +94,7 @@
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-  max = 3;
+  max = 4;
   count = 0;
   formGroupStart = '<div class="form-group"> ';
   formGroupEnd = ' </div>';

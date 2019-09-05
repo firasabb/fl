@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\PreQuestion;
+use App\Question;
 use App\PreChoice;
+use App\Choice;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Str;
 
 class PreQuestionController extends Controller
 {
@@ -69,8 +72,9 @@ class PreQuestionController extends Controller
             foreach($options as $option){
                 $choice = new PreChoice();
                 $choice->choice = $option;
+                $choice->pre_question_id = $prequestion->id;
                 $choice->save();
-                $prequestion->choices()->save($choice);
+                
             }
         }
 
@@ -118,8 +122,53 @@ class PreQuestionController extends Controller
      * @param  \App\PreQuestion  $preQuestion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PreQuestion $preQuestion)
-    {
-        //
+    public function destroy($id)
+    {   
+        $prequestion = PreQuestion::findOrFail($id);
+        $prequestion->delete();
+
+        return redirect('admin/dashboard/prequestions/')->with('status', 'Question has been deleted!');
+    }
+
+
+    public function approve(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:15|max:200',
+            'question_id' => 'required|integer',
+            'description' => 'string|max:500|nullable',
+            'options' => 'array',
+            'options.*' => 'string|max:200'
+        ]);
+
+        if($validator->fails()){
+
+            return redirect()->back()->withErrors($validator)->withInput();
+
+        }
+
+        $prequestion = PreQuestion::findOrFail($request->question_id);
+
+        $question = new Question();
+
+        $question->title = $request->title;
+        $question->description = $request->description;
+        $question->url = Str::slug(htmlspecialchars($request->title), '-');
+        $question->save(); 
+
+        if($request->options){
+            $options = $request->options;
+            foreach($options as $option){
+                $choice = new Choice();
+                $choice->choice = $option;
+                $choice->question_id = $question->id;
+                $choice->save();
+            }
+        }
+
+        $prequestion->delete();
+
+        return redirect('/admin/dashboard/prequestions/')->with('status', 'Question has been approved!');
+
     }
 }

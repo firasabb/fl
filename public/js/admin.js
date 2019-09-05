@@ -141,6 +141,24 @@ $(document).ready(function () {
   $('#delete-form-permissions-2').on('submit', function () {
     return confirm('Are you sure that you want to delete this permission?');
   });
+  $('#delete-prequestion').on('submit', function () {
+    return confirm('Are you sure that you want to delete this question?');
+  });
+  $('#add-prequestion').click(function () {
+    if (confirm('Are you sure that you want to approve this question?')) {
+      forms = $('.enabled-disabled');
+
+      for (i = 0; i < forms.length; i++) {
+        if (forms[i].disabled) {
+          forms[i].disabled = false;
+        }
+      }
+
+      $('#add-prequestion-form').submit();
+    } else {
+      return false;
+    }
+  });
 });
 
 /***/ }),

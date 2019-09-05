@@ -27,14 +27,14 @@
                         @csrf
                         <div class="form-group">
                             <label for="questions-title">Question:</label>
-                            <input class="form-control" type="text" name="title" placeholder="What is The Largest Galaxy?" value="{{ old('title') }}" required maxlength="200" minlength="15"/>
+                            <input class="form-control" type="text" name="title" placeholder="What is The Largest Galaxy in Our Universe?" value="{{ old('title') }}" required maxlength="200" minlength="15"/>
                             <div class="invalid-feedback">
                                     Please provide a valid question: maximum allowed number of characters is 300 and minimum number is 15.
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="question-description">Description:</label>
-                            <textarea class="form-control" type="text" name="description" placeholder="Add a description for your question (Optional)..." maxlength="500">{{ old('description') }}</textarea>
+                            <textarea class="form-control" type="text" name="description" placeholder="Add a description to your question (Optional)..." maxlength="500">{{ old('description') }}</textarea>
                             <div class="invalid-feedback">
                                     Please provide a valid description: maximum allowed number of characters is 1000.
                             </div>
