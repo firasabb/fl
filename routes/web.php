@@ -17,6 +17,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Check Username
+
+Route::post('/register/checkusername', 'Auth\RegisterController@checkusername')->name('checkusername');
+
+//
+
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin/dashboard', 'AdminController@index')->name('admin.dashboard');
 

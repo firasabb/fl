@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Storage;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -52,7 +53,8 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed']
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['required', 'string', 'max:20', 'unique:users']
         ]);
     }
 
@@ -69,10 +71,47 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'username' => $data['username'],
             'avatar_url' => $avatar_url,
             'password' => Hash::make($data['password']),
         ]);
         $user->assignRole('user');
         return $user;
+    }
+
+    public function checkusername(Request $request){
+        
+
+        $validator = Validator::make($request->all(), [
+            'username' => 'string'
+        ]);
+
+        if($validator->fails()){
+            $response = array(
+                'status' => 'error',
+                'error' => 'Please provide a correct username',
+            );
+            return response()->json($response);
+        }
+
+        $username = $request->username;
+
+        if($username){
+
+            $user = User::where('username', $username)->first();
+
+            if($user){
+                $response = array(
+                    'status' => 'error',
+                    'error' => 'Please provide another username',
+                );
+                return response()->json($response);
+            } else {
+                $response = array(
+                    'status' => 'success'
+                );
+                return response()->json($response);
+            }
+        }
     }
 }

@@ -33,4 +33,39 @@ $(document).ready(function(){
         });
       }, false);
 
+
+
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $('#username').on('keyup',
+
+        function checkusername() {
+          var url = window.location.href;
+          jQuery.ajax({
+            url: url + "/checkusername",
+            type: "POST",
+            data: {username:$('#username').val()},
+            success:function(data){
+              if(data.status == 'success'){
+                $('#username').removeClass('is-invalid');
+                $('#username').addClass('is-valid');
+                
+              } else {
+                $('#username').removeClass('is-valid');
+                $('#username').addClass('is-invalid');
+                
+              }
+            },
+            error:function (e){
+              console.log(e);
+            }
+          });
+        }
+
+      );
+
 });
