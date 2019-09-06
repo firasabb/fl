@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
         $user->password = bcrypt('123123qweqwe');
         $user->avatar_url = Storage::url('no-avatar.png');
         $user->username = 'freezabb';
+        $user->bio = 'A musician, guitarist and app developer.';
         $user->save();
 
         $user->assignRole('admin', 'moderator', 'user');

@@ -40,12 +40,26 @@
   margin-left: 1rem;
 }
 
-.profile-img {
-  height: 100px;
-  width: 100px;
+.profile-first-row {
+  margin-top: 3rem;
+}
+
+.profile-img img {
+  max-height: 100px;
+  max-width: 100px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
+}
+
+.profile-text-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-text {
+  vertical-align: middle;
 }
 

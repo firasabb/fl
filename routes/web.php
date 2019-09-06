@@ -62,12 +62,26 @@ Route::delete('/admin/dashboard/prequestion/{id}', 'PreQuestionController@destro
 Route::post('/admin/dashboard/prequestions/', 'PreQuestionController@approve')->name('admin.approve.prequestion');
 
 
+// Admin / Tags
+
+Route::get('/admin/dashboard/tags/', 'TagController@adminIndex')->name('admin.index.tags');
+
+
 // PreQuestions
 
 Route::get('/create/question', 'PreQuestionController@create')->name('create.prequestion');
 Route::post('/create/question', 'PreQuestionController@store')->name('store.prequestion');
 
 
-//Question
+// Question
 
 Route::get('/question/{url}', 'QuestionController@show')->name('show.question');
+
+
+// Users
+
+Route::get('/user/{username}', 'UserController@showProfile')->name('user.profile');
+
+// Tags
+
+Route::get('/tags', 'TagController@index')->name('index.tags');
