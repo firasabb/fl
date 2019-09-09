@@ -17,12 +17,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-// Check Username
+// Check Username AJAX
 
 Route::post('/register/checkusername', 'Auth\RegisterController@checkusername')->name('checkusername');
 
-//
+// Get Tags AJAX
 
+Route::post('/create/question/tags', 'PreQuestionController@suggestTags')->name('suggesttags');
+
+//
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin/dashboard', 'AdminController@index')->name('admin.dashboard');
@@ -57,14 +60,18 @@ Route::post('/admin/dashboard/permissions', 'AdminController@addPermission')->na
 
 // Admin / PreQuestions
 
-Route::get('/admin/dashboard/prequestions/', 'PreQuestionController@index')->name('admin.index.prequestions');
-Route::delete('/admin/dashboard/prequestion/{id}', 'PreQuestionController@destroy')->name('admin.delete.prequestion');
-Route::post('/admin/dashboard/prequestions/', 'PreQuestionController@approve')->name('admin.approve.prequestion');
+Route::get('/admin/dashboard/prequestions/', 'PreQuestionController@index')->middleware('role:admin|moderator')->name('admin.index.prequestions');
+Route::delete('/admin/dashboard/prequestion/{id}', 'PreQuestionController@destroy')->middleware('role:admin|moderator')->name('admin.delete.prequestion');
+Route::post('/admin/dashboard/prequestions/', 'PreQuestionController@approve')->middleware('role:admin|moderator')->name('admin.approve.prequestion');
 
 
 // Admin / Tags
 
-Route::get('/admin/dashboard/tags/', 'TagController@adminIndex')->name('admin.index.tags');
+Route::get('/admin/dashboard/tags/', 'TagController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.tags');
+Route::delete('/admin/dashboard/tag/{id}', 'TagController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.tag');
+Route::get('/admin/dashboard/tag/{id}', 'TagController@adminShow')->middleware('role:admin|moderator')->name('admin.show.tag');
+Route::put('/admin/dashboard/tag/{id}', 'TagController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.tag');
+Route::post('/admin/dashboard/tag/', 'TagController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.tag');
 
 
 // PreQuestions

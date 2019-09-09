@@ -6,10 +6,12 @@ use App\PreQuestion;
 use App\Question;
 use App\PreChoice;
 use App\Choice;
+use App\Tag;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
 use Auth;
+use Spatie\Searchable\Search;
 
 class PreQuestionController extends Controller
 {
@@ -176,5 +178,35 @@ class PreQuestionController extends Controller
 
         return redirect('/admin/dashboard/prequestions/')->with('status', 'Question has been approved!');
 
+    }
+
+
+    public function suggestTags(Request $request){
+
+        $tag = $request->tag;
+
+        if($tag){
+
+            $suggestion = Tag::where('name', $tag)->get();
+    
+            $searchResults = (new Search())
+                        ->registerModel(\App\Tag::class, 'name')
+                        ->perform($tag);
+
+            $response = array(
+                'status' => 'success',
+                'results' => $searchResults
+            );
+    
+            return response()->json($response);
+
+        }
+
+        $response = array(
+            'status' => 'error',
+            'message' => 'no tag has been searched for'
+        );
+
+        return response()->json($response);
     }
 }

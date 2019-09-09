@@ -25,11 +25,7 @@ $(document).ready(function(){
         return confirm('Are you sure that you want to edit this user?');
     });
 
-    $('#delete-form-users-1').on('submit', function(){
-        return confirm('Are you sure that you want to delete this user?');
-    });
-
-    $('#delete-form-users-2').on('submit', function(){
+    $('#delete-form-users').on('submit', function(){
         return confirm('Are you sure that you want to delete this user?');
     });
 
@@ -41,11 +37,7 @@ $(document).ready(function(){
         return confirm('Are you sure that you want to edit this role?');
     });
 
-    $('#delete-form-roles-1').on('submit', function(){
-        return confirm('Are you sure that you want to delete this role?');
-    });
-
-    $('#delete-form-roles-2').on('submit', function(){
+    $('#delete-form-roles').on('submit', function(){
         return confirm('Are you sure that you want to delete this role?');
     });
 
@@ -53,11 +45,7 @@ $(document).ready(function(){
         return confirm('Are you sure that you want to edit this permission?');
     });
 
-    $('#delete-form-permissions-1').on('submit', function(){
-        return confirm('Are you sure that you want to delete this permission?');
-    });
-
-    $('#delete-form-permissions-2').on('submit', function(){
+    $('#delete-form-permissions').on('submit', function(){
         return confirm('Are you sure that you want to delete this permission?');
     });
 
@@ -82,4 +70,13 @@ $(document).ready(function(){
         }
     });
 
+    $('#edit-form-tags').on('submit', function(){
+        return confirm('Are you sure that you want to edit this tag?');
+    });
+
+    $('#delete-form-tags').on('submit', function(){
+        return confirm('Are you sure that you want to delete this tag?');
+    });
+
+    
 });

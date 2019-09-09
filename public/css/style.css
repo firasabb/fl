@@ -63,3 +63,35 @@
   vertical-align: middle;
 }
 
+.tag-container {
+  position: relative;
+}
+
+.suggestions {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.suggestions div {
+  transition: all 0.2s ease;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.suggestions div:hover {
+  background-color: #83b5ff;
+}
+
+.suggestions-active {
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+

@@ -23,7 +23,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('create.prequestion') }}" class="needs-validation">
+                    <form method="POST" action="{{ route('create.prequestion') }}" class="needs-validation" autocomplete="off">
                         @csrf
                         <div class="form-group">
                             <label for="questions-title">Question:</label>
@@ -39,7 +39,13 @@
                                     Please provide a valid description: maximum allowed number of characters is 1000.
                             </div>
                         </div>
-                        <div class="options">
+                        <div class="form-group">
+
+                            <label for="question-description">Tags:</label>
+                            <div class="tag-container">
+                                <input class="form-control" id="tag-input" type="text" name="tags[]" value="{{ old('tags[]') }}" required/>
+                            </div>
+                        <div id="tags">
                         </div>
                         <div class="create-question-btns">
                             <button type="submit" class="btn btn-primary submit-question-btn">Submit</button>

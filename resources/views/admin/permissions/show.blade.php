@@ -69,7 +69,7 @@
 
             <div class="block-button">
                 <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit Permission</button>
-                <form action="{{ route('admin.delete.permission', ['id' => $permission->id]) }}" method="POST" id="delete-form-permissions-2">
+                <form action="{{ route('admin.delete.permission', ['id' => $permission->id]) }}" method="POST" id="delete-form-permissions" class="delete-form-2">
                     {!! csrf_field() !!}
                     {!! method_field('DELETE') !!}
                     <button type="submit" class="btn btn-danger btn-lg btn-block">Delete Permission</button>

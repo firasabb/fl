@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Users</div>
 
@@ -36,6 +36,9 @@
                                 Email
                             </th>
                             <th scope="col">
+                                Username
+                            </th>
+                            <th scope="col">
                                 Roles
                             </th>
                             <th scope="col">
@@ -54,6 +57,9 @@
                                     {{$user->email}}
                                 </td>
                                 <td>
+                                    {{$user->username}}
+                                </td>
+                                <td>
                                     <?php
                                         $userRoles = $user->roles;
                                         foreach ($userRoles as $role) {
@@ -63,7 +69,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ url('admin/dashboard/user/' . $user->id) }}" class="btn btn-success">Show/Edit</a>
-                                    <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users-1">
+                                    <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users" class="delete-form-1">
                                         {!! csrf_field() !!}
                                         {!! method_field('DELETE') !!}
                                         <button class="btn btn-danger" type="submit">Delete</button>
@@ -98,6 +104,9 @@
                                     </div>
                                     <div class="form-group">
                                         <input class="form-control" type="email" name="email"  value="{{ old('email') }}" placeholder="Email" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" id="username" type="text" name="username"  value="{{ old('username') }}" placeholder="Username" />
                                     </div>
                                 </div>
                                 <div class="col">

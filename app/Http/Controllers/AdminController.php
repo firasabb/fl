@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use Storage;
 
 class AdminController extends Controller
 {
@@ -67,6 +68,7 @@ class AdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'min:3|max:30|required',
+            'username' => 'required|unique:users',
             'email' => 'email|required',
             'password' => 'min:6|max:50|required',
             'roles' => 'array|required'
@@ -79,6 +81,8 @@ class AdminController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->username = $request->username;
+        $user->avatar_url = Storage::url('no-avatar.png');
         $user->password = bcrypt($request->password);
         $user->save();
 
@@ -102,7 +106,7 @@ class AdminController extends Controller
         ]);
 
         if($validator->fails()){
-            return redirect('/admin/dashboard/users/' . $user->id)->withErrors($validator)->withInput(Input::except('password'));
+            return redirect('/admin/dashboard/user/' . $user->id)->withErrors($validator)->withInput(Input::except('password'));
         }
 
         $user->name = $request->name;

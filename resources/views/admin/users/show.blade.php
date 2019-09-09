@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">{{$user->name}}</div>
 
@@ -73,7 +73,7 @@
 
             <div class="block-button">
                 <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit User</button>
-                <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users-2">
+                <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users" class="delete-form-2">
                     {!! csrf_field() !!}
                     {!! method_field('DELETE') !!}
                     <button type="submit" class="btn btn-danger btn-lg btn-block">Delete User</button>

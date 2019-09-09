@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Tag;
 use Illuminate\Http\Request;
+use Validator;
+use URL;
+use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
@@ -41,9 +44,25 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function adminAdd(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:20',
+            'url' => 'required|string'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/admin/dashboard/tags')->withErrors($validator)->withInput();
+        } 
+
+        $tag = new Tag();
+        $tag->name = strToLower($request->name);
+        $tag->url = URL::to('/tag') . '/' . Str::slug(htmlspecialchars($request->url), '-');
+        $tag->save();
+
+        return redirect('/admin/dashboard/tags')->with('status', 'A tag has been created!');
+
+
     }
 
     /**
@@ -52,9 +71,10 @@ class TagController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $tag)
+    public function adminShow($id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        return view('admin.tags.show', ['tag' => $tag]);
     }
 
     /**
@@ -75,7 +95,7 @@ class TagController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $tag)
+    public function adminEdit(Request $request, Tag $tag)
     {
         //
     }
@@ -86,8 +106,10 @@ class TagController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function adminDestroy($id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        $tag->delete();
+        return redirect('/admin/dashboard/tags/')->with('status', 'A tag has been deleted!');
     }
 }
