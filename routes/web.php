@@ -74,6 +74,10 @@ Route::put('/admin/dashboard/tag/{id}', 'TagController@adminEdit')->middleware('
 Route::post('/admin/dashboard/tag/', 'TagController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.tag');
 
 
+// Admin / Answers
+
+Route::get('/admin/dashboard/answers/', 'AnswerController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.answers');
+
 // PreQuestions
 
 Route::get('/create/question', 'PreQuestionController@create')->name('create.prequestion');
@@ -92,3 +96,7 @@ Route::get('/user/{username}', 'UserController@showProfile')->name('user.profile
 // Tags
 
 Route::get('/tags', 'TagController@index')->name('index.tags');
+
+// Answers
+
+Route::post('/answer/create/{token}', 'AnswerController@store')->middleware('role:user')->name('add.answer');

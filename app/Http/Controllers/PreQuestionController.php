@@ -162,6 +162,7 @@ class PreQuestionController extends Controller
         $question->description = $request->description;
         $question->url = Str::slug(htmlspecialchars($request->title), '-');
         $question->user_id = $request->user_id;
+        $question->token = uniqid();
         $question->save(); 
 
         if($request->options){

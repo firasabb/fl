@@ -15,4 +15,8 @@ class Answer extends Model
         return $this->belongsTo('\App\Question');
     }
 
+    public function upvotes(){
+        return $this->hasMany('\App\Upvote', 'answer_id');
+    }
+
 }

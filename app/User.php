@@ -58,4 +58,10 @@ class User extends Authenticatable
         return $this->hasMany('\App\Answer', 'user_id');
 
     }
+
+    public function upvotes(){
+
+        return $this->hasMany('\App\Upvote', 'user_id');
+
+    }
 }

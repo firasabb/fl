@@ -31,5 +31,52 @@
             </div>
         </div>
     </div>
+    
+    @auth
+        @if(empty($question->answers->where('user_id', Auth::user()->id)->first()))
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{{ route('add.answer', $question->token) }}">
+                        @csrf
+                        <div class="form-group">
+                            <input class="form-control" name="title" type="text" value="{{ old('title') }}" />
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="description">{{ old('description') }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        @endif
+    @endauth
+        
+    @foreach($question->answers as $answer)
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-md-1">
+                        @svg('thumbs-up', 'heart-icon')
+                        @svg('thumbs-down', 'heart-icon')
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $answer->title }}</h5>
+                            <p class="card-text">{{ $answer->description }}</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+        </div>
+    </div>
 </div>
 @endsection

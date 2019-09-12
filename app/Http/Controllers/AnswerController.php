@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use App\Question;
 use Illuminate\Http\Request;
+use Validator;
+use Auth;
 
 class AnswerController extends Controller
 {
@@ -12,9 +15,10 @@ class AnswerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function adminIndex()
     {
-        //
+        $answers = Answer::all()->paginate(15);
+        return view('answers', $answers);
     }
 
     /**
@@ -22,9 +26,25 @@ class AnswerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function store($token, Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:100',
+            'description' => 'max:500|nullable',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors()->withInput();
+        }
+
+        $answer = new Answer();
+        $answer->title = $request->title;
+        $answer->description = $request->description;
+        $answer->user_id = Auth::user()->id;
+        $answer->question_id = Question::where('token', $token)->firstOrFail()->id;
+        $answer->save();
+
+        return redirect()->back()->with('status', 'Your answer has been added successfully!');
     }
 
     /**
@@ -33,7 +53,7 @@ class AnswerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
         //
     }
