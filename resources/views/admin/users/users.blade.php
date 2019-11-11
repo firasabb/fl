@@ -5,6 +5,30 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            <form method="post" action="{{ route('admin.search.user') }}">
+                {!! csrf_field() !!}
+                <div class="form-row" >
+                    <div class="col">
+                        <input type='email' name="email" placeholder="Email..." class="form-control"/>
+                    </div>
+                    <div class="col">
+                        <input type='number' name="id" placeholder="ID..." class="form-control"/>
+                    </div>
+                    <div class="col">
+                        <input type='text' name="first_name" placeholder="First Name..." class="form-control"/>
+                    </div>
+                    <div class="col">
+                        <input type='text' name="last_name" placeholder="Last Name..." class="form-control"/>
+                    </div>
+                    <div class="col">
+                        <input type='submit' value="submit" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Users</div>
 

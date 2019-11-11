@@ -45,16 +45,19 @@ class AdminController extends Controller
      * 
     */
 
-    public function indexUsers(){
+    public function indexUsers($users = null){
 
-        $users = User::orderBy('id', 'DESC')->paginate(20);
+        if(!$users){
+            $users = User::orderBy('id', 'DESC')->paginate(20);
+        } else {
+            $users = $users->paginate(20);
+        }
         $roles = Role::all();
-
         return view('admin.users.users')->with('users', $users)->with('roles', $roles);
 
     }
 
-
+    
     public function showUser($id){
 
         $user = User::findOrFail($id);
@@ -142,6 +145,68 @@ class AdminController extends Controller
         return redirect('/admin/dashboard/user/' . $user->id)->with('status', 'User password has been changed to:  ' . $generatedPassword);
 
     }
+
+
+
+    public function searchUser(Request $request){
+        
+        $users = array();
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'email|nullable',
+            'id' => 'integer|nullable',
+            'first_name' => 'max:50|nullable',
+            'last_name' => 'max:50|nullable'
+        ]);
+            if($validator->fails()){
+                return redirect('/admin/dashboard/users/')->withErrors($validator)->withInput();
+            }
+        $email = $request->email;
+        $id = $request->id;
+        $first_name = $request->first_name;
+        $last_name = $request->last_name;
+        
+        $where_arr = array();
+
+        if($email){
+
+            $email_where = ['email', 'LIKE', $email];
+            array_push($where_arr, $email_where);
+
+        } if ($id){
+
+            $id_where = ['id', '=', $id];
+            array_push($where_arr, $id_where);
+
+        } if($first_name && $last_name){
+
+            $name_where = ['name', 'LIKE', $first_name . ' ' . $last_name];
+            array_push($where_arr, $name_where);
+
+        } if($first_name && !$last_name){
+
+            $name_where = ['name', 'LIKE', $first_name];
+            array_push($where_arr, $name_where);
+
+        } if(!$first_name && $last_name){
+
+            $name_where = ['name', 'LIKE', $last_name];
+            array_push($where_arr, $name_where);
+
+        } if(empty($request->all())) {
+
+            return '';
+
+        }
+
+        $users = User::where($where_arr);
+
+        if(empty($users)){
+            return $this->indexUsers();
+        }
+        return $this->indexUsers($users);
+    }
+
 
 
     private function generateString($ln = 10){

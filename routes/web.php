@@ -35,7 +35,8 @@ Route::get('/admin/dashboard/users', 'AdminController@indexUsers')->name('admin.
 Route::delete('/admin/dashboard/user/{id}', 'AdminController@destroyUser')->name('admin.delete.user');
 Route::get('/admin/dashboard/user/{id}', 'AdminController@showUser')->name('admin.show.user');
 Route::put('/admin/dashboard/user/{id}', 'AdminController@editUser')->name('admin.edit.user');
-Route::post('/admin/dashboard/users', 'AdminController@addUser')->name('admin.add.user');
+Route::post('/admin/dashboard/users/add', 'AdminController@addUser')->name('admin.add.user');
+Route::post('/admin/dashboard/users/search', 'AdminController@searchUser')->name('admin.search.user');
 Route::get('/admin/dashboard/user/{id}/generate/password', 'AdminController@generatePassword')->name('admin.generate.password.user');
 
 
