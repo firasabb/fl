@@ -6,12 +6,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
-
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -64,4 +65,10 @@ class User extends Authenticatable
         return $this->hasMany('\App\Upvote', 'user_id');
 
     }
+
+    public function reports()
+    {
+        return $this->morphMany('\App\Report', 'reportable');
+    }
+    
 }

@@ -1,3 +1,25 @@
+
+td form{
+    display: inline-block;
+}
+
+.td-actions{
+    text-align: center;
+}
+
+
+.td-actions-btns a{
+    width: 45%;
+}
+
+.td-actions-btns form{
+    width: 50%;
+}
+
+.td-actions-btns form button{
+    width: 100%;
+}
+
 .block-button{
     padding: 25px 0px;
 }
@@ -37,4 +59,16 @@
 
 .delete-prequestion-container{
     margin: 0.5rem 0;
+}
+
+
+// Search Rows and Columns
+
+.search-row{
+    padding-bottom: 20px;
+}
+
+.search-col{
+    display: flex;
+    justify-content: center;
 }

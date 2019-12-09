@@ -1,3 +1,33 @@
+.card-header-date {
+  float: right;
+}
+
+.card-header-date span {
+  font-size: 0.6rem;
+  color: #525252;
+}
+
+.card-header-img {
+  display: inline-block;
+}
+
+.card-header-text {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.card-footer-icons {
+  float: left;
+}
+
+.card-footer-report {
+  float: right;
+}
+
+.card-footer-report a {
+  color: #ff6666;
+}
+
 .submit-question-btn {
   float: right;
 }
@@ -34,10 +64,6 @@
 
 .card-header-flex {
   display: flex;
-}
-
-.card-header-text {
-  margin-left: 1rem;
 }
 
 .profile-first-row {

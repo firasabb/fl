@@ -156,6 +156,18 @@ $(document).ready(function () {
   $('#delete-form-tags').on('submit', function () {
     return confirm('Are you sure that you want to delete this tag?');
   });
+  $('#edit-form-reports').on('submit', function () {
+    return confirm('Are you sure that you want to edit this report?');
+  });
+  $('#delete-form-reports').on('submit', function () {
+    return confirm('Are you sure that you want to delete this report?');
+  });
+  $('#edit-form-categories').on('submit', function () {
+    return confirm('Are you sure that you want to edit this category?');
+  });
+  $('#delete-form-categories').on('submit', function () {
+    return confirm('Are you sure that you want to delete this category?');
+  });
 });
 
 /***/ }),
@@ -167,7 +179,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Firas\Web\xampp\htdocs\laravel\new\resources\js\admin.js */"./resources/js/admin.js");
+module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\js\admin.js */"./resources/js/admin.js");
 
 
 /***/ })

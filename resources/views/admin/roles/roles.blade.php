@@ -26,16 +26,16 @@
 
                     <table class="table">
                         <tr>
-                            <th scope="col">
+                            <th>
                                 ID
                             </th>
-                            <th scope="col">
+                            <th>
                                 Name
                             </th>
                             <th>
                                 Permissions
                             </th>
-                            <th scope="col">
+                            <th class="td-actions">
                                 Actions
                             </th>   
                         </tr>
@@ -53,12 +53,14 @@
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.show.role', ['id' => $role->id]) }}" class="btn btn-success">Show/Edit</a>
-                                    <form action="{{ route('admin.delete.role', ['id' => $role->id]) }}" method="POST" id="delete-form-roles" class="delete-form-1">
-                                        {!! csrf_field() !!}
-                                        {!! method_field('DELETE') !!}
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                    </form>
+                                    <div class="td-actions-btns">
+                                        <a href="{{ route('admin.show.role', ['id' => $role->id]) }}" class="btn btn-success">Show/Edit</a>
+                                        <form action="{{ route('admin.delete.role', ['id' => $role->id]) }}" method="POST" id="delete-form-roles" class="delete-form-1">
+                                            {!! csrf_field() !!}
+                                            {!! method_field('DELETE') !!}
+                                            <button class="btn btn-danger" type="submit">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

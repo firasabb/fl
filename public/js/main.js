@@ -216,7 +216,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Firas\Web\xampp\htdocs\laravel\new\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\js\main.js */"./resources/js/main.js");
 
 
 /***/ })

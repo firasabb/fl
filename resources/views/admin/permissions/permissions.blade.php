@@ -26,16 +26,16 @@
 
                     <table class="table">
                         <tr>
-                            <th scope="col">
+                            <th>
                                 ID
                             </th>
-                            <th scope="col">
+                            <th>
                                 Name
                             </th>
                             <th>
                                 Roles
                             </th>
-                            <th scope="col">
+                            <th class="td-actions">
                                 Actions
                             </th>   
                         </tr>

@@ -40,6 +40,14 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="question-description">Categories:</label>
+                            <select name="categories[]" multiple>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
 
                             <label for="question-description">Tags:</label>
                             <div class="tag-container">

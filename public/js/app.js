@@ -49388,10 +49388,10 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Firas\Web\xampp\htdocs\laravel\new\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Firas\Web\xampp\htdocs\laravel\new\resources\sass\app.scss */"./resources/sass/app.scss");
-__webpack_require__(/*! C:\Firas\Web\xampp\htdocs\laravel\new\resources\sass\admin.scss */"./resources/sass/admin.scss");
-module.exports = __webpack_require__(/*! C:\Firas\Web\xampp\htdocs\laravel\new\resources\sass\style.scss */"./resources/sass/style.scss");
+__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\sass\admin.scss */"./resources/sass/admin.scss");
+module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\sass\style.scss */"./resources/sass/style.scss");
 
 
 /***/ })

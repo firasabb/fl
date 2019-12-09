@@ -20,6 +20,7 @@ class CreateAnswersTable extends Migration
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('user_id');
             $table->boolean('best')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('question_id')

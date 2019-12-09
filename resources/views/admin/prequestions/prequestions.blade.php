@@ -4,6 +4,7 @@
 @section('content')
 <div class="container">
     @foreach($prequestions as $prequestion)
+    <?php $hasCategories = $prequestion->categories->pluck('id'); ?>
     <div class="row justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -40,6 +41,16 @@
                                 <label for="description" class="col-sm-2 col-form-label">Description:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control enabled-disabled" name="description" disabled>{{ $prequestion->description }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="categories" class="col-sm-2 col-form-label">Categories:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control enabled-disabled" name="categories[]" multiple disabled>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" <?php echo $hasCategories->search($category->id) !== false ? 'Selected' : ''; ?>>{{ $category->name }}</option>
+                                    @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <p>Options:</p>

@@ -3,9 +3,9 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <form method="post" action="{{ route('admin.search.user') }}">
+    <div class="row justify-content-center search-row">
+        <div class="col-md-12 search-col">
+            <form method="post" action="{{ route('admin.search.users') }}">
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
@@ -21,7 +21,10 @@
                         <input type='text' name="last_name" placeholder="Last Name..." class="form-control"/>
                     </div>
                     <div class="col">
-                        <input type='submit' value="submit" class="btn btn-primary"/>
+                        <input type='text' name="username" placeholder="Username..." class="form-control"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <input type='submit' value="Search" class="btn btn-primary"/>
                     </div>
                 </div>
             </form>
@@ -50,22 +53,22 @@
 
                     <table class="table">
                         <tr>
-                            <th scope="col">
+                            <th>
                                 ID
                             </th>
-                            <th scope="col">
+                            <th>
                                 Name
                             </th>
-                            <th scope="col">
+                            <th>
                                 Email
                             </th>
-                            <th scope="col">
+                            <th>
                                 Username
                             </th>
-                            <th scope="col">
+                            <th>
                                 Roles
                             </th>
-                            <th scope="col">
+                            <th class="td-actions">
                                 Actions
                             </th>   
                         </tr>
@@ -92,12 +95,14 @@
                                     ?>
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/dashboard/user/' . $user->id) }}" class="btn btn-success">Show/Edit</a>
-                                    <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users" class="delete-form-1">
-                                        {!! csrf_field() !!}
-                                        {!! method_field('DELETE') !!}
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                    </form>
+                                    <div class="td-actions-btns">
+                                        <a href="{{ url('admin/dashboard/user/' . $user->id) }}" class="btn btn-success">Edit</a>
+                                        <form action="{{ route('admin.delete.user', ['id' => $user->id]) }}" method="POST" id="delete-form-users" class="delete-form-1">
+                                            {!! csrf_field() !!}
+                                            {!! method_field('DELETE') !!}
+                                            <button class="btn btn-danger" type="submit">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

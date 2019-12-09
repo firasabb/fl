@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index')->name('welcome.index');
 
 Auth::routes();
 
@@ -36,7 +34,7 @@ Route::delete('/admin/dashboard/user/{id}', 'AdminController@destroyUser')->name
 Route::get('/admin/dashboard/user/{id}', 'AdminController@showUser')->name('admin.show.user');
 Route::put('/admin/dashboard/user/{id}', 'AdminController@editUser')->name('admin.edit.user');
 Route::post('/admin/dashboard/users/add', 'AdminController@addUser')->name('admin.add.user');
-Route::post('/admin/dashboard/users/search', 'AdminController@searchUser')->name('admin.search.user');
+Route::post('/admin/dashboard/users/search', 'AdminController@searchUsers')->name('admin.search.users');
 Route::get('/admin/dashboard/user/{id}/generate/password', 'AdminController@generatePassword')->name('admin.generate.password.user');
 
 
@@ -66,6 +64,16 @@ Route::delete('/admin/dashboard/prequestion/{id}', 'PreQuestionController@destro
 Route::post('/admin/dashboard/prequestions/', 'PreQuestionController@approve')->middleware('role:admin|moderator')->name('admin.approve.prequestion');
 
 
+// Admin / Questions
+
+Route::get('/admin/dashboard/questions/', 'QuestionController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.questions');
+Route::delete('/admin/dashboard/question/{id}', 'QuestionController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.question');
+Route::get('/admin/dashboard/question/{id}', 'QuestionController@adminShow')->middleware('role:admin|moderator')->name('admin.show.question');
+Route::put('/admin/dashboard/question/{id}', 'QuestionController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.question');
+Route::post('/admin/dashboard/question/', 'QuestionController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.question');
+Route::post('/admin/dashboard/questions/search', 'QuestionController@adminSearchQuestions')->middleware('role:admin|moderator')->name('admin.search.questions');
+
+
 // Admin / Tags
 
 Route::get('/admin/dashboard/tags/', 'TagController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.tags');
@@ -73,16 +81,38 @@ Route::delete('/admin/dashboard/tag/{id}', 'TagController@adminDestroy')->middle
 Route::get('/admin/dashboard/tag/{id}', 'TagController@adminShow')->middleware('role:admin|moderator')->name('admin.show.tag');
 Route::put('/admin/dashboard/tag/{id}', 'TagController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.tag');
 Route::post('/admin/dashboard/tag/', 'TagController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.tag');
+Route::post('/admin/dashboard/tags/search', 'TagController@adminSearchTags')->middleware('role:admin|moderator')->name('admin.search.tags');
+
+
+// Admin / Categories
+
+Route::get('/admin/dashboard/categories/', 'CategoryController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.categories');
+Route::delete('/admin/dashboard/categorie/{id}', 'CategoryController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.category');
+Route::get('/admin/dashboard/category/{id}', 'CategoryController@adminShow')->middleware('role:admin|moderator')->name('admin.show.category');
+Route::put('/admin/dashboard/category/{id}', 'CategoryController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.category');
+Route::post('/admin/dashboard/category/', 'CategoryController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.category');
+Route::post('/admin/dashboard/categories/search', 'CategoryController@adminSearchCategories')->middleware('role:admin|moderator')->name('admin.search.categories');
 
 
 // Admin / Answers
 
 Route::get('/admin/dashboard/answers/', 'AnswerController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.answers');
 
+
+// Admin / Reports
+
+Route::get('/admin/dashboard/reports/', 'ReportController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.reports');
+Route::delete('/admin/dashboard/report/{id}', 'ReportController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.report');
+Route::get('/admin/dashboard/report/{id}', 'ReportController@adminShow')->middleware('role:admin|moderator')->name('admin.show.report');
+Route::put('/admin/dashboard/report/{id}', 'ReportController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.report');
+Route::post('/admin/dashboard/report/', 'ReportController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.report');
+Route::post('/admin/dashboard/report/search', 'ReportController@adminSearchReports')->middleware('role:admin|moderator')->name('admin.search.reports');
+
+
 // PreQuestions
 
-Route::get('/create/question', 'PreQuestionController@create')->name('create.prequestion');
-Route::post('/create/question', 'PreQuestionController@store')->name('store.prequestion');
+Route::get('/ask/question', 'PreQuestionController@create')->name('create.prequestion');
+Route::post('/ask/question', 'PreQuestionController@store')->name('store.prequestion');
 
 
 // Question

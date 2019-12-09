@@ -7,6 +7,7 @@ use App\Question;
 use App\PreChoice;
 use App\Choice;
 use App\Tag;
+use App\Category;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
@@ -32,8 +33,9 @@ class PreQuestionController extends Controller
      */
     public function index()
     {
-        $prequestions = PreQuestion::orderBy('id', 'desc')->paginate(1); 
-        return view('admin.prequestions.prequestions', ['prequestions' => $prequestions]);
+        $prequestions = PreQuestion::orderBy('id', 'asc')->paginate(1);
+        $categories = Category::all(); 
+        return view('admin.prequestions.prequestions', ['prequestions' => $prequestions, 'categories' => $categories]);
     }
 
     /**
@@ -43,7 +45,8 @@ class PreQuestionController extends Controller
      */
     public function create()
     {
-        return view('prequestions.create');
+        $categories = Category::all();
+        return view('prequestions.create', ['categories' => $categories]);
     }
 
     /**
@@ -57,12 +60,14 @@ class PreQuestionController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:15|max:200',
             'description' => 'string|max:500|nullable',
+            'categories' => 'required|array',
+            'categories.*' => 'integer',
             'options' => 'array',
             'options.*' => 'string|max:200'
         ]);
 
         if($validator->fails()){
-            return redirect('/create/question/')->withErrors($validator)->withInput();
+            return redirect('/ask/question/')->withErrors($validator)->withInput();
         }
 
         $user = Auth::user();
@@ -73,15 +78,23 @@ class PreQuestionController extends Controller
         $prequestion->user_id = $user->id;
         $prequestion->save();
 
-        if($request->options){
-            $options = $request->options;
+        $options = $request->options;
+        if($options){
             foreach($options as $option){
                 $choice = new PreChoice();
                 $choice->choice = $option;
-                $choice->pre_question_id = $prequestion->id;
-                $choice->save();
-                
+                $prequestion->choices()->save($choice);
             }
+        }
+
+        $categories = $request->categories;
+        foreach($categories as $category){
+            $category = Category::findOrFail($category);
+            $prequestion->categories()->attach($category);
+        }
+
+        if($user->hasAnyRole(['admin', 'moderator'])){
+            $this->adminAddQuestion($prequestion->id);
         }
 
         return redirect('/home')->with('status', 'Your Question Has Been Created! Once it is approved, it is going to be public...');
@@ -160,9 +173,9 @@ class PreQuestionController extends Controller
 
         $question->title = $request->title;
         $question->description = $request->description;
-        $question->url = Str::slug(htmlspecialchars($request->title), '-');
+        $question->url = Str::slug($request->title, '-');
         $question->user_id = $request->user_id;
-        $question->token = uniqid();
+        $question->unique_id = uniqid();
         $question->save(); 
 
         if($request->options){
@@ -175,10 +188,48 @@ class PreQuestionController extends Controller
             }
         }
 
+        $categories = $request->categories;
+        foreach($categories as $category){
+            $category = Category::findOrFail($category);
+            $question->categories()->attach($category);
+        }
+
         $prequestion->delete();
 
-        return redirect('/admin/dashboard/prequestions/')->with('status', 'Question has been approved!');
+        return redirect('/admin/dashboard/prequestions/')->with('status', 'The Question has been approved!');
 
+    }
+
+
+
+    public function adminAddQuestion($prequestion_id){
+
+        $prequestion = PreQuestion::findOrFail($prequestion_id);
+        $prechoices = $prequestion->choices;
+        $question = new Question();
+        $question->title = $prequestion->title;
+        $question->description = $prequestion->description;
+        $question->url = Str::slug($prequestion->title, '-');
+        $question->user_id = $prequestion->user_id;
+        $question->unique_id = uniqid();
+        $question->save();
+        $prequestion->delete();
+
+        if(!empty($prechoices)){
+            foreach($prechoices as $prechoice){
+                $choice = new Choice;
+                $choice->choice = $prechoice->choice;
+                $choice->question_id = $question->id;
+                $choice->save();
+            }
+        }
+
+        $categories = $prequestion->categories;
+        foreach($categories as $category){
+            $question->categories()->attach($category);
+        }
+
+        return redirect('/admin/dashboard/questions/')->with('status', 'A new question has been added by an admin.');
     }
 
 

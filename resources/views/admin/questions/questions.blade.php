@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row justify-content-center search-row">
         <div class="col-md-12 search-col">
-            <form method="post" action="{{ route('admin.search.tags') }}">
+            <form method="post" action="{{ route('admin.search.questions') }}">
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Tags</div>
+                <div class="card-header">Questions</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -48,30 +48,36 @@
                                 ID
                             </th>
                             <th>
-                                Name
+                                Title
                             </th>
                             <th>
                                 URL
+                            </th>
+                            <th>
+                                Answers
                             </th>
                             <th class="td-actions">
                                 Actions
                             </th>   
                         </tr>
-                        @foreach ($tags as $tag)
+                        @foreach ($questions as $question)
                             <tr>
                                 <td>
-                                    {{$tag->id}}
+                                    {{$question->id}}
                                 </td>
                                 <td>
-                                    {{ strtoupper($tag->name) }}
+                                    {{ $question->title }}
                                 </td>
                                 <td>
-                                    {{ $tag->url }}
+                                    <a href="{{ route('show.question', ['url' => $question->url]) }}">{{ $question->url }}</a>
+                                </td>
+                                <td>
+                                    {{ $question->answers()->count() }}
                                 </td>
                                 <td>
                                     <div class="td-actions-btns">
-                                        <a href="{{ route('admin.show.tag', ['id' => $tag->id]) }}" class="btn btn-success">Show/Edit</a>
-                                        <form action="{{ route('admin.delete.tag', ['id' => $tag->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
+                                        <a href="{{ route('admin.show.question', ['id' => $question->id]) }}" class="btn btn-success">Show/Edit</a>
+                                        <form action="{{ route('admin.delete.question', ['id' => $question->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
                                             {!! csrf_field() !!}
                                             {!! method_field('DELETE') !!}
                                             <button class="btn btn-danger" type="submit">Delete</button>
@@ -81,47 +87,11 @@
                             </tr>
                         @endforeach
                     </table>
-                    {{ $tags->links() }}
+                    {{ $questions->links() }}
                 </div>
             </div>
             <div class="block-button">
-                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addModal">Add Tag</button>
-            </div>
-
-            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <form method="POST" action="{{ route('admin.add.tag') }}">
-                            {!! csrf_field() !!}
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Tag</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="name"  value="{{ old('name') }}" placeholder="Name" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="url"  value="{{ old('url') }}" placeholder="Url" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button name="action" type="submit" class="btn btn-primary">Add</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
+                <a href="{{route('create.prequestion')}}" target="_blank" class="btn btn-primary btn-lg btn-block">Add Question</a>
             </div>
 
         </div>

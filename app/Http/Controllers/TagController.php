@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use URL;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class TagController extends Controller
 {
@@ -17,14 +18,18 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::orderBy('id', 'desc')->paginate();
+        $tags = Tag::orderBy('id', 'desc')->paginate(20);
         return view('tags.tags', ['tags' => $tags]);
     }
 
 
-    public function adminIndex()
+    public function adminIndex($tags = null)
     {
-        $tags = Tag::orderBy('id', 'desc')->paginate();
+        if(!$tags){
+            $tags = Tag::orderBy('id', 'desc')->paginate(20);
+        } else {
+            $tags = $tags->paginate(20);
+        }
         return view('admin.tags.tags', ['tags' => $tags]);
     }
 
@@ -47,7 +52,7 @@ class TagController extends Controller
     public function adminAdd(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:20',
+            'name' => 'required|string|max:40',
             'url' => 'required|string'
         ]);
 
@@ -57,10 +62,15 @@ class TagController extends Controller
 
         $tag = new Tag();
         $tag->name = strToLower($request->name);
-        $tag->url = URL::to('/tag') . '/' . Str::slug(htmlspecialchars($request->url), '-');
+        $request->url = Str::slug($request->url, '-');
+        $check = Tag::where(['deleted_at' => NULL, 'url' => $request->url])->first();
+        if(!empty($check)){
+            return redirect('/admin/dashboard/tags/')->withErrors('The url has already been taken.')->withInput();
+        }
+        $tag->url = $request->url;
         $tag->save();
 
-        return redirect('/admin/dashboard/tags')->with('status', 'A tag has been created!');
+        return redirect('/admin/dashboard/tags')->with('status', 'A new tag has been created!');
 
 
     }
@@ -95,9 +105,31 @@ class TagController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function adminEdit(Request $request, Tag $tag)
+    public function adminEdit(Request $request, $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|max:40',
+            'url' => 'string'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/admin/dashboard/tag/' . $id)->withErrors($validator)->withInput();
+        } 
+
+        $tag->name = strToLower($request->name);
+        $request->url = Str::slug($request->url, '-');
+        if($request->url != $tag->url){
+            $check = Tag::where(['deleted_at' => NULL, 'url' => $request->url])->first();
+            if(!empty($check)){
+                return redirect('/admin/dashboard/tag/' . $id)->withErrors('The url has already been taken.')->withInput();
+            }
+            $tag->url = $request->url;
+        }
+        $tag->save();
+
+        return redirect('/admin/dashboard/tag/' . $id)->with('status', 'This tag has been edited');
     }
 
     /**
@@ -112,4 +144,47 @@ class TagController extends Controller
         $tag->delete();
         return redirect('/admin/dashboard/tags/')->with('status', 'A tag has been deleted!');
     }
+
+
+    public function adminSearchTags(Request $request){
+        
+        $users = array();
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'integer|nullable',
+            'name' => 'string|max:300|nullable'
+        ]);
+
+        if($validator->fails()){
+            return redirect('/admin/dashboard/tags/')->withErrors($validator)->withInput();
+        }
+
+        $name = $request->name;
+        $id = $request->id;
+        
+        $where_arr = array();
+
+        if($name){
+
+            $name_where = ['name', 'LIKE', '%' . $name . '%'];
+            array_push($where_arr, $name_where);
+
+        } if ($id){
+
+            $id_where = ['id', '=', $id];
+            array_push($where_arr, $id_where);
+
+        } if(empty($request->all())) {
+            return '';
+        }
+
+        $tags = Tag::where($where_arr);
+
+        if(empty($tags)){
+            return $this->adminIndex();
+        }
+        return $this->adminIndex($tags);
+    }
+
+
 }

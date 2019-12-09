@@ -1,3 +1,52 @@
+
+
+
+
+// Welcome Page Cards
+
+
+
+.card-header-date{
+
+    float: right;
+
+}
+
+
+
+.card-header-date span{
+
+    font-size: 0.6rem;
+    color: rgb(82, 82, 82);
+
+}
+
+
+.card-header-img{
+    display: inline-block;
+}
+
+
+.card-header-text{
+    display: inline-block;
+    margin-left: 1rem;
+}
+
+
+.card-footer-icons{
+    float: left;
+}
+
+.card-footer-report{
+    float: right;
+}
+
+.card-footer-report a{
+    color: rgb(255, 102, 102);
+}
+
+
+
 .submit-question-btn{
     float: right;
 }
@@ -40,10 +89,6 @@
 
 .card-header-flex{
     display: flex;
-}
-
-.card-header-text{
-    margin-left: 1rem;
 }
 
 .profile-first-row{

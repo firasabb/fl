@@ -18,6 +18,7 @@ class CreatePreQuestionsTable extends Migration
             $table->text('title');
             $table->unsignedBigInteger('user_id');
             $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')

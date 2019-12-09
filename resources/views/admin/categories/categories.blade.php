@@ -5,14 +5,14 @@
 <div class="container">
     <div class="row justify-content-center search-row">
         <div class="col-md-12 search-col">
-            <form method="post" action="{{ route('admin.search.tags') }}">
+            <form method="post" action="{{ route('admin.search.categories') }}">
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
                         <input type='number' name="id" placeholder="ID..." class="form-control"/>
                     </div>
                     <div class="col">
-                        <input type='text' name="name" placeholder="Tag Name..." class="form-control"/>
+                        <input type='text' name="name" placeholder="Category Name..." class="form-control"/>
                     </div>
                     <div class="col-sm-1">
                         <input type='submit' value="Search" class="btn btn-primary"/>
@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Tags</div>
+                <div class="card-header">Categories</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -57,21 +57,21 @@
                                 Actions
                             </th>   
                         </tr>
-                        @foreach ($tags as $tag)
+                        @foreach ($categories as $category)
                             <tr>
                                 <td>
-                                    {{$tag->id}}
+                                    {{$category->id}}
                                 </td>
                                 <td>
-                                    {{ strtoupper($tag->name) }}
+                                    {{ strtoupper($category->name) }}
                                 </td>
                                 <td>
-                                    {{ $tag->url }}
+                                    {{ $category->url }}
                                 </td>
                                 <td>
                                     <div class="td-actions-btns">
-                                        <a href="{{ route('admin.show.tag', ['id' => $tag->id]) }}" class="btn btn-success">Show/Edit</a>
-                                        <form action="{{ route('admin.delete.tag', ['id' => $tag->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
+                                        <a href="{{ route('admin.show.category', ['id' => $category->id]) }}" class="btn btn-success">Show/Edit</a>
+                                        <form action="{{ route('admin.delete.category', ['id' => $category->id]) }}" method="POST" id="delete-form-categories" class="delete-form-1">
                                             {!! csrf_field() !!}
                                             {!! method_field('DELETE') !!}
                                             <button class="btn btn-danger" type="submit">Delete</button>
@@ -81,20 +81,20 @@
                             </tr>
                         @endforeach
                     </table>
-                    {{ $tags->links() }}
+                    {{ $categories->links() }}
                 </div>
             </div>
             <div class="block-button">
-                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addModal">Add Tag</button>
+                <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addModal">Add Category</button>
             </div>
 
             <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                    <form method="POST" action="{{ route('admin.add.tag') }}">
+                    <form method="POST" action="{{ route('admin.add.category') }}">
                             {!! csrf_field() !!}
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Tag</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

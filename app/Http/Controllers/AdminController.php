@@ -148,15 +148,16 @@ class AdminController extends Controller
 
 
 
-    public function searchUser(Request $request){
+    public function searchUsers(Request $request){
         
         $users = array();
 
         $validator = Validator::make($request->all(), [
             'email' => 'email|nullable',
             'id' => 'integer|nullable',
-            'first_name' => 'max:50|nullable',
-            'last_name' => 'max:50|nullable'
+            'first_name' => 'string|max:50|nullable',
+            'last_name' => 'string|max:50|nullable',
+            'username' => 'string|max:100|nullable'
         ]);
             if($validator->fails()){
                 return redirect('/admin/dashboard/users/')->withErrors($validator)->withInput();
@@ -165,7 +166,8 @@ class AdminController extends Controller
         $id = $request->id;
         $first_name = $request->first_name;
         $last_name = $request->last_name;
-        
+        $username = $request->username;
+
         $where_arr = array();
 
         if($email){
@@ -180,18 +182,23 @@ class AdminController extends Controller
 
         } if($first_name && $last_name){
 
-            $name_where = ['name', 'LIKE', $first_name . ' ' . $last_name];
+            $name_where = ['name', 'LIKE', '%' . $first_name . ' ' . $last_name . '%'];
             array_push($where_arr, $name_where);
 
         } if($first_name && !$last_name){
 
-            $name_where = ['name', 'LIKE', $first_name];
+            $name_where = ['name', 'LIKE', '%' . $first_name . '%'];
             array_push($where_arr, $name_where);
 
         } if(!$first_name && $last_name){
 
-            $name_where = ['name', 'LIKE', $last_name];
+            $name_where = ['name', 'LIKE', '%' . $last_name . '%'];
             array_push($where_arr, $name_where);
+
+        } if($username){
+
+            $username_where = ['username', 'LIKE', '%' . $username . '%'];
+            array_push($where_arr, $username_where);
 
         } if(empty($request->all())) {
 
@@ -206,8 +213,6 @@ class AdminController extends Controller
         }
         return $this->indexUsers($users);
     }
-
-
 
     private function generateString($ln = 10){
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
