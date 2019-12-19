@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index')->name('welcome.index');
+Route::get('/', 'WelcomeController@index')->name('main.index');
 
 Auth::routes();
 
@@ -131,3 +131,8 @@ Route::get('/tags', 'TagController@index')->name('index.tags');
 // Answers
 
 Route::post('/answer/create/{token}', 'AnswerController@store')->middleware('role:user')->name('add.answer');
+
+
+// Reports
+
+Route::post('/reports/add/{type}', 'ReportController@store')->middleware('role:user')->name('add.report');

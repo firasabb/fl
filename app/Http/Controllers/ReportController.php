@@ -7,6 +7,49 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
+
+
+    public function __construct(){
+
+    }
+
+
+
+    public function store(Request $request, $type){
+
+        $validator = Validator::make($request->all(), [
+            '_q' => 'required|string',
+            'body' => 'required|string'
+        ]);
+
+        if($validator->fails()){
+
+            return back()->withErrors($validator)->withInput();
+
+        }
+
+        if($type == 'question'){
+
+            $_q = decrypt($request->_q);
+            $question = Question::findOrFail($_q);
+            $report = new Report();
+            $report->body = $request->body;
+            $report->save();
+            $report->reportable()->save($question);
+
+            return back()->with('status', 'Your report has been successfully submitted! Thank you for helping us making the website a better place.');
+
+        }
+        
+
+
+    }
+
+
+
+
+
+
     /**
      * Display a listing of the resource.
      *

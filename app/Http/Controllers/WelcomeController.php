@@ -15,7 +15,7 @@ class WelcomeController extends Controller
     public function index(){
 
         $questions = Question::orderBy('id', 'desc')->paginate(5);
-        return view('welcome', ['questions' => $questions]);
+        return view('main', ['questions' => $questions]);
 
     }
 }
