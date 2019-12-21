@@ -29,7 +29,7 @@
                                 @svg('heart', 'heart-icon')
                             </div>
                             <div class="card-footer-report">
-                                <button type="button" id="report-btn" class="btn btn-outline-danger">Report</button>
+                                <button type="button" v-on:click="open_report_modal('{{ $question->unique_id }}')" class="btn btn-outline-danger">Report</button>
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <textarea name="body" placeholder="Please describe why the question should not be on the website..."></textarea>
+                            <textarea class="form-control" name="body" placeholder="Please describe why the question should not be on the website..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -64,6 +64,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button name="action" type="submit" class="btn btn-primary">Submit</button>
             </div>
+            <input type="hidden" name="_q" v-bind:value="id">
         </form>
         </div>
     </div>

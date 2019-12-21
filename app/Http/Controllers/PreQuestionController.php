@@ -13,6 +13,8 @@ use Validator;
 use Illuminate\Support\Str;
 use Auth;
 use Spatie\Searchable\Search;
+use Illuminate\Support\Facades\Crypt;
+
 
 class PreQuestionController extends Controller
 {
@@ -175,7 +177,7 @@ class PreQuestionController extends Controller
         $question->description = $request->description;
         $question->url = Str::slug($request->title, '-');
         $question->user_id = $request->user_id;
-        $question->unique_id = uniqid();
+        $question->unique_id = Crypt::encrypt($question->id);
         $question->save(); 
 
         if($request->options){
@@ -211,7 +213,7 @@ class PreQuestionController extends Controller
         $question->description = $prequestion->description;
         $question->url = Str::slug($prequestion->title, '-');
         $question->user_id = $prequestion->user_id;
-        $question->unique_id = uniqid();
+        $question->unique_id = Crypt::encrypt($question->id);
         $question->save();
         $prequestion->delete();
 

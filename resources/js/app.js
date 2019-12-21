@@ -29,4 +29,13 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    data: {
+        id: 0
+    },
+    methods: {
+        open_report_modal: function(id){
+            $('#reportModal').modal('show');
+            this.id = id;
+        }
+    }
 });

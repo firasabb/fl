@@ -49216,7 +49216,16 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
  */
 
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: {
+    id: 0
+  },
+  methods: {
+    open_report_modal: function open_report_modal(id) {
+      $('#reportModal').modal('show');
+      this.id = id;
+    }
+  }
 });
 
 /***/ }),

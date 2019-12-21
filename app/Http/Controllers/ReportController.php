@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Report;
+use App\Question;
 use Illuminate\Http\Request;
+use Validator;
+use Illuminate\Support\Facades\Crypt;
 
 class ReportController extends Controller
 {
@@ -29,8 +32,9 @@ class ReportController extends Controller
         }
 
         if($type == 'question'){
-
-            $_q = decrypt($request->_q);
+            
+            $_q = Crypt::decrypt($request->_q);
+            var_dump($request->_q);
             $question = Question::findOrFail($_q);
             $report = new Report();
             $report->body = $request->body;
