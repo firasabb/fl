@@ -38,7 +38,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('add.answer', $question->token) }}">
+                    <form method="POST" action="{{ route('add.answer', ['encryptedId' => encrypt($question->id)]) }}">
                         @csrf
                         <div class="form-group">
                             <input class="form-control" name="title" type="text" value="{{ old('title') }}" />

@@ -10,10 +10,15 @@ class Report extends Model
     use SoftDeletes;
 
 
-    public function reportable($reported){
+    public function reportable(){
         
         return $this->morphTo();
 
     }
 
+    public function user(){
+
+        return $this->belongsTo('\App\User');
+
+    }
 }

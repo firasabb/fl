@@ -151,6 +151,14 @@ class PreQuestionController extends Controller
         return redirect('admin/dashboard/prequestions/')->with('status', 'Question has been deleted!');
     }
 
+    /** 
+    *
+    * Approve the prequestion for users not admins
+    *
+    * @param Request
+    * @return Response
+    *
+    */
 
     public function approve(Request $request){
 
@@ -171,14 +179,7 @@ class PreQuestionController extends Controller
 
         $prequestion = PreQuestion::findOrFail($request->question_id);
 
-        $question = new Question();
-
-        $question->title = $request->title;
-        $question->description = $request->description;
-        $question->url = Str::slug($request->title, '-');
-        $question->user_id = $request->user_id;
-        $question->unique_id = Crypt::encrypt($question->id);
-        $question->save(); 
+        $question = $this->makeNewQuestion($request); 
 
         if($request->options){
             $options = $request->options;
@@ -203,18 +204,21 @@ class PreQuestionController extends Controller
     }
 
 
+    /** 
+    *
+    * Approve the prequestion for admins
+    *
+    * @param Request
+    * @return Response
+    *
+    */
+
 
     public function adminAddQuestion($prequestion_id){
 
         $prequestion = PreQuestion::findOrFail($prequestion_id);
         $prechoices = $prequestion->choices;
-        $question = new Question();
-        $question->title = $prequestion->title;
-        $question->description = $prequestion->description;
-        $question->url = Str::slug($prequestion->title, '-');
-        $question->user_id = $prequestion->user_id;
-        $question->unique_id = Crypt::encrypt($question->id);
-        $question->save();
+        $question = $this->makeNewQuestion($prequestion);
         $prequestion->delete();
 
         if(!empty($prechoices)){
@@ -233,6 +237,8 @@ class PreQuestionController extends Controller
 
         return redirect('/admin/dashboard/questions/')->with('status', 'A new question has been added by an admin.');
     }
+
+
 
 
     public function suggestTags(Request $request){
@@ -263,4 +269,30 @@ class PreQuestionController extends Controller
 
         return response()->json($response);
     }
+
+
+
+    /**
+     * 
+     * Make new Question
+     * 
+     * @param Object: Prequestion or Request
+     * @return New Question
+     * 
+     */
+
+
+    private function makeNewQuestion($obj){
+
+        $question = new Question();
+        $question->title = $obj->title;
+        $question->description = $obj->description;
+        $question->url = Str::slug($obj->title, '-');
+        $question->user_id = $obj->user_id;
+        $question->save();
+        return $question;
+
+    }
+
+
 }

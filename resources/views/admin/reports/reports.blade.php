@@ -66,7 +66,11 @@
                                     {{ strtoupper($report->reportable_type) }}
                                 </td>
                                 <td>
-                                    {{ $report->reportable_id }}
+                                    @if($report->reportable_type == 'App\Question')
+                                        <a href="{{ route('show.question', ['url' => $report->reportable->url]) }}" target="_blank">{{ $report->reportable_id }}</a>
+                                    @else
+                                        {{ $report->reportable_id }}
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="td-actions-btns">

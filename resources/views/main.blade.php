@@ -29,7 +29,7 @@
                                 @svg('heart', 'heart-icon')
                             </div>
                             <div class="card-footer-report">
-                                <button type="button" v-on:click="open_report_modal('{{ $question->unique_id }}')" class="btn btn-outline-danger">Report</button>
+                                <button type="button" v-on:click="open_report_modal('{{ encrypt($question->id) }}')" class="btn btn-outline-danger">Report</button>
                             </div>
                         </div>
                     </div>

@@ -18,8 +18,13 @@ class CreateReportsTable extends Migration
             $table->string('body');
             $table->integer('reportable_id');
             $table->text('reportable_type');
+            $table->unsignedBigInteger('user_id');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                    ->references('id')->on('users')
+                    ->onDelete('cascade');
         });
     }
 

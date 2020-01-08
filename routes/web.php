@@ -130,7 +130,7 @@ Route::get('/tags', 'TagController@index')->name('index.tags');
 
 // Answers
 
-Route::post('/answer/create/{token}', 'AnswerController@store')->middleware('role:user')->name('add.answer');
+Route::post('/answer/create/{encryptedId}', 'AnswerController@store')->middleware('role:user')->name('add.answer');
 
 
 // Reports

@@ -7,6 +7,7 @@ use App\Question;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Crypt;
+use Auth;
 
 class ReportController extends Controller
 {
@@ -16,6 +17,14 @@ class ReportController extends Controller
 
     }
 
+
+    /**
+     * 
+     * Save the report in the database
+     * @param Request
+     * @return Response
+     * 
+     */
 
 
     public function store(Request $request, $type){
@@ -33,13 +42,14 @@ class ReportController extends Controller
 
         if($type == 'question'){
             
-            $_q = Crypt::decrypt($request->_q);
-            var_dump($request->_q);
+            $_q = decrypt($request->_q);
+            $user = Auth::user();
             $question = Question::findOrFail($_q);
             $report = new Report();
             $report->body = $request->body;
+            $report->reportable()->associate($question);
+            $user->reports()->save($report);
             $report->save();
-            $report->reportable()->save($question);
 
             return back()->with('status', 'Your report has been successfully submitted! Thank you for helping us making the website a better place.');
 
@@ -61,7 +71,7 @@ class ReportController extends Controller
      */
     public function adminIndex($reports = null)
     {
-        $reports = Report::orderBy('id', 'desc')->paginate(20);
+        $reports = Report::orderBy('id', 'desc')->with('reportable')->paginate(20);
         return view('admin.reports.reports', ['reports' => $reports]);
     }
 
@@ -83,9 +93,10 @@ class ReportController extends Controller
      * @param  \App\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function adminShow(Report $report)
+    public function adminShow($id)
     {
-        //
+        $report = Report::findOrFail($id);
+        return view('admin.reports.show', ['report' => $report]);
     }
 
     /**
