@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Answer;
 use App\Question;
+use App\User;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
@@ -26,22 +27,23 @@ class AnswerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store($token, Request $request)
+    public function store($encryptedId, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:100',
-            'description' => 'max:500|nullable',
+            'description' => 'max:2500|nullable',
         ]);
 
-        if($validator->fails()){
+        if($validator->fails() || !$encryptedId){
             return redirect()->back()->withErrors()->withInput();
         }
-
+        $question = Question::findOrFail(decrypt($encryptedId));
+        $user = Auth::user();
         $answer = new Answer();
         $answer->title = $request->title;
         $answer->description = $request->description;
-        $answer->user_id = Auth::user()->id;
-        $answer->question_id = Question::where('token', $token)->firstOrFail()->id;
+        $answer->question_id = $question->id;
+        $user->answers()->save($answer);
         $answer->save();
 
         return redirect()->back()->with('status', 'Your answer has been added successfully!');

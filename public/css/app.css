@@ -10644,3 +10644,7 @@ a.text-dark:focus {
   }
 }
 
+.block-button {
+  padding: 25px 0px;
+}
+

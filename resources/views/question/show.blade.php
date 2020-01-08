@@ -76,6 +76,15 @@
         </div>
     </div>
     @endforeach
+        @hasanyrole('writer|admin')
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="block-button">
+                        <a href="{{route('admin.show.question', ['id' => $question->id])}}" target="_blank" class="btn btn-primary btn-lg btn-block">Edit This Question</a>
+                    </div>
+                <div>
+            </div>
+        @endrole
         </div>
     </div>
 </div>
