@@ -21,7 +21,7 @@ Route::post('/register/checkusername', 'Auth\RegisterController@checkusername')-
 
 // Get Tags AJAX
 
-Route::post('/create/question/tags', 'PreQuestionController@suggestTags')->name('suggesttags');
+Route::post('/ask/question/tags', 'PreQuestionController@suggestTags')->name('suggesttags');
 
 //
 
@@ -98,8 +98,8 @@ Route::post('/admin/dashboard/categories/search', 'CategoryController@adminSearc
 
 Route::get('/admin/dashboard/answers/', 'AnswerController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.answers');
 Route::delete('/admin/dashboard/answer/{id}', 'AnswerController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.answer');
-Route::get('/admin/dashboard/question/{id}', 'AnswerController@adminShow')->middleware('role:admin|moderator')->name('admin.show.answer');
-Route::put('/admin/dashboard/question/{id}', 'AnswerController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.answer');
+Route::get('/admin/dashboard/answer/{id}', 'AnswerController@adminShow')->middleware('role:admin|moderator')->name('admin.show.answer');
+Route::put('/admin/dashboard/answer/{id}', 'AnswerController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.answer');
 Route::post('/admin/dashboard/answer/', 'AnswerController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.answer');
 Route::post('/admin/dashboard/answers/search', 'AnswerController@adminSearchAnswers')->middleware('role:admin|moderator')->name('admin.search.answers');
 

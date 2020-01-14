@@ -66,8 +66,6 @@
                             <div class="col">
                                 <h5>ID:</h1>
                                 <p>{{ $question->id }}</p>
-                                <h5>Unique ID:</h1>
-                                <p>{{ $question->unique_id }}</p>
                             </div>
                         </div>
                     </form>

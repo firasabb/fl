@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
 use Auth;
-use Spatie\Searchable\Search;
 use Illuminate\Support\Facades\Crypt;
 
 
@@ -243,31 +242,42 @@ class PreQuestionController extends Controller
 
     public function suggestTags(Request $request){
 
-        $tag = $request->tag;
+        if($request->ajax()){
 
-        if($tag){
+            $tag = $request->tag;
+            $exist = $request->exist;
+        
+            if($tag){
 
-            $suggestion = Tag::where('name', $tag)->get();
-    
-            $searchResults = (new Search())
-                        ->registerModel(\App\Tag::class, 'name')
-                        ->perform($tag);
+                $whereArr = array();
+
+                if($exist){
+                    foreach($exist as $existTag){
+                        $where = ['name', '!=', $existTag];
+                        array_push($whereArr, $where);
+                    }
+                }
+                $where = ['name', 'LIKE', '%' . $tag . '%'];
+                array_push($whereArr, $where);
+                $searchResults = Tag::where($whereArr)->get();
+
+                $response = array(
+                    'status' => 'success',
+                    'results' => $searchResults
+                );
+        
+                return response()->json($response);
+
+            }
 
             $response = array(
-                'status' => 'success',
-                'results' => $searchResults
+                'status' => 'error',
+                'message' => 'no tag has been searched for'
             );
-    
+
             return response()->json($response);
-
         }
-
-        $response = array(
-            'status' => 'error',
-            'message' => 'no tag has been searched for'
-        );
-
-        return response()->json($response);
+        
     }
 
 

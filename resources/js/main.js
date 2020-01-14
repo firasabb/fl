@@ -68,75 +68,79 @@ $(document).ready(function(){
 
       );
 
+      var selectedTags = [];
 
-      $('#tag-input').on('keyup',
-
-    function checkusername() {
-        var url = window.location.href;
-        jQuery.ajax({
-        url: url + "/tags",
-        type: "POST",
-        data: {tag:$('#tag-input').val()},
-        success:function(data){
-            if(data.status == 'success'){
-                suggest(data.results);            
-            }
-        },
-
-        });
-    }
-
-    );
+      $('#tag-input').on('input keyup',
+        function getTags() {
+          if(this.value){
+            var exist = Array();
+            var url = document.location.href;
+            var selectedTagsUl = $('#selected-tags-ul');
+            var selectedTagsUlChildren = selectedTagsUl.children('li').each(
+              function(){
+                exist.push($(this).text());
+              }
+            );
+            jQuery.ajax({
+              url: url + "/tags",
+              type: "POST",
+              data: {tag:$('#tag-input').val(), exist: exist},
+              success:function(data){
+                  if(data.status == 'success'){
+                    clearAllTags();
+                      suggest(data.results);
+                      tagClick();
+                  } else {
+                    clearAllTags();
+                  }
+              },
+            });
+          } else {
+            clearAllTags();
+          }
+      });
 
 
 
     function suggest(arr){
 
-      var inp = document.getElementById('tag-input');
-      var tags_container = document.getElementById('tags');
-      var tags_nodeList = tags_container.querySelectorAll('div');
-      var tags = Array.from(tags_nodeList);
-      var check;
-      closeAllLists();
-      a = document.createElement("DIV");
-      a.setAttribute("class", "suggestions");
-      inp.parentNode.appendChild(a);
-      for (i = 0; i < arr.length; i++) {
-
-        let elm = arr[i].searchable.name;
-
-        b = document.createElement("DIV");
-
-        b.innerHTML = "<strong>" + elm + "</strong>";
-
-        b.innerHTML += "<input type='hidden' value='" + elm + "'>";
- 
-            b.addEventListener("click", function(e) {
-
-              c = document.createElement('DIV');
-              c.innerHTML = this.getElementsByTagName("input")[0].value;
-              tags_container.appendChild(c);
-
-              inp.value = this.getElementsByTagName("input")[0].value;
-
-              closeAllLists();
-        });
-        a.appendChild(b);
-        
-      }
-
-    function closeAllLists(elmnt) {
-        var x = document.getElementsByClassName("suggestions");
-        for (var i = 0; i < x.length; i++) {
-          if (elmnt != x[i] && elmnt != inp) {
-          x[i].parentNode.removeChild(x[i]);
-        }
+      var tagsUl = $('#tags');
+      for(let i = 0; i < arr.length; i++){
+        var name = arr[i].name;
+        var elm = '<li class="list-group-item tags-li" id="tags-li-' + i + '">' + name + '</li>';
+        tagsUl.append(elm);
       }
     }
 
-    document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
-    });
+    function tagClick(){
+      var hiddenInput = $('#hidden-tag-input');
+      $('.tags-li').on('click', function(e){
+        let tagName = $(this).text();
+        let tag = '<li class="list-group-item list-group-item-primary selected-tags-li">' + tagName + '</li>';
+        $('#selected-tags-ul').append(tag);
+        selectedTags.push(tagName);
+        console.log(selectedTags);
+        $(this).remove();
+        deleteOnClick();
+      });
+    }
+
+    function clearAllTags(){
+      var tagsUl = $('#tags');
+      tagsUl.empty();
+    }
+
+    function deleteOnClick(){
+      var valueArr = $('#hidden-tag-input').val();
+      var tag = $('.selected-tags-li');
+      tag.on('click', function(){
+        var text = $(this).text();
+        selectedTags = $.grep(selectedTags, function(element, i){
+          return element != text;
+        });
+        $(this).remove();
+        console.log(selectedTags);
+      });
     }
 
   

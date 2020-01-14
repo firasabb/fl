@@ -146,16 +146,21 @@ class TagController extends Controller
     }
 
 
+    /**
+     * Search the tags for admins.
+     *
+     * @param  Request
+     * @return \Illuminate\Http\Response
+     */
+
     public function adminSearchTags(Request $request){
-        
-        $users = array();
 
         $validator = Validator::make($request->all(), [
             'id' => 'integer|nullable',
             'name' => 'string|max:300|nullable'
         ]);
 
-        if($validator->fails()){
+        if($validator->fails() || empty($request->all())){
             return redirect('/admin/dashboard/tags/')->withErrors($validator)->withInput();
         }
 
@@ -174,8 +179,6 @@ class TagController extends Controller
             $id_where = ['id', '=', $id];
             array_push($where_arr, $id_where);
 
-        } if(empty($request->all())) {
-            return '';
         }
 
         $tags = Tag::where($where_arr);

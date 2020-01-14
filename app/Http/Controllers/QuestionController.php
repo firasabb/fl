@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Validator;
 
 class QuestionController extends Controller
 {
@@ -97,32 +99,44 @@ class QuestionController extends Controller
     }
 
 
-    public function adminAdd(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:20',
-            'url' => 'required|string'
-        ]);
-
-        if($validator->fails()){
-            return redirect('/admin/dashboard/tags')->withErrors($validator)->withInput();
-        } 
-
-        $tag = new Tag();
-        $tag->name = strToLower($request->name);
-        $tag->url = URL::to('/tag') . '/' . Str::slug(htmlspecialchars($request->url), '-');
-        $tag->save();
-
-        return redirect('/admin/dashboard/tags')->with('status', 'A tag has been created!');
-
-
-    }
-
-
     public function adminShow($id)
     {
         $question = Question::findOrFail($id);
         return view('admin.questions.show', ['question' => $question]);
+    }
+
+
+    /**
+     * 
+     * Update the question
+     * @param request
+     * @return response
+     * 
+     */
+    public function adminEdit(Request $request, $id)
+    {
+        $question = Question::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:15|max:200',
+            'description' => 'string|max:500|nullable',
+            'categories' => 'required|array',
+            'categories.*' => 'integer',
+            'options' => 'array',
+            'options.*' => 'string|max:200'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('admin.show.question', ['id' => $id])->withErrors($validator)->withInput();
+        } 
+
+        $question->title = $request->title;
+        $question->description = $request->description;
+        $question->categories = $request->categories;
+        $question->options = $request->options;
+        $question->save();
+
+        return redirect()->route('admin.show.answer', ['id' => $id])->with('status', 'This category has been edited');
     }
 
 
@@ -136,42 +150,45 @@ class QuestionController extends Controller
 
     public function adminSearchQuestions(Request $request){
         
-        $users = array();
-
         $validator = Validator::make($request->all(), [
             'id' => 'integer|nullable',
-            'name' => 'string|max:300|nullable'
+            'title' => 'string|nullable',
+            'url' => 'string|nullable'
         ]);
 
-        if($validator->fails()){
-            return redirect('/admin/dashboard/tags/')->withErrors($validator)->withInput();
+        if($validator->fails() || empty($request->all())){
+            return redirect()->route('admin.index.questions')->withErrors($validator)->withInput();
         }
 
-        $name = $request->name;
         $id = $request->id;
+        $title = $request->title;
+        $url = Str::slug($request->url);
         
         $where_arr = array();
 
-        if($name){
-
-            $name_where = ['name', 'LIKE', '%' . $name . '%'];
-            array_push($where_arr, $name_where);
-
-        } if ($id){
+        if($id){
 
             $id_where = ['id', '=', $id];
             array_push($where_arr, $id_where);
 
-        } if(empty($request->all())) {
-            return '';
+        } if($title){
+
+            $title_where = ['title', 'LIKE', '%' . $title . '%'];
+            array_push($where_arr, $title_where);
+
+        } if($url){
+
+            $url_where = ['url', 'LIKE', '%' . $url . '%'];
+            array_push($where_arr, $url_where);
+
         }
 
-        $tags = Tag::where($where_arr);
+        $questions = Question::where($where_arr);
 
-        if(empty($tags)){
+        if(empty($questions)){
             return $this->adminIndex();
         }
-        return $this->adminIndex($tags);
+        return $this->adminIndex($questions);
     }
 
 

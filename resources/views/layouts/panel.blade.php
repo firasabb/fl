@@ -56,7 +56,7 @@
                             <a class="nav-link" href="{{ route('admin.index.questions') }}">Questions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Answers</a>
+                            <a class="nav-link" href="{{ route('admin.index.answers') }}">Answers</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.index.tags') }}">Tags</a>

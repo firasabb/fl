@@ -159,7 +159,7 @@ class AdminController extends Controller
             'last_name' => 'string|max:50|nullable',
             'username' => 'string|max:100|nullable'
         ]);
-            if($validator->fails()){
+            if($validator->fails() || empty($request->all())){
                 return redirect('/admin/dashboard/users/')->withErrors($validator)->withInput();
             }
         $email = $request->email;
@@ -199,10 +199,6 @@ class AdminController extends Controller
 
             $username_where = ['username', 'LIKE', '%' . $username . '%'];
             array_push($where_arr, $username_where);
-
-        } if(empty($request->all())) {
-
-            return '';
 
         }
 

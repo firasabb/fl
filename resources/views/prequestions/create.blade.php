@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="question-description">Categories:</label>
-                            <select name="categories[]" multiple>
+                            <select name="categories[]" multiple class="form-control">
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -50,10 +50,15 @@
                         <div class="form-group">
 
                             <label for="question-description">Tags:</label>
-                            <div class="tag-container">
-                                <input class="form-control" id="tag-input" type="text" name="tags[]" value="{{ old('tags[]') }}" required/>
+                            <div class="selected-tags">
+                                <ul id="selected-tags-ul" class="selected-tags-ul list-group list-group-horizontal">
+                                </ul>
                             </div>
-                        <div id="tags">
+                            <div class="tag-container">
+                                <input type="hidden" name="tags[]" id="hidden-tag-input" value=""/>
+                                <input class="form-control" id="tag-input" type="text" value="{{ old('tags[]') }}" required/>
+                            </div>
+                        <ul id="tags" class="list-group">
                         </div>
                         <div class="create-question-btns">
                             <button type="submit" class="btn btn-primary submit-question-btn">Submit</button>

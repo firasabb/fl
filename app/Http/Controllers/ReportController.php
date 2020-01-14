@@ -8,14 +8,33 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Crypt;
 use Auth;
+use DB;
 
 class ReportController extends Controller
 {
 
 
-    public function __construct(){
-
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adminIndex($reports = null)
+    {
+        if(!$reports){
+            $reports = Report::orderBy('id', 'desc')->paginate(20);
+        } else {
+            $reports = $reports->paginate(20);
+        }
+        $report_types = DB::table('reports')->select('reportable_type')->groupBy('reportable_type')->get();
+        foreach($report_types as $report_type){
+            $report_type->reportable_type = stripslashes(str_replace('App', '', $report_type->reportable_type));
+        }
+        return view('admin.reports.reports', ['reports' => $reports, 'report_types' => $report_types]);
     }
+
+
 
 
     /**
@@ -25,8 +44,6 @@ class ReportController extends Controller
      * @return Response
      * 
      */
-
-
     public function store(Request $request, $type){
 
         $validator = Validator::make($request->all(), [
@@ -54,38 +71,9 @@ class ReportController extends Controller
             return back()->with('status', 'Your report has been successfully submitted! Thank you for helping us making the website a better place.');
 
         }
-        
-
 
     }
 
-
-
-
-
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function adminIndex($reports = null)
-    {
-        $reports = Report::orderBy('id', 'desc')->with('reportable')->paginate(20);
-        return view('admin.reports.reports', ['reports' => $reports]);
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function adminAdd(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -100,29 +88,59 @@ class ReportController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Delete the report for admins.
      *
      * @param  \App\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function adminEdit(Report $report)
+    public function adminDestroy($id)
     {
-        //
+        $report = Report::findOrFail($id);
+        $report->delete();
+        return redirect()->route('admin.index.reports')->with('message', 'The report has been deleted');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Report  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function adminDestroy(Report $report)
-    {
-        //
+    public function adminSearchReports(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'integer|nullable',
+            'reportable_id' => 'integer|nullable',
+            'reportable_type' => 'string'
+        ]);
+
+        if($validator->fails() || empty($request->all())){
+            return redirect()->route('admin.index.reports')->withErrors($validator)->withInput();
+        }
+
+        $id = $request->id;
+        $reportable_id = $request->reportable_id;
+        $reportable_type = $request->reportable_type;
+        $where_arr = array();
+
+        if($id){
+
+            $id_where = ['id', '=', $id];
+            array_push($where_arr, $id_where);
+
+        } if($reportable_type){
+
+            $reportable_type_where = ['reportable_type', 'LIKE', '%' . $reportable_type];
+            array_push($where_arr, $reportable_type_where);
+
+        } if($reportable_id){
+
+            $reportable_id_where = ['reportable_id', '=', $reportable_id];
+            array_push($where_arr, $reportable_id_where);
+
+        }
+
+        $reports = Report::where($where_arr);
+
+        if(empty($reports)){
+            return $this->adminIndex();
+        }
+        return $this->adminIndex($reports);
     }
 
-    public function adminSearchReports(){
-
-    }
 
 }

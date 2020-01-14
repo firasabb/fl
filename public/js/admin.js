@@ -168,6 +168,18 @@ $(document).ready(function () {
   $('#delete-form-categories').on('submit', function () {
     return confirm('Are you sure that you want to delete this category?');
   });
+  $('#edit-form-reports').on('submit', function () {
+    return confirm('Are you sure that you want to edit this report?');
+  });
+  $('#delete-form-reports').on('submit', function () {
+    return confirm('Are you sure that you want to delete this report?');
+  });
+  $('#edit-form-answers').on('submit', function () {
+    return confirm('Are you sure that you want to edit this answer?');
+  });
+  $('#delete-form-answers').on('submit', function () {
+    return confirm('Are you sure that you want to delete this answer?');
+  });
 });
 
 /***/ }),

@@ -9,22 +9,22 @@
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
-                        <input type='email' name="email" placeholder="Email..." class="form-control"/>
+                        <input type="eamil" name="email" placeholder="Email..." class="form-control" value="{{ old('email') }}"/>
                     </div>
                     <div class="col">
-                        <input type='number' name="id" placeholder="ID..." class="form-control"/>
+                        <input type="number" name="id" placeholder="ID..." class="form-control" value="{{ old('id') }}"/>
                     </div>
                     <div class="col">
-                        <input type='text' name="first_name" placeholder="First Name..." class="form-control"/>
+                        <input type="text" name="first_name" placeholder="First Name..." class="form-control" value="{{ old('first_name') }}"/>
                     </div>
                     <div class="col">
-                        <input type='text' name="last_name" placeholder="Last Name..." class="form-control"/>
+                        <input type="text" name="last_name" placeholder="Last Name..." class="form-control" value="{{ old('last_name') }}"/>
                     </div>
                     <div class="col">
-                        <input type='text' name="username" placeholder="Username..." class="form-control"/>
+                        <input type="text" name="username" placeholder="Username..." class="form-control" value="{{ old('username') }}"/>
                     </div>
                     <div class="col-sm-1">
-                        <input type='submit' value="Search" class="btn btn-primary"/>
+                        <input type="submit" value="Search" class="btn btn-primary"/>
                     </div>
                 </div>
             </form>

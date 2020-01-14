@@ -5,14 +5,21 @@
 <div class="container">
     <div class="row justify-content-center search-row">
         <div class="col-md-12 search-col">
-            <form method="post" action="{{ route('admin.search.tags') }}">
+            <form method="post" action="{{ route('admin.search.reports') }}">
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
-                        <input type='number' name="id" placeholder="ID..." class="form-control"/>
+                        <input type='number' name="id" placeholder="ID" class="form-control"/>
                     </div>
                     <div class="col">
-                        <input type='text' name="name" placeholder="Tag Name..." class="form-control"/>
+                        <input type='text' name="reportable_id" placeholder="Reportable id" class="form-control"/>
+                    </div>
+                    <div class="col">
+                        <select name="reportable_type" class="form-control">
+                            @foreach($report_types as $report_type)
+                                <option value="{{ $report_type->reportable_type }}">{{ $report_type->reportable_type }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-sm-1">
                         <input type='submit' value="Search" class="btn btn-primary"/>

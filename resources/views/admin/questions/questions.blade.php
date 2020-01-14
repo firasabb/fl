@@ -9,13 +9,16 @@
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
-                        <input type='number' name="id" placeholder="ID..." class="form-control"/>
+                        <input type='number' name='id' placeholder="ID" class="form-control" value="{{ old('id') }}"/>
                     </div>
                     <div class="col">
-                        <input type='text' name="name" placeholder="Tag Name..." class="form-control"/>
+                        <input type='text' name='title' placeholder="Question Title" class="form-control" value="{{ old('title') }}"/>
+                    </div>
+                    <div class="col">
+                        <input type='text' name='url' placeholder="Question URL" class="form-control" value="{{ old('url') }}"/>
                     </div>
                     <div class="col-sm-1">
-                        <input type='submit' value="Search" class="btn btn-primary"/>
+                        <input type='submit' value='search' class="btn btn-primary"/>
                     </div>
                 </div>
             </form>

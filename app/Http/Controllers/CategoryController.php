@@ -170,35 +170,31 @@ class CategoryController extends Controller
 
 
     public function adminSearchCategories(Request $request){
-        
-        $users = array();
 
         $validator = Validator::make($request->all(), [
             'id' => 'integer|nullable',
             'name' => 'string|max:300|nullable'
         ]);
 
-        if($validator->fails()){
+        if($validator->fails() || empty($request->all())){
             return redirect('/admin/dashboard/categories/')->withErrors($validator)->withInput();
         }
 
-        $name = $request->name;
         $id = $request->id;
+        $name = $request->name;
         
         $where_arr = array();
 
-        if($name){
-
-            $name_where = ['name', 'LIKE', '%' . $name . '%'];
-            array_push($where_arr, $name_where);
-
-        } if ($id){
+        if ($id){
 
             $id_where = ['id', '=', $id];
             array_push($where_arr, $id_where);
 
-        } if(empty($request->all())) {
-            return '';
+        } if($name){
+
+            $name_where = ['name', 'LIKE', '%' . $name . '%'];
+            array_push($where_arr, $name_where);
+
         }
 
         $categories = Category::where($where_arr);
