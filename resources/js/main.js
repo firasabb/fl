@@ -119,7 +119,7 @@ $(document).ready(function(){
         let tag = '<li class="list-group-item list-group-item-primary selected-tags-li">' + tagName + '</li>';
         $('#selected-tags-ul').append(tag);
         selectedTags.push(tagName);
-        console.log(selectedTags);
+        hiddenInput.val(selectedTags.join(', '));
         $(this).remove();
         deleteOnClick();
       });
@@ -138,8 +138,8 @@ $(document).ready(function(){
         selectedTags = $.grep(selectedTags, function(element, i){
           return element != text;
         });
+        hiddenInput.val(selectedTags.join(', '));
         $(this).remove();
-        console.log(selectedTags);
       });
     }
 
