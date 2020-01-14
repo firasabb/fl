@@ -131,7 +131,7 @@ $(document).ready(function(){
     }
 
     function deleteOnClick(){
-      var valueArr = $('#hidden-tag-input').val();
+      var hiddenInput = $('#hidden-tag-input');
       var tag = $('.selected-tags-li');
       tag.on('click', function(){
         var text = $(this).text();
