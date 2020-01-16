@@ -60,3 +60,40 @@ td form {
   justify-content: center;
 }
 
+/**
+**
+** Prequestion Approve page
+**
+**/
+
+.tags-li {
+  cursor: pointer;
+  transition: all 1s ease;
+}
+
+.tags-li:hover {
+  background-color: #bcd7ff;
+}
+
+.selected-tags {
+  padding-bottom: 1rem;
+}
+
+.selected-tags-li {
+  cursor: pointer;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+  margin-right: 0.5rem !important;
+}
+
+/**
+**
+**  Admin Edit Question Page
+**  
+**
+**/
+
+.edit-tags {
+  padding: 25px 0px;
+}
+

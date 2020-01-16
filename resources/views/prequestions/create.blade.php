@@ -55,10 +55,10 @@
                                 </ul>
                             </div>
                             <div class="tag-container">
-                                <input type="hidden" name="tags[]" id="hidden-tag-input" value=""/>
-                                <input class="form-control" id="tag-input" type="text" value="{{ old('tags[]') }}" required/>
+                                <input type="hidden" name="tags" id="hidden-tag-input" value="{{ old('tags') }}"/>
+                                <input class="form-control" id="tag-input" type="text"/>
                             </div>
-                        <ul id="tags" class="list-group">
+                            <ul id="tags" class="list-group">
                         </div>
                         <div class="create-question-btns">
                             <button type="submit" class="btn btn-primary submit-question-btn">Submit</button>

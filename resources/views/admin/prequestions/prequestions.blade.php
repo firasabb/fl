@@ -53,6 +53,23 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="tags" class="col-sm-2 col-form-label">Tags:</label>
+                                <div class="col-sm-10">
+                                    <div class="selected-tags">
+                                        <ul id="selected-tags-ul" class="selected-tags-ul list-group list-group-horizontal">
+                                        @foreach($prequestion->tags as $tag)
+                                            <li class="list-group-item list-group-item-primary selected-tags-li">{{ $tag->name }}</li>
+                                        @endforeach
+                                        </ul>
+                                    </div>
+                                    <div class="tag-container">
+                                        <input type="hidden" name="tags" id="hidden-tag-input" value="<?php $i=0; foreach($prequestion->tags as $tag){ $i++; if($i < count($prequestion->tags)){echo $tag->name . ', ';} else { echo $tag->name; }} ?>"/>
+                                        <input class="form-control" id="tag-input" type="text" required/>
+                                    </div>
+                                    <ul id="tags" class="list-group">
+                                </div>
+                            </div>
                             <p>Options:</p>
                             <div class="row">
                                 @foreach($prequestion->choices as $key => $choice)

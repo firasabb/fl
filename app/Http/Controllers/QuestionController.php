@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Category;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
@@ -102,7 +104,9 @@ class QuestionController extends Controller
     public function adminShow($id)
     {
         $question = Question::findOrFail($id);
-        return view('admin.questions.show', ['question' => $question]);
+        $categories = Category::all();
+        $hasCategories = $question->categories->pluck('id');
+        return view('admin.questions.show', ['question' => $question, 'categories' => $categories, 'hasCategories' => $hasCategories]);
     }
 
 
@@ -123,7 +127,8 @@ class QuestionController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'integer',
             'options' => 'array',
-            'options.*' => 'string|max:200'
+            'options.*' => 'string|max:200',
+            'tags' => 'string|max:150'
         ]);
 
         if($validator->fails()){
@@ -131,12 +136,21 @@ class QuestionController extends Controller
         } 
 
         $question->title = $request->title;
+        $question->url = $request->url;
         $question->description = $request->description;
-        $question->categories = $request->categories;
-        $question->options = $request->options;
+        $question->categories()->sync($request->categories);
+        $tagsArr = array();
+        $tags = $request->tags;
+        $tags = explode(', ', $tags);
+        foreach($tags as $tag){
+            $tag = Tag::where('name', 'LIKE', $tag)->first();
+            array_push($tagsArr, $tag->id);
+        }
+        $question->tags()->sync($tagsArr);
+        //$question->options = $request->options;
         $question->save();
 
-        return redirect()->route('admin.show.answer', ['id' => $id])->with('status', 'This category has been edited');
+        return redirect()->route('admin.show.question', ['id' => $id])->with('status', 'This category has been edited');
     }
 
 

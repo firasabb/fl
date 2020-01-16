@@ -63,6 +63,7 @@ class PreQuestionController extends Controller
             'description' => 'string|max:500|nullable',
             'categories' => 'required|array',
             'categories.*' => 'integer',
+            'tags' => 'required|string|max:150',
             'options' => 'array',
             'options.*' => 'string|max:200'
         ]);
@@ -92,6 +93,13 @@ class PreQuestionController extends Controller
         foreach($categories as $category){
             $category = Category::findOrFail($category);
             $prequestion->categories()->attach($category);
+        }
+
+        $tags = $request->tags;
+        $tags = explode(', ', $tags);
+        foreach($tags as $tag){
+            $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
+            $prequestion->tags()->attach($tag);
         }
 
         if($user->hasAnyRole(['admin', 'moderator'])){
@@ -165,6 +173,9 @@ class PreQuestionController extends Controller
             'title' => 'required|string|min:15|max:200',
             'question_id' => 'required|integer',
             'description' => 'string|max:500|nullable',
+            'categories' => 'required|array',
+            'categories.*' => 'string',
+            'tags' => 'required|string|max:150',
             'options' => 'array',
             'options.*' => 'string|max:200',
             'user_id' => 'required|integer'
@@ -196,6 +207,13 @@ class PreQuestionController extends Controller
             $question->categories()->attach($category);
         }
 
+        $tags = $request->tags;
+        $tags = explode(', ', $tags);
+        foreach($tags as $tag){
+            $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
+            $question->tags()->attach($tag);
+        }
+
         $prequestion->delete();
 
         return redirect('/admin/dashboard/prequestions/')->with('status', 'The Question has been approved!');
@@ -218,7 +236,6 @@ class PreQuestionController extends Controller
         $prequestion = PreQuestion::findOrFail($prequestion_id);
         $prechoices = $prequestion->choices;
         $question = $this->makeNewQuestion($prequestion);
-        $prequestion->delete();
 
         if(!empty($prechoices)){
             foreach($prechoices as $prechoice){
@@ -233,6 +250,13 @@ class PreQuestionController extends Controller
         foreach($categories as $category){
             $question->categories()->attach($category);
         }
+
+        $tags = $prequestion->tags;
+        foreach($tags as $tag){
+            $question->tags()->attach($tag);
+        }
+
+        $prequestion->delete();
 
         return redirect('/admin/dashboard/questions/')->with('status', 'A new question has been added by an admin.');
     }
@@ -297,7 +321,12 @@ class PreQuestionController extends Controller
         $question = new Question();
         $question->title = $obj->title;
         $question->description = $obj->description;
-        $question->url = Str::slug($obj->title, '-');
+        $url = Str::slug($obj->title, '-');
+        $checkIfUrlExists = Question::where('url', 'LIKE', $url)->first();
+        if($checkIfUrlExists){
+            $url = $url . uniqid('-');
+        }
+        $question->url = $url;
         $question->user_id = $obj->user_id;
         $question->save();
         return $question;
