@@ -18,12 +18,12 @@ class PermissionsTableSeeder extends Seeder
             'delete_user',
             'edit_user',
             'view_users',
-            'create_question',
-            'delete_question',
-            'edit_question',
-            'create_answer',
-            'delete_answer',
-            'edit_answer'
+            'create_art',
+            'delete_art',
+            'edit_art',
+            'create_comment',
+            'delete_comment',
+            'edit_comment'
         ];
 
         $admin = Role::where('name', 'admin')->first();
@@ -47,37 +47,37 @@ class PermissionsTableSeeder extends Seeder
                     case 'view_user':
                         $newPermission->assignRole($admin);
                         break;
-                    case 'create_question':
+                    case 'create_art':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         $newPermission->assignRole($user);
                         break;
-                    case 'delete_question':
+                    case 'delete_art':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         $newPermission->assignRole($user);
                         break;
-                    case 'edit_question':
+                    case 'edit_art':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         $newPermission->assignRole($user);
                         break;
-                    case 'create_answer':
+                    case 'create_comment':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         $newPermission->assignRole($user);
                         break;
-                    case 'delete_answer':
+                    case 'delete_comment':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         $newPermission->assignRole($user);
                         break;
-                    case 'edit_answer':
+                    case 'edit_comment':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         $newPermission->assignRole($user);
                         break;
-                    case 'approve_answer':
+                    case 'approve_comment':
                         $newPermission->assignRole($admin);
                         $newPermission->assignRole($moderator);
                         break;

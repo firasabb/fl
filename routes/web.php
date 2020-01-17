@@ -21,7 +21,7 @@ Route::post('/register/checkusername', 'Auth\RegisterController@checkusername')-
 
 // Get Tags AJAX
 
-Route::post('/ask/question/tags', 'PreQuestionController@suggestTags')->name('suggesttags');
+Route::post('/ask/art/tags', 'PreArtController@suggestTags')->name('suggesttags');
 
 //
 
@@ -57,21 +57,21 @@ Route::post('/admin/dashboard/permissions', 'AdminController@addPermission')->na
 
 
 
-// Admin / PreQuestions
+// Admin / PreArts
 
-Route::get('/admin/dashboard/prequestions/', 'PreQuestionController@index')->middleware('role:admin|moderator')->name('admin.index.prequestions');
-Route::delete('/admin/dashboard/prequestion/{id}', 'PreQuestionController@destroy')->middleware('role:admin|moderator')->name('admin.delete.prequestion');
-Route::post('/admin/dashboard/prequestions/', 'PreQuestionController@approve')->middleware('role:admin|moderator')->name('admin.approve.prequestion');
+Route::get('/admin/dashboard/prearts/', 'PreArtController@index')->middleware('role:admin|moderator')->name('admin.index.prearts');
+Route::delete('/admin/dashboard/preart/{id}', 'PreArtController@destroy')->middleware('role:admin|moderator')->name('admin.delete.preart');
+Route::post('/admin/dashboard/prearts/', 'PreArtController@approve')->middleware('role:admin|moderator')->name('admin.approve.preart');
 
 
-// Admin / Questions
+// Admin / Arts
 
-Route::get('/admin/dashboard/questions/', 'QuestionController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.questions');
-Route::delete('/admin/dashboard/question/{id}', 'QuestionController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.question');
-Route::get('/admin/dashboard/question/{id}', 'QuestionController@adminShow')->middleware('role:admin|moderator')->name('admin.show.question');
-Route::put('/admin/dashboard/question/{id}', 'QuestionController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.question');
-Route::post('/admin/dashboard/question/', 'QuestionController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.question');
-Route::post('/admin/dashboard/questions/search', 'QuestionController@adminSearchQuestions')->middleware('role:admin|moderator')->name('admin.search.questions');
+Route::get('/admin/dashboard/arts/', 'ArtController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.arts');
+Route::delete('/admin/dashboard/art/{id}', 'ArtController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.art');
+Route::get('/admin/dashboard/art/{id}', 'ArtController@adminShow')->middleware('role:admin|moderator')->name('admin.show.art');
+Route::put('/admin/dashboard/art/{id}', 'ArtController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.art');
+Route::post('/admin/dashboard/art/', 'ArtController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.art');
+Route::post('/admin/dashboard/arts/search', 'ArtController@adminSearchArts')->middleware('role:admin|moderator')->name('admin.search.arts');
 
 
 // Admin / Tags
@@ -94,14 +94,14 @@ Route::post('/admin/dashboard/category/', 'CategoryController@adminAdd')->middle
 Route::post('/admin/dashboard/categories/search', 'CategoryController@adminSearchCategories')->middleware('role:admin|moderator')->name('admin.search.categories');
 
 
-// Admin / Answers
+// Admin / Comments
 
-Route::get('/admin/dashboard/answers/', 'AnswerController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.answers');
-Route::delete('/admin/dashboard/answer/{id}', 'AnswerController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.answer');
-Route::get('/admin/dashboard/answer/{id}', 'AnswerController@adminShow')->middleware('role:admin|moderator')->name('admin.show.answer');
-Route::put('/admin/dashboard/answer/{id}', 'AnswerController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.answer');
-Route::post('/admin/dashboard/answer/', 'AnswerController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.answer');
-Route::post('/admin/dashboard/answers/search', 'AnswerController@adminSearchAnswers')->middleware('role:admin|moderator')->name('admin.search.answers');
+Route::get('/admin/dashboard/comments/', 'CommentController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.comments');
+Route::delete('/admin/dashboard/comment/{id}', 'CommentController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.comment');
+Route::get('/admin/dashboard/comment/{id}', 'CommentController@adminShow')->middleware('role:admin|moderator')->name('admin.show.comment');
+Route::put('/admin/dashboard/comment/{id}', 'CommentController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.comment');
+Route::post('/admin/dashboard/comment/', 'CommentController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.comment');
+Route::post('/admin/dashboard/comments/search', 'CommentController@adminSearchcomments')->middleware('role:admin|moderator')->name('admin.search.comments');
 
 
 // Admin / Reports
@@ -114,15 +114,15 @@ Route::post('/admin/dashboard/report/', 'ReportController@adminAdd')->middleware
 Route::post('/admin/dashboard/report/search', 'ReportController@adminSearchReports')->middleware('role:admin|moderator')->name('admin.search.reports');
 
 
-// PreQuestions
+// PreArts
 
-Route::get('/ask/question', 'PreQuestionController@create')->name('create.prequestion');
-Route::post('/ask/question', 'PreQuestionController@store')->name('store.prequestion');
+Route::get('/ask/art', 'PreArtController@create')->name('create.preart');
+Route::post('/ask/art', 'PreArtController@store')->name('store.preart');
 
 
-// Question
+// Art
 
-Route::get('/question/{url}', 'QuestionController@show')->name('show.question');
+Route::get('/art/{url}', 'ArtController@show')->name('show.art');
 
 
 // Users
@@ -133,9 +133,9 @@ Route::get('/user/{username}', 'UserController@showProfile')->name('user.profile
 
 Route::get('/tags', 'TagController@index')->name('index.tags');
 
-// Answers
+// Comments
 
-Route::post('/answer/create/{encryptedId}', 'AnswerController@store')->middleware('role:user')->name('add.answer');
+Route::post('/comment/create/{encryptedId}', 'CommentController@store')->middleware('role:user')->name('add.comment');
 
 
 // Reports

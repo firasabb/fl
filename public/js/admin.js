@@ -132,11 +132,11 @@ $(document).ready(function () {
   $('#delete-form-permissions').on('submit', function () {
     return confirm('Are you sure that you want to delete this permission?');
   });
-  $('#delete-prequestion').on('submit', function () {
-    return confirm('Are you sure that you want to delete this question?');
+  $('#delete-preart').on('submit', function () {
+    return confirm('Are you sure that you want to delete this art?');
   });
-  $('#add-prequestion').click(function () {
-    if (confirm('Are you sure that you want to approve this question?')) {
+  $('#add-preart').click(function () {
+    if (confirm('Are you sure that you want to approve this art?')) {
       forms = $('.enabled-disabled');
 
       for (i = 0; i < forms.length; i++) {
@@ -145,7 +145,7 @@ $(document).ready(function () {
         }
       }
 
-      $('#add-prequestion-form').submit();
+      $('#add-preart-form').submit();
     } else {
       return false;
     }
@@ -174,11 +174,11 @@ $(document).ready(function () {
   $('#delete-form-reports').on('submit', function () {
     return confirm('Are you sure that you want to delete this report?');
   });
-  $('#edit-form-answers').on('submit', function () {
-    return confirm('Are you sure that you want to edit this answer?');
+  $('#edit-form-comments').on('submit', function () {
+    return confirm('Are you sure that you want to edit this comment?');
   });
-  $('#delete-form-answers').on('submit', function () {
-    return confirm('Are you sure that you want to delete this answer?');
+  $('#delete-form-comments').on('submit', function () {
+    return confirm('Are you sure that you want to delete this comment?');
   });
   $.ajaxSetup({
     headers: {
@@ -201,7 +201,7 @@ $(document).ready(function () {
         exist.push($(this).text());
       });
       jQuery.ajax({
-        url: url + "/ask/question/tags",
+        url: url + "/ask/art/tags",
         type: "POST",
         data: {
           tag: $('#tag-input').val(),

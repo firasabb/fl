@@ -3,12 +3,12 @@
 
 @section('content')
 <div class="container">
-    @foreach($prequestions as $prequestion)
-    <?php $hasCategories = $prequestion->categories->pluck('id'); ?>
+    @foreach($prearts as $preart)
+    <?php $hasCategories = $preart->categories->pluck('id'); ?>
     <div class="row justify-content-center">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header">Questions to approve</div>
+                <div class="card-header">Arts to approve</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -27,20 +27,20 @@
                     @endif
 
 
-                        <form method="POST" action="{{ route('admin.approve.prequestion') }}" id="add-prequestion-form">
+                        <form method="POST" action="{{ route('admin.approve.preart') }}" id="add-preart-form">
                             @csrf
                             <div class="form-group row">
-                                <label for="question" class="col-sm-2 col-form-label">Question:</label>
+                                <label for="art" class="col-sm-2 col-form-label">Art:</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control enabled-disabled" name="title" disabled type="text" value="{{ $prequestion->title }}"/>
-                                    <input type="hidden" name="question_id" value="{{ $prequestion->id }}">
-                                    <input type="hidden" name="user_id" value="{{ $prequestion->user_id }}">
+                                    <input class="form-control enabled-disabled" name="title" disabled type="text" value="{{ $preart->title }}"/>
+                                    <input type="hidden" name="art_id" value="{{ $preart->id }}">
+                                    <input type="hidden" name="user_id" value="{{ $preart->user_id }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="description" class="col-sm-2 col-form-label">Description:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control enabled-disabled" name="description" disabled>{{ $prequestion->description }}</textarea>
+                                    <textarea class="form-control enabled-disabled" name="description" disabled>{{ $preart->description }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -58,13 +58,13 @@
                                 <div class="col-sm-10">
                                     <div class="selected-tags">
                                         <ul id="selected-tags-ul" class="selected-tags-ul list-group list-group-horizontal">
-                                        @foreach($prequestion->tags as $tag)
+                                        @foreach($preart->tags as $tag)
                                             <li class="list-group-item list-group-item-primary selected-tags-li">{{ $tag->name }}</li>
                                         @endforeach
                                         </ul>
                                     </div>
                                     <div class="tag-container">
-                                        <input type="hidden" name="tags" id="hidden-tag-input" value="<?php $i=0; foreach($prequestion->tags as $tag){ $i++; if($i < count($prequestion->tags)){echo $tag->name . ', ';} else { echo $tag->name; }} ?>"/>
+                                        <input type="hidden" name="tags" id="hidden-tag-input" value="<?php $i=0; foreach($preart->tags as $tag){ $i++; if($i < count($preart->tags)){echo $tag->name . ', ';} else { echo $tag->name; }} ?>"/>
                                         <input class="form-control" id="tag-input" type="text" required/>
                                     </div>
                                     <ul id="tags" class="list-group">
@@ -72,7 +72,7 @@
                             </div>
                             <p>Options:</p>
                             <div class="row">
-                                @foreach($prequestion->choices as $key => $choice)
+                                @foreach($preart->choices as $key => $choice)
                                     <div class="col-sm-2">
                                     </div>
                                     <div class="col-sm-10">
@@ -88,18 +88,18 @@
 
                     
                     <div class="pagination-container">
-                        {{ $prequestions->links() }}
+                        {{ $prearts->links() }}
                     </div>
                 </div>
             </div>
             <div class="block-button">
-                <button id="add-prequestion" type="button" class="btn btn-primary btn-lg btn-block">Approve</button>
+                <button id="add-preart" type="button" class="btn btn-primary btn-lg btn-block">Approve</button>
                 <button id="edit-button" type="button" class="btn btn-success btn-lg btn-block">Edit</button>
-                <div class="delete-prequestion-container">
-                    <form method="POST" action="{{ route('admin.delete.prequestion', ['id' => $prequestion->id]) }}" id="delete-prequestion">
+                <div class="delete-preart-container">
+                    <form method="POST" action="{{ route('admin.delete.preart', ['id' => $preart->id]) }}" id="delete-preart">
                         @csrf
                         {!! method_field('DELETE') !!}
-                        <button id="delete-prequestion" type="submit" class="btn btn-danger btn-lg btn-block">Delete</button>
+                        <button id="delete-preart" type="submit" class="btn btn-danger btn-lg btn-block">Delete</button>
                     </form>
                 </div>
             </div>

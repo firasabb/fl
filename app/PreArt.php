@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PreQuestion extends Model
+class PreArt extends Model
 {
 
     use SoftDeletes;
@@ -13,7 +13,7 @@ class PreQuestion extends Model
 
     public function choices(){
 
-        return $this->hasMany('\App\PreChoice', 'pre_question_id');
+        return $this->hasMany('\App\PreChoice', 'pre_art_id');
 
     }
 

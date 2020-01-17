@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Add a question</div>
+                <div class="card-header">Add an art</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -23,24 +23,24 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('create.prequestion') }}" class="needs-validation" autocomplete="off">
+                    <form method="POST" action="{{ route('create.preart') }}" class="needs-validation" autocomplete="off">
                         @csrf
                         <div class="form-group">
-                            <label for="questions-title">Question:</label>
+                            <label for="arts-title">Art:</label>
                             <input class="form-control" type="text" name="title" placeholder="What is The Largest Galaxy in Our Universe?" value="{{ old('title') }}" required maxlength="200" minlength="15"/>
                             <div class="invalid-feedback">
-                                    Please provide a valid question: maximum allowed number of characters is 300 and minimum number is 15.
+                                    Please provide a valid art: maximum allowed number of characters is 300 and minimum number is 15.
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="question-description">Description:</label>
-                            <textarea class="form-control" type="text" name="description" placeholder="Add a description to your question (Optional)..." maxlength="500">{{ old('description') }}</textarea>
+                            <label for="art-description">Description:</label>
+                            <textarea class="form-control" type="text" name="description" placeholder="Add a description to your art (Optional)..." maxlength="500">{{ old('description') }}</textarea>
                             <div class="invalid-feedback">
                                     Please provide a valid description: maximum allowed number of characters is 1000.
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="question-description">Categories:</label>
+                            <label for="art-description">Categories:</label>
                             <select name="categories[]" multiple class="form-control">
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group">
 
-                            <label for="question-description">Tags:</label>
+                            <label for="art-description">Tags:</label>
                             <div class="selected-tags">
                                 <ul id="selected-tags-ul" class="selected-tags-ul list-group list-group-horizontal">
                                 </ul>
@@ -60,8 +60,8 @@
                             </div>
                             <ul id="tags" class="list-group">
                         </div>
-                        <div class="create-question-btns">
-                            <button type="submit" class="btn btn-primary submit-question-btn">Submit</button>
+                        <div class="create-art-btns">
+                            <button type="submit" class="btn btn-primary submit-art-btn">Submit</button>
                             <button type="button" class="btn btn-success add-choice-btn" id="add-option">Add an option</button>
                         </div>
                     </form>

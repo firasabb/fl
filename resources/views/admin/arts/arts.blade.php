@@ -5,17 +5,17 @@
 <div class="container">
     <div class="row justify-content-center search-row">
         <div class="col-md-12 search-col">
-            <form method="post" action="{{ route('admin.search.questions') }}">
+            <form method="post" action="{{ route('admin.search.arts') }}">
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
                         <input type='number' name='id' placeholder="ID" class="form-control" value="{{ old('id') }}"/>
                     </div>
                     <div class="col">
-                        <input type='text' name='title' placeholder="Question Title" class="form-control" value="{{ old('title') }}"/>
+                        <input type='text' name='title' placeholder="Art Title" class="form-control" value="{{ old('title') }}"/>
                     </div>
                     <div class="col">
-                        <input type='text' name='url' placeholder="Question URL" class="form-control" value="{{ old('url') }}"/>
+                        <input type='text' name='url' placeholder="Art URL" class="form-control" value="{{ old('url') }}"/>
                     </div>
                     <div class="col-sm-1">
                         <input type='submit' value='search' class="btn btn-primary"/>
@@ -27,7 +27,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Questions</div>
+                <div class="card-header">Arts</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -57,30 +57,30 @@
                                 URL
                             </th>
                             <th>
-                                Answers
+                                Comments
                             </th>
                             <th class="td-actions">
                                 Actions
                             </th>   
                         </tr>
-                        @foreach ($questions as $question)
+                        @foreach ($arts as $art)
                             <tr>
                                 <td>
-                                    {{$question->id}}
+                                    {{$art->id}}
                                 </td>
                                 <td>
-                                    {{ $question->title }}
+                                    {{ $art->title }}
                                 </td>
                                 <td>
-                                    <a href="{{ route('show.question', ['url' => $question->url]) }}">{{ $question->url }}</a>
+                                    <a href="{{ route('show.art', ['url' => $art->url]) }}">{{ $art->url }}</a>
                                 </td>
                                 <td>
-                                    {{ $question->answers()->count() }}
+                                    {{ $art->comments()->count() }}
                                 </td>
                                 <td>
                                     <div class="td-actions-btns">
-                                        <a href="{{ route('admin.show.question', ['id' => $question->id]) }}" class="btn btn-success">Show/Edit</a>
-                                        <form action="{{ route('admin.delete.question', ['id' => $question->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
+                                        <a href="{{ route('admin.show.art', ['id' => $art->id]) }}" class="btn btn-success">Show/Edit</a>
+                                        <form action="{{ route('admin.delete.art', ['id' => $art->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
                                             {!! csrf_field() !!}
                                             {!! method_field('DELETE') !!}
                                             <button class="btn btn-danger" type="submit">Delete</button>
@@ -90,11 +90,11 @@
                             </tr>
                         @endforeach
                     </table>
-                    {{ $questions->links() }}
+                    {{ $arts->links() }}
                 </div>
             </div>
             <div class="block-button">
-                <a href="{{route('create.prequestion')}}" target="_blank" class="btn btn-primary btn-lg btn-block">Add Question</a>
+                <a href="{{route('create.preart')}}" target="_blank" class="btn btn-primary btn-lg btn-block">Add Art</a>
             </div>
 
         </div>

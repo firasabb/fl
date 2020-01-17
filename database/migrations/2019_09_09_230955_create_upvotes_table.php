@@ -17,16 +17,16 @@ class CreateUpvotesTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('answer_id');
+            $table->unsignedBigInteger('comment_id');
 
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
             
-            $table->foreign('answer_id')
+            $table->foreign('comment_id')
                   ->references('id')
-                  ->on('answers')
+                  ->on('comments')
                   ->onDelete('cascade');                
             
         });

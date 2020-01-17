@@ -8,9 +8,9 @@ class Choice extends Model
 {
     
 
-    public function question(){
+    public function art(){
 
-        return $this->belongsTo('\App\Question');
+        return $this->belongsTo('\App\Art');
 
     }
 

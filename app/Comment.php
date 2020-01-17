@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Answer extends Model
+class Comment extends Model
 {
 
     use SoftDeletes;
@@ -19,7 +19,7 @@ class Answer extends Model
     }
 
     public function upvotes(){
-        return $this->hasMany('\App\Upvote', 'answer_id');
+        return $this->hasMany('\App\Upvote', 'comment_id');
     }
 
     public function reports()

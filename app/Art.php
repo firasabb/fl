@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Question extends Model
+class Art extends Model
 {
     
     use SoftDeletes;
@@ -13,7 +13,7 @@ class Question extends Model
 
     public function choices(){
 
-        return $this->hasMany('\App\Choice', 'question_id');
+        return $this->hasMany('\App\Choice', 'art_id');
 
     }
 

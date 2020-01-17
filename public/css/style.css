@@ -28,7 +28,7 @@
   color: #ff6666;
 }
 
-.submit-question-btn {
+.submit-art-btn {
   float: right;
 }
 
@@ -36,11 +36,11 @@
   float: left;
 }
 
-.create-question-btns {
+.create-art-btns {
   margin-top: 30px;
 }
 
-.question-card {
+.art-card {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -91,7 +91,7 @@
 
 /**
 **
-**  Ask new question page
+**  Ask new art page
 **
 **/
 

@@ -49,14 +49,14 @@
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre> Approve <span class="caret"></span></a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{  route('admin.index.prequestions')  }}">Questions</a>
+                                <a class="dropdown-item" href="{{  route('admin.index.prearts')  }}">Arts</a>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.index.questions') }}">Questions</a>
+                            <a class="nav-link" href="{{ route('admin.index.arts') }}">Arts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.index.answers') }}">Answers</a>
+                            <a class="nav-link" href="{{ route('admin.index.comments') }}">Comments</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.index.tags') }}">Tags</a>

@@ -17,11 +17,11 @@ class CreateChoicesTable extends Migration
             $table->bigIncrements('id');
             $table->text('choice');
             $table->boolean('right')->default(0);
-            $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('art_id');
             $table->timestamps();
 
-            $table->foreign('question_id')
-                    ->references('id')->on('questions')
+            $table->foreign('art_id')
+                    ->references('id')->on('arts')
                     ->onDelete('cascade');
         });
     }

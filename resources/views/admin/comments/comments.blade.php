@@ -5,14 +5,14 @@
 <div class="container">
     <div class="row justify-content-center search-row">
         <div class="col-md-12 search-col">
-            <form method="post" action="{{ route('admin.search.answers') }}">
+            <form method="post" action="{{ route('admin.search.comments') }}">
                 {!! csrf_field() !!}
                 <div class="form-row" >
                     <div class="col">
                         <input type='number' name="id" placeholder="ID" class="form-control" value="{{ old('id') }}"/>
                     </div>
                     <div class="col">
-                        <input type='number' name="question_id" placeholder="Question ID" class="form-control" value="{{ old('question_id') }}"/>
+                        <input type='number' name="art_id" placeholder="Art ID" class="form-control" value="{{ old('art_id') }}"/>
                     </div>
                     <div class="col">
                         <input type='text' name="title" placeholder="Title" class="form-control" value="{{ old('title') }}"/>
@@ -30,7 +30,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">answers</div>
+                <div class="card-header">Comments</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -57,27 +57,27 @@
                                 Title
                             </th>
                             <th>
-                                Question
+                                Art
                             </th>
                             <th class="td-actions">
                                 Actions
                             </th>   
                         </tr>
-                        @foreach ($answers as $answer)
+                        @foreach ($comments as $comment)
                             <tr>
                                 <td>
-                                    {{$answer->id}}
+                                    {{$comment->id}}
                                 </td>
                                 <td>
-                                    {{ $answer->title }}
+                                    {{ $comment->title }}
                                 </td>
                                 <td>
-                                    <a href="{{ route('show.question', ['url' => $answer->question->url]) }}">{{ $answer->question->url }}</a>
+                                    <a href="{{ route('show.art', ['url' => $comment->art->url]) }}">{{ $comment->art->url }}</a>
                                 </td>
                                 <td>
                                     <div class="td-actions-btns">
-                                        <a href="{{ route('admin.show.answer', ['id' => $answer->id]) }}" class="btn btn-success">Show/Edit</a>
-                                        <form action="{{ route('admin.delete.answer', ['id' => $answer->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
+                                        <a href="{{ route('admin.show.comment', ['id' => $comment->id]) }}" class="btn btn-success">Show/Edit</a>
+                                        <form action="{{ route('admin.delete.comment', ['id' => $comment->id]) }}" method="POST" id="delete-form-tags" class="delete-form-1">
                                             {!! csrf_field() !!}
                                             {!! method_field('DELETE') !!}
                                             <button class="btn btn-danger" type="submit">Delete</button>
@@ -87,7 +87,7 @@
                             </tr>
                         @endforeach
                     </table>
-                    {{ $answers->links() }}
+                    {{ $comments->links() }}
                 </div>
             </div>
 
