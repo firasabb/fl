@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Answer;
-use App\Question;
+use App\Comment;
+use App\Art;
 use App\User;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
 
-class AnswerController extends Controller
+class CommentController extends Controller
 {
     /**
-     * Display a listing of the answers.
+     * Display a listing of the comments.
      *
      * @return \Illuminate\Http\Response
      */
-    public function adminIndex($answers = null)
+    public function adminIndex($comments = null)
     {
-        if(!$answers){
-            $answers = Answer::orderBy('id', 'desc')->paginate(20);
+        if(!$comments){
+            $comments = Comment::orderBy('id', 'desc')->paginate(20);
         } else {
-            $answers = $answers->paginate(20);
+            $comments = $comments->paginate(20);
         }
-        return view('admin.answers.answers', ['answers' => $answers]);
+        return view('admin.comments.comments', ['comments' => $comments]);
     }
 
     /**
-     * Save the answer into the database.
+     * Save the comment into the database.
      * @param encryptedid
      * @return \Illuminate\Http\Response
      */
@@ -41,57 +41,57 @@ class AnswerController extends Controller
         if($validator->fails() || !$encryptedId){
             return redirect()->back()->withErrors()->withInput();
         }
-        $question = Question::findOrFail(decrypt($encryptedId));
+        $art = Art::findOrFail(decrypt($encryptedId));
         $user = Auth::user();
-        $answer = new Answer();
-        $answer->title = $request->title;
-        $answer->description = $request->description;
-        $answer->question_id = $question->id;
-        $user->answers()->save($answer);
-        $answer->save();
+        $comment = new Comment();
+        $comment->title = $request->title;
+        $comment->description = $request->description;
+        $comment->art_id = $art->id;
+        $user->comments()->save($comment);
+        $comment->save();
 
-        return redirect()->back()->with('status', 'Your answer has been added successfully!');
+        return redirect()->back()->with('status', 'Your comment has been added successfully!');
     }
 
 
 
     /**
-     * Show answer page for admins and moderators
+     * Show comment page for admins and moderators
      * 
-     * @param answer id
+     * @param comment id
      * @return response
      */
     public function adminShow($id)
     {
-        $answer = Answer::findOrFail($id);
-        return view('admin.answers.show', ['answer' => $answer]);
+        $comment = Comment::findOrFail($id);
+        return view('admin.comments.show', ['comment' => $comment]);
     }
 
 
     /**
-     * Delete answer for admins and moderators
+     * Delete comment for admins and moderators
      * 
-     * @param answer id
+     * @param comment id
      * @return response
      */
     public function adminDestroy($id)
     {
-        $answer = Answer::findOrFail($id);
-        $answer->delete();
-        return redirect()->route('admin.index.answers')->with('status', 'The question has been deleted!');
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        return redirect()->route('admin.index.comments')->with('status', 'The art has been deleted!');
     }
 
 
     /**
      * 
-     * Update the answer
+     * Update the comment
      * @param request
      * @return response
      * 
      */
     public function adminEdit(Request $request, $id)
     {
-        $answer = Answer::findOrFail($id);
+        $comment = Comment::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:40',
@@ -99,14 +99,14 @@ class AnswerController extends Controller
         ]);
 
         if($validator->fails()){
-            return redirect()->route('admin.show.answer', ['id' => $id])->withErrors($validator)->withInput();
+            return redirect()->route('admin.show.comment', ['id' => $id])->withErrors($validator)->withInput();
         } 
 
-        $answer->title = $request->title;
-        $answer->description = $request->description;
-        $answer->save();
+        $comment->title = $request->title;
+        $comment->description = $request->description;
+        $comment->save();
 
-        return redirect()->route('admin.show.answer', ['id' => $id])->with('status', 'This category has been edited');
+        return redirect()->route('admin.show.comment', ['id' => $id])->with('status', 'This category has been edited');
     }
 
 
@@ -125,10 +125,10 @@ class AnswerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Answer  $answer
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Answer $answer)
+    public function show(Comment $comment)
     {
         //
     }
@@ -136,10 +136,10 @@ class AnswerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Answer  $answer
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Answer $answer)
+    public function edit(Comment $comment)
     {
         //
     }
@@ -148,10 +148,10 @@ class AnswerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Answer  $answer
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Answer $answer)
+    public function update(Request $request, Comment $comment)
     {
         //
     }
@@ -159,30 +159,30 @@ class AnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Answer  $answer
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Answer $answer)
+    public function destroy(Comment $comment)
     {
         //
     }
 
 
-    public function adminSearchAnswers(Request $request){
+    public function adminSearchComments(Request $request){
 
         $validator = Validator::make($request->all(), [
             'id' => 'integer|nullable',
-            'question_id' => 'integer|nullable',
+            'art_id' => 'integer|nullable',
             'title' => 'string|nullable',
             'description' => 'string|nullable'
         ]);
 
         if($validator->fails() || empty($request->all())){
-            return redirect()->route('admin.index.answers')->withErrors($validator)->withInput();
+            return redirect()->route('admin.index.comments')->withErrors($validator)->withInput();
         }
 
         $id = $request->id;
-        $question_id = $request->question_id;
+        $art_id = $request->art_id;
         $title = $request->title;
         $description = $request->description;
         $where_arr = array();
@@ -192,10 +192,10 @@ class AnswerController extends Controller
             $id_where = ['id', '=', $id];
             array_push($where_arr, $id_where);
 
-        } if($question_id){
+        } if($art_id){
 
-            $question_id_where = ['question_id', '=', $question_id];
-            array_push($where_arr, $question_id_where);
+            $art_id_where = ['art_id', '=', $art_id];
+            array_push($where_arr, $art_id_where);
 
         } if($title){
 
@@ -209,11 +209,11 @@ class AnswerController extends Controller
 
         }
 
-        $answers = Answer::where($where_arr);
+        $comments = Comment::where($where_arr);
 
-        if(empty($answers)){
+        if(empty($comments)){
             return $this->adminIndex();
         }
-        return $this->adminIndex($answers);
+        return $this->adminIndex($comments);
     }
 }

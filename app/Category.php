@@ -9,14 +9,14 @@ class Category extends Model
 {
     use SoftDeletes;
     
-    public function questions()
+    public function arts()
     {
-        return $this->morphedByMany('App\Question', 'categoriable');
+        return $this->morphedByMany('App\Art', 'categoriable');
     }
 
-    public function prequestions()
+    public function prearts()
     {
-        return $this->morphedByMany('App\PreQuestion', 'categoriable');
+        return $this->morphedByMany('App\PreArt', 'categoriable');
     }
 
 

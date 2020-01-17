@@ -23,13 +23,13 @@ class Tag extends Model implements Searchable
      }
 
 
-    public function questions()
+    public function arts()
     {
-        return $this->morphedByMany('App\Question', 'taggable');
+        return $this->morphedByMany('App\Art', 'taggable');
     }
 
-    public function prequestions()
+    public function prearts()
     {
-        return $this->morphedByMany('App\PreQuestion', 'taggable');
+        return $this->morphedByMany('App\PreArt', 'taggable');
     }
 }

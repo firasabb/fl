@@ -41,22 +41,22 @@ class User extends Authenticatable
     ];
 
 
-    public function prequestions(){
+    public function prearts(){
 
-        return $this->hasMany('\App\PreQuestion', 'user_id');
-
-    }
-
-    public function questions(){
-
-        return $this->hasMany('\App\Question', 'user_id');
+        return $this->hasMany('\App\PreArt', 'user_id');
 
     }
 
+    public function arts(){
 
-    public function answers(){
+        return $this->hasMany('\App\Art', 'user_id');
 
-        return $this->hasMany('\App\Answer', 'user_id');
+    }
+
+
+    public function comments(){
+
+        return $this->hasMany('\App\Comment', 'user_id');
 
     }
 

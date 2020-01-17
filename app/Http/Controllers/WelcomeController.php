@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Question;
+use App\Art;
 
 class WelcomeController extends Controller
 {
@@ -14,8 +14,8 @@ class WelcomeController extends Controller
 
     public function index(){
 
-        $questions = Question::orderBy('id', 'desc')->paginate(5);
-        return view('main', ['questions' => $questions]);
+        $arts = Art::orderBy('id', 'desc')->paginate(5);
+        return view('main', ['arts' => $arts]);
 
     }
 }

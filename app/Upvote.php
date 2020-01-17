@@ -11,6 +11,6 @@ class Upvote extends Model
     }
 
     public function answer(){
-        return $this->belongsTo('\App\Answer');
+        return $this->belongsTo('\App\Comment');
     }
 }

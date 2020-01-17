@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Report;
-use App\Question;
+use App\Art;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Crypt;
@@ -57,14 +57,14 @@ class ReportController extends Controller
 
         }
 
-        if($type == 'question'){
+        if($type == 'art'){
             
             $_q = decrypt($request->_q);
             $user = Auth::user();
-            $question = Question::findOrFail($_q);
+            $art = Art::findOrFail($_q);
             $report = new Report();
             $report->body = $request->body;
-            $report->reportable()->associate($question);
+            $report->reportable()->associate($art);
             $user->reports()->save($report);
             $report->save();
 

@@ -36,9 +36,9 @@ class Question extends Model
         return $this->morphToMany('\App\Category', 'categoriable');
     }
 
-    public function answers()
+    public function comments()
     {
-        return $this->hasMany('\App\Answer', 'question_id');
+        return $this->hasMany('\App\Comment', 'art_id');
     }
 
     public function reports()

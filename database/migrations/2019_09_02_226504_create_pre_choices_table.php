@@ -17,11 +17,11 @@ class CreatePreChoicesTable extends Migration
             $table->bigIncrements('id');
             $table->text('choice');
             $table->boolean('right')->default(0);
-            $table->unsignedBigInteger('pre_question_id');
+            $table->unsignedBigInteger('preart_id');
             $table->timestamps();
 
-            $table->foreign('pre_question_id')
-                    ->references('id')->on('pre_questions')
+            $table->foreign('preart_id')
+                    ->references('id')->on('pre_arts')
                     ->onDelete('cascade');
         });
     }

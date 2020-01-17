@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\PreQuestion;
-use App\Question;
+use App\PreArt;
+use App\Art;
 use App\PreChoice;
 use App\Choice;
 use App\Tag;
@@ -15,7 +15,7 @@ use Auth;
 use Illuminate\Support\Facades\Crypt;
 
 
-class PreQuestionController extends Controller
+class PreArtController extends Controller
 {
 
 
@@ -34,9 +34,9 @@ class PreQuestionController extends Controller
      */
     public function index()
     {
-        $prequestions = PreQuestion::orderBy('id', 'asc')->paginate(1);
+        $prearts = PreArt::orderBy('id', 'asc')->paginate(1);
         $categories = Category::all(); 
-        return view('admin.prequestions.prequestions', ['prequestions' => $prequestions, 'categories' => $categories]);
+        return view('admin.prearts.prearts', ['prearts' => $prearts, 'categories' => $categories]);
     }
 
     /**
@@ -47,7 +47,7 @@ class PreQuestionController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('prequestions.create', ['categories' => $categories]);
+        return view('prearts.create', ['categories' => $categories]);
     }
 
     /**
@@ -56,7 +56,7 @@ class PreQuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, PreQuestion $preQuestion)
+    public function store(Request $request, Preart $preart)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:15|max:200',
@@ -69,54 +69,54 @@ class PreQuestionController extends Controller
         ]);
 
         if($validator->fails()){
-            return redirect('/ask/question/')->withErrors($validator)->withInput();
+            return redirect('/ask/art/')->withErrors($validator)->withInput();
         }
 
         $user = Auth::user();
 
-        $prequestion = new PreQuestion();
-        $prequestion->title = $request->title;
-        $prequestion->description = $request->description;
-        $prequestion->user_id = $user->id;
-        $prequestion->save();
+        $preart = new PreArt();
+        $preart->title = $request->title;
+        $preart->description = $request->description;
+        $preart->user_id = $user->id;
+        $preart->save();
 
         $options = $request->options;
         if($options){
             foreach($options as $option){
                 $choice = new PreChoice();
                 $choice->choice = $option;
-                $prequestion->choices()->save($choice);
+                $preart->choices()->save($choice);
             }
         }
 
         $categories = $request->categories;
         foreach($categories as $category){
             $category = Category::findOrFail($category);
-            $prequestion->categories()->attach($category);
+            $preart->categories()->attach($category);
         }
 
         $tags = $request->tags;
         $tags = explode(', ', $tags);
         foreach($tags as $tag){
             $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
-            $prequestion->tags()->attach($tag);
+            $preart->tags()->attach($tag);
         }
 
         if($user->hasAnyRole(['admin', 'moderator'])){
-            $this->adminAddQuestion($prequestion->id);
+            $this->adminAddArt($preart->id);
         }
 
-        return redirect('/home')->with('status', 'Your Question Has Been Created! Once it is approved, it is going to be public...');
+        return redirect('/home')->with('status', 'Your Art Has Been Created! Once it is approved, it is going to be public...');
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\PreQuestion  $preQuestion
+     * @param  \App\PreArt  $preart
      * @return \Illuminate\Http\Response
      */
-    public function show(PreQuestion $preQuestion)
+    public function show(PreArt $preart)
     {
         //
     }
@@ -124,10 +124,10 @@ class PreQuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PreQuestion  $preQuestion
+     * @param  \App\PreArt  $preart
      * @return \Illuminate\Http\Response
      */
-    public function edit(PreQuestion $preQuestion)
+    public function edit(PreArt $preart)
     {
         //
     }
@@ -136,10 +136,10 @@ class PreQuestionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PreQuestion  $preQuestion
+     * @param  \App\PreArt  $preart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PreQuestion $preQuestion)
+    public function update(Request $request, Preart $preart)
     {
         //
     }
@@ -147,20 +147,20 @@ class PreQuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PreQuestion  $preQuestion
+     * @param  \App\Preart  $preart
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {   
-        $prequestion = PreQuestion::findOrFail($id);
-        $prequestion->delete();
+        $preart = PreArt::findOrFail($id);
+        $preart->delete();
 
-        return redirect('admin/dashboard/prequestions/')->with('status', 'Question has been deleted!');
+        return redirect('admin/dashboard/prearts/')->with('status', 'Art has been deleted!');
     }
 
     /** 
     *
-    * Approve the prequestion for users not admins
+    * Approve the preart for users not admins
     *
     * @param Request
     * @return Response
@@ -171,7 +171,7 @@ class PreQuestionController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:15|max:200',
-            'question_id' => 'required|integer',
+            'art_id' => 'required|integer',
             'description' => 'string|max:500|nullable',
             'categories' => 'required|array',
             'categories.*' => 'string',
@@ -187,16 +187,16 @@ class PreQuestionController extends Controller
 
         }
 
-        $prequestion = PreQuestion::findOrFail($request->question_id);
+        $preart = PreArt::findOrFail($request->art_id);
 
-        $question = $this->makeNewQuestion($request); 
+        $art = $this->makeNewArt($request); 
 
         if($request->options){
             $options = $request->options;
             foreach($options as $option){
                 $choice = new Choice();
                 $choice->choice = $option;
-                $choice->question_id = $question->id;
+                $choice->art_id = $art->id;
                 $choice->save();
             }
         }
@@ -204,26 +204,26 @@ class PreQuestionController extends Controller
         $categories = $request->categories;
         foreach($categories as $category){
             $category = Category::findOrFail($category);
-            $question->categories()->attach($category);
+            $art->categories()->attach($category);
         }
 
         $tags = $request->tags;
         $tags = explode(', ', $tags);
         foreach($tags as $tag){
             $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
-            $question->tags()->attach($tag);
+            $art->tags()->attach($tag);
         }
 
-        $prequestion->delete();
+        $preart->delete();
 
-        return redirect('/admin/dashboard/prequestions/')->with('status', 'The Question has been approved!');
+        return redirect('/admin/dashboard/prearts/')->with('status', 'The Art has been approved!');
 
     }
 
 
     /** 
     *
-    * Approve the prequestion for admins
+    * Approve the preart for admins
     *
     * @param Request
     * @return Response
@@ -231,34 +231,34 @@ class PreQuestionController extends Controller
     */
 
 
-    public function adminAddQuestion($prequestion_id){
+    public function adminAddArt($preart_id){
 
-        $prequestion = PreQuestion::findOrFail($prequestion_id);
-        $prechoices = $prequestion->choices;
-        $question = $this->makeNewQuestion($prequestion);
+        $preart = PreArt::findOrFail($preart_id);
+        $prechoices = $preart->choices;
+        $art = $this->makeNewArt($preart);
 
         if(!empty($prechoices)){
             foreach($prechoices as $prechoice){
                 $choice = new Choice;
                 $choice->choice = $prechoice->choice;
-                $choice->question_id = $question->id;
+                $choice->art_id = $art->id;
                 $choice->save();
             }
         }
 
-        $categories = $prequestion->categories;
+        $categories = $preart->categories;
         foreach($categories as $category){
-            $question->categories()->attach($category);
+            $art->categories()->attach($category);
         }
 
-        $tags = $prequestion->tags;
+        $tags = $preart->tags;
         foreach($tags as $tag){
-            $question->tags()->attach($tag);
+            $art->tags()->attach($tag);
         }
 
-        $prequestion->delete();
+        $preart->delete();
 
-        return redirect('/admin/dashboard/questions/')->with('status', 'A new question has been added by an admin.');
+        return redirect('/admin/dashboard/arts/')->with('status', 'A new art has been added by an admin.');
     }
 
 
@@ -308,28 +308,28 @@ class PreQuestionController extends Controller
 
     /**
      * 
-     * Make new Question
+     * Make new Art
      * 
-     * @param Object: Prequestion or Request
-     * @return New Question
+     * @param Object: preart or Request
+     * @return New Art
      * 
      */
 
 
-    private function makeNewQuestion($obj){
+    private function makeNewArt($obj){
 
-        $question = new Question();
-        $question->title = $obj->title;
-        $question->description = $obj->description;
+        $art = new Art();
+        $art->title = $obj->title;
+        $art->description = $obj->description;
         $url = Str::slug($obj->title, '-');
-        $checkIfUrlExists = Question::where('url', 'LIKE', $url)->first();
+        $checkIfUrlExists = Art::where('url', 'LIKE', $url)->first();
         if($checkIfUrlExists){
             $url = $url . uniqid('-');
         }
-        $question->url = $url;
-        $question->user_id = $obj->user_id;
-        $question->save();
-        return $question;
+        $art->url = $url;
+        $art->user_id = $obj->user_id;
+        $art->save();
+        return $art;
 
     }
 

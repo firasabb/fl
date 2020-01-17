@@ -14,8 +14,8 @@ class Answer extends Model
         return $this->belongsTo('\App\User');
     }
 
-    public function question(){
-        return $this->belongsTo('\App\Question');
+    public function art(){
+        return $this->belongsTo('\App\Art');
     }
 
     public function upvotes(){

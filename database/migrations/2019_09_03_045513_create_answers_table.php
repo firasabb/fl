@@ -13,19 +13,19 @@ class CreateAnswersTable extends Migration
      */
     public function up()
     {
-        Schema::create('answers', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('title');
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('art_id');
             $table->unsignedBigInteger('user_id');
             $table->boolean('best')->default(0);
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('question_id')
+            $table->foreign('art_id')
                   ->references('id')
-                  ->on('questions')
+                  ->on('arts')
                   ->onDelete('cascade');
                   
             $table->foreign('user_id')
@@ -42,7 +42,7 @@ class CreateAnswersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('answers');
+        Schema::dropIfExists('comments');
         
     }
 }

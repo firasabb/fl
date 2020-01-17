@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class PreChoice extends Model
 {
     
-    public function question(){
+    public function preart(){
 
-        return $this->belongsTo('\App\PreQuestion');
+        return $this->belongsTo('\App\PreArt');
         
     }
 

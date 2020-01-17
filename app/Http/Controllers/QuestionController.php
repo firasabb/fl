@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Question;
+use App\Art;
 use App\Category;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
 
-class QuestionController extends Controller
+class ArtController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,23 +45,23 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Question  $question
+     * @param  \App\Art  $art
      * @return \Illuminate\Http\Response
      */
     public function show($url)
     {
-        $question = Question::where('url', $url)->firstOrFail();
+        $art = Art::where('url', $url)->firstOrFail();
         
-        return view('question.show', ['question' => $question]);
+        return view('art.show', ['art' => $art]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Question  $question
+     * @param  \App\Art $art
      * @return \Illuminate\Http\Response
      */
-    public function edit(Question $question)
+    public function edit(Art $art)
     {
         //
     }
@@ -70,10 +70,10 @@ class QuestionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Question  $question
+     * @param  \App\Art  $art
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Question $question)
+    public function update(Request $request, Art $art)
     {
         //
     }
@@ -81,45 +81,45 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Question  $question
+     * @param  \App\Art  $art
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Question $question)
+    public function destroy(art $art)
     {
         //
     }
 
 
-    public function adminIndex($questions = null)
+    public function adminIndex($arts = null)
     {
-        if(!$questions){
-            $questions = Question::orderBy('id', 'desc')->paginate(10);
+        if(!$arts){
+            $arts = Art::orderBy('id', 'desc')->paginate(10);
         } else {
-            $questions = $questions->paginate(20);
+            $arts = $arts->paginate(20);
         }
-        return view('admin.questions.questions', ['questions' => $questions]);
+        return view('admin.arts.arts', ['arts' => $arts]);
     }
 
 
     public function adminShow($id)
     {
-        $question = Question::findOrFail($id);
+        $art = Art::findOrFail($id);
         $categories = Category::all();
-        $hasCategories = $question->categories->pluck('id');
-        return view('admin.questions.show', ['question' => $question, 'categories' => $categories, 'hasCategories' => $hasCategories]);
+        $hasCategories = $art->categories->pluck('id');
+        return view('admin.arts.show', ['art' => $art, 'categories' => $categories, 'hasCategories' => $hasCategories]);
     }
 
 
     /**
      * 
-     * Update the question
+     * Update the art
      * @param request
      * @return response
      * 
      */
     public function adminEdit(Request $request, $id)
     {
-        $question = Question::findOrFail($id);
+        $art = Art::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:15|max:200',
@@ -132,13 +132,13 @@ class QuestionController extends Controller
         ]);
 
         if($validator->fails()){
-            return redirect()->route('admin.show.question', ['id' => $id])->withErrors($validator)->withInput();
+            return redirect()->route('admin.show.art', ['id' => $id])->withErrors($validator)->withInput();
         } 
 
-        $question->title = $request->title;
-        $question->url = $request->url;
-        $question->description = $request->description;
-        $question->categories()->sync($request->categories);
+        $art->title = $request->title;
+        $art->url = $request->url;
+        $art->description = $request->description;
+        $art->categories()->sync($request->categories);
         $tagsArr = array();
         $tags = $request->tags;
         $tags = explode(', ', $tags);
@@ -146,23 +146,23 @@ class QuestionController extends Controller
             $tag = Tag::where('name', 'LIKE', $tag)->first();
             array_push($tagsArr, $tag->id);
         }
-        $question->tags()->sync($tagsArr);
-        //$question->options = $request->options;
-        $question->save();
+        $art->tags()->sync($tagsArr);
+        //$art->options = $request->options;
+        $art->save();
 
-        return redirect()->route('admin.show.question', ['id' => $id])->with('status', 'This category has been edited');
+        return redirect()->route('admin.show.art', ['id' => $id])->with('status', 'This category has been edited');
     }
 
 
     public function adminDestroy($id)
     {
-        $question = Question::findOrFail($id);
-        $question->delete();
-        return redirect('/admin/dashboard/questions/')->with('status', 'The question has been deleted!');
+        $art = Art::findOrFail($id);
+        $art->delete();
+        return redirect('/admin/dashboard/arts/')->with('status', 'The art has been deleted!');
     }
 
 
-    public function adminSearchQuestions(Request $request){
+    public function adminSearchArts(Request $request){
         
         $validator = Validator::make($request->all(), [
             'id' => 'integer|nullable',
@@ -171,7 +171,7 @@ class QuestionController extends Controller
         ]);
 
         if($validator->fails() || empty($request->all())){
-            return redirect()->route('admin.index.questions')->withErrors($validator)->withInput();
+            return redirect()->route('admin.index.arts')->withErrors($validator)->withInput();
         }
 
         $id = $request->id;
@@ -197,12 +197,12 @@ class QuestionController extends Controller
 
         }
 
-        $questions = Question::where($where_arr);
+        $arts = Art::where($where_arr);
 
-        if(empty($questions)){
+        if(empty($arts)){
             return $this->adminIndex();
         }
-        return $this->adminIndex($questions);
+        return $this->adminIndex($arts);
     }
 
 

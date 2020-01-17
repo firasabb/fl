@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{$answer->title}}</div>
+                <div class="card-header">{{$comment->title}}</div>
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -25,29 +25,29 @@
                     @endif
 
                     <div class="text-center p-3">
-                        <h5>Asked by: <a href="{{ url('admin/dashboard/user/' . $answer->user->id) }}">{{ $answer->user->name }}</a></h5>
+                        <h5>Asked by: <a href="{{ url('admin/dashboard/user/' . $comment->user->id) }}">{{ $comment->user->name }}</a></h5>
                     </div>
 
-                    <form method="POST" action="{{ route('admin.edit.answer', ['id' => $answer->id]) }}" id="edit-form-answers">
+                    <form method="POST" action="{{ route('admin.edit.comment', ['id' => $comment->id]) }}" id="edit-form-comments">
                         {!! csrf_field() !!}
                         {!! method_field('PUT') !!}
 
                         
                                 <div class="text-center p-3">
-                                    <h5>Question: <a href="{{ route('show.question', ['url' => $answer->question->url]) }}">{{ $answer->question->title }}</a></h5>
+                                    <h5>Art: <a href="{{ route('show.art', ['url' => $comment->art->url]) }}">{{ $comment->art->title }}</a></h5>
                                 </div>
                             
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <input class="form-control enabled-disabled" type="text" name="title"  value="{{ $answer->title }}" placeholder="Title" disabled/>
+                                    <input class="form-control enabled-disabled" type="text" name="title"  value="{{ $comment->title }}" placeholder="Title" disabled/>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <textarea class="form-control enabled-disabled" name="description" disabled>{{ $answer->description }}</textarea>
+                                    <textarea class="form-control enabled-disabled" name="description" disabled>{{ $comment->description }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -59,13 +59,13 @@
                         <div class="row info-row">
                             <div class="col">
                                 <h5>Created at:</h1>
-                                <p>{{ $answer->created_at }}</p>
+                                <p>{{ $comment->created_at }}</p>
                                 <h5>Updated at:</h1>
-                                <p>{{ $answer->updated_at }}</p>
+                                <p>{{ $comment->updated_at }}</p>
                             </div>
                             <div class="col">
                                 <h5>ID:</h1>
-                                <p>{{ $answer->id }}</p>
+                                <p>{{ $comment->id }}</p>
                             </div>
                         </div>
                     </form>
@@ -73,11 +73,11 @@
             </div>
 
             <div class="block-button">
-                <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit Question</button>
-                <form action="{{ route('admin.delete.answer', ['id' => $answer->id]) }}" method="POST" id="delete-form-answers" class="delete-form-2">
+                <button type="button" class="btn btn-success btn-lg btn-block" id="edit-button">Edit Comment</button>
+                <form action="{{ route('admin.delete.comment', ['id' => $comment->id]) }}" method="POST" id="delete-form-comments" class="delete-form-2">
                     {!! csrf_field() !!}
                     {!! method_field('DELETE') !!}
-                    <button type="submit" class="btn btn-danger btn-lg btn-block">Delete Answer</button>
+                    <button type="submit" class="btn btn-danger btn-lg btn-block">Delete Comment</button>
                 </form>
             </div>
 
