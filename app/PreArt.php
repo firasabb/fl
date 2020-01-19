@@ -11,9 +11,9 @@ class PreArt extends Model
     use SoftDeletes;
     
 
-    public function choices(){
+    public function downloads(){
 
-        return $this->hasMany('\App\PreChoice', 'pre_art_id');
+        return $this->hasMany('\App\PreDownload', 'preart_id');
 
     }
 

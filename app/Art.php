@@ -11,9 +11,9 @@ class Art extends Model
     use SoftDeletes;
 
 
-    public function choices(){
+    public function downloads(){
 
-        return $this->hasMany('\App\Choice', 'art_id');
+        return $this->hasMany('\App\Download', 'art_id');
 
     }
 

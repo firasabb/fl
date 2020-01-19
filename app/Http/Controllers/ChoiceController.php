@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Choice;
+use App\Download;
 use Illuminate\Http\Request;
 
-class ChoiceController extends Controller
+class DownloadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ChoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Choice  $choice
+     * @param  \App\Download  $download
      * @return \Illuminate\Http\Response
      */
-    public function show(Choice $choice)
+    public function show(Download $download)
     {
         //
     }
@@ -52,10 +52,10 @@ class ChoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Choice  $choice
+     * @param  \App\Download  $download
      * @return \Illuminate\Http\Response
      */
-    public function edit(Choice $choice)
+    public function edit(Download $download)
     {
         //
     }
@@ -64,10 +64,10 @@ class ChoiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Choice  $choice
+     * @param  \App\Download  $download
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Choice $choice)
+    public function update(Request $request, Download $download)
     {
         //
     }
@@ -75,10 +75,10 @@ class ChoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Choice  $choice
+     * @param  \App\Download  $download
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Choice $choice)
+    public function destroy(Download $download)
     {
         //
     }

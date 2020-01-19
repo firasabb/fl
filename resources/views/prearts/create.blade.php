@@ -23,7 +23,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('create.preart') }}" class="needs-validation" autocomplete="off">
+                    <form method="POST" action="{{ route('create.preart') }}" class="needs-validation" autocomplete="off" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="arts-title">Art:</label>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group">
 
-                            <label for="art-description">Tags:</label>
+                            <label for="art-tags">Tags:</label>
                             <div class="selected-tags">
                                 <ul id="selected-tags-ul" class="selected-tags-ul list-group list-group-horizontal">
                                 </ul>
@@ -60,9 +60,12 @@
                             </div>
                             <ul id="tags" class="list-group">
                         </div>
+                        <div class="uploads">
+                            <label for="art-uploads">Upload Your Files:</label>
+                        </div>
                         <div class="create-art-btns">
                             <button type="submit" class="btn btn-primary submit-art-btn">Submit</button>
-                            <button type="button" class="btn btn-success add-choice-btn" id="add-option">Add an option</button>
+                            <button type="button" class="btn btn-success add-download-btn" id="add-download">Add a File</button>
                         </div>
                     </form>
                 </div>

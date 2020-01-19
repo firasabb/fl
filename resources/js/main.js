@@ -1,20 +1,20 @@
 $(document).ready(function(){
 
-    max = 4;
+    max = 5;
     count = 0;
     formGroupStart = '<div class="form-group"> ';
     formGroupEnd = ' </div>';
     invalidForm = '<div class="invalid-feedback">Please provide a valid option: maximum allowed number of characters is 300.</div>';
 
-    $('#add-option').click(function(){
+    $('#add-download').click(function(){
 
         if(count < max){
             num = count + 1;
-            var option = formGroupStart + '<input type="text" class="form-control" name="options[' + count + ']" maxlength="200" placeholder="Option ' + num + '..."  />' + formGroupEnd;
-            $('.options').append(option);
+            var option = formGroupStart + '<input type="file" class="form-control" name="uploads[' + count + ']" maxlength="200" placeholder="Option ' + num + '..."  />' + formGroupEnd;
+            $('.uploads').append(option);
             count++;
         } else{
-            alert('Maximum number of options has been reached.');
+            alert('Maximum number of uploads has been reached.');
         }
 
     }); 
@@ -74,7 +74,7 @@ $(document).ready(function(){
         function getTags() {
           if(this.value){
             var exist = Array();
-            var url = document.location.href;
+            var url = window.location.protocol + '//' + document.location.hostname;
             var selectedTagsUl = $('#selected-tags-ul');
             var selectedTagsUlChildren = selectedTagsUl.children('li').each(
               function(){
@@ -82,7 +82,7 @@ $(document).ready(function(){
               }
             );
             jQuery.ajax({
-              url: url + "/tags",
+              url: url + "/add/art/tags",
               type: "POST",
               data: {tag:$('#tag-input').val(), exist: exist},
               success:function(data){

@@ -8,6 +8,7 @@ use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
+use Storage;
 
 class ArtController extends Controller
 {
@@ -157,6 +158,10 @@ class ArtController extends Controller
     public function adminDestroy($id)
     {
         $art = Art::findOrFail($id);
+        $downloads = $art->downloads;
+        foreach($downloads as $download){
+            Storage::cloud()->delete($download->url);
+        }
         $art->delete();
         return redirect('/admin/dashboard/arts/')->with('status', 'The art has been deleted!');
     }

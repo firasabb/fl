@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PreChoice extends Model
+class PreDownload extends Model
 {
     
     public function preart(){

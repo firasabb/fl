@@ -21,7 +21,7 @@ Route::post('/register/checkusername', 'Auth\RegisterController@checkusername')-
 
 // Get Tags AJAX
 
-Route::post('/ask/art/tags', 'PreArtController@suggestTags')->name('suggesttags');
+Route::post('/add/art/tags', 'PreArtController@suggestTags')->name('suggesttags');
 
 //
 
@@ -116,8 +116,8 @@ Route::post('/admin/dashboard/report/search', 'ReportController@adminSearchRepor
 
 // PreArts
 
-Route::get('/ask/art', 'PreArtController@create')->name('create.preart');
-Route::post('/ask/art', 'PreArtController@store')->name('store.preart');
+Route::get('/add/art', 'PreArtController@create')->name('create.preart');
+Route::post('/add/art', 'PreArtController@store')->name('store.preart');
 
 
 // Art

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePreChoicesTable extends Migration
+class CreatePreDownloadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreatePreChoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pre_choices', function (Blueprint $table) {
+        Schema::create('pre_downloads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('choice');
+            $table->text('name');
+            $table->text('description')->nullable();
+            $table->text('url');
             $table->boolean('right')->default(0);
             $table->unsignedBigInteger('preart_id');
             $table->timestamps();
@@ -33,6 +35,6 @@ class CreatePreChoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pre_choices');
+        Schema::dropIfExists('pre_downloads');
     }
 }

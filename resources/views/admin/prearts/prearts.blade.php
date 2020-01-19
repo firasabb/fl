@@ -72,12 +72,12 @@
                             </div>
                             <p>Options:</p>
                             <div class="row">
-                                @foreach($preart->choices as $key => $choice)
+                                @foreach($preart->downloads as $key => $download)
                                     <div class="col-sm-2">
                                     </div>
                                     <div class="col-sm-10">
                                         <div class="form-group">
-                                            <input class="form-control enabled-disabled" name="options[{{ $key }}]" type="text" disabled value="{{ $choice->choice }}" />
+                                            <input class="form-control enabled-disabled" name="options[{{ $key }}]" type="text" disabled value="{{ $download->name }}" />
                                         </div>
                                     </div>
                                     

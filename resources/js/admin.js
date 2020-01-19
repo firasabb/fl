@@ -135,7 +135,7 @@ $(document).ready(function(){
               }
             );
             jQuery.ajax({
-              url: url + "/ask/art/tags",
+              url: url + "/add/art/tags",
               type: "POST",
               data: {tag:$('#tag-input').val(), exist: exist},
               success:function(data){

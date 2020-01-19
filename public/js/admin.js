@@ -201,7 +201,7 @@ $(document).ready(function () {
         exist.push($(this).text());
       });
       jQuery.ajax({
-        url: url + "/ask/art/tags",
+        url: url + "/add/art/tags",
         type: "POST",
         data: {
           tag: $('#tag-input').val(),
@@ -275,7 +275,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\js\admin.js */"./resources/js/admin.js");
+module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\assettorch\resources\js\admin.js */"./resources/js/admin.js");
 
 
 /***/ })

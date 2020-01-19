@@ -34003,7 +34003,7 @@ var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
  * @method
  * @memberof Popper.Utils
  * @argument {Any} functionToCheck - variable to check
- * @returns {Boolean} comment to: is a function?
+ * @returns {Boolean} answer to: is a function?
  */
 function isFunction(functionToCheck) {
   var getType = {};
@@ -34483,7 +34483,7 @@ function getViewportOffsetRectRelativeToArtbitraryNode(element) {
  * @memberof Popper.Utils
  * @argument {Element} element
  * @argument {Element} customContainer
- * @returns {Boolean} comment to "isFixed?"
+ * @returns {Boolean} answer to "isFixed?"
  */
 function isFixed(element) {
   var nodeName = element.nodeName;
@@ -49397,10 +49397,10 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\sass\app.scss */"./resources/sass/app.scss");
-__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\sass\admin.scss */"./resources/sass/admin.scss");
-module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\sass\style.scss */"./resources/sass/style.scss");
+__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\assettorch\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\assettorch\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\assettorch\resources\sass\admin.scss */"./resources/sass/admin.scss");
+module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\assettorch\resources\sass\style.scss */"./resources/sass/style.scss");
 
 
 /***/ })

@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\PreArt;
 use App\Art;
-use App\PreChoice;
-use App\Choice;
+use App\PreDownload;
+use App\Download;
 use App\Tag;
 use App\Category;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
 use Auth;
+use Storage; 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Crypt;
 
 
@@ -64,15 +66,18 @@ class PreArtController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'integer',
             'tags' => 'required|string|max:150',
-            'options' => 'array',
-            'options.*' => 'string|max:200'
+            'uploads' => 'required|array',
+            'uploads.*' => 'file|max:100000'
         ]);
-
         if($validator->fails()){
-            return redirect('/ask/art/')->withErrors($validator)->withInput();
+            return redirect('/add/art/')->withErrors($validator)->withInput();
         }
 
         $user = Auth::user();
+
+        if(!Arr::has(Storage::cloud()->directories(), 'predownloads')){
+            Storage::cloud()->makeDirectory('downloads');
+        }
 
         $preart = new PreArt();
         $preart->title = $request->title;
@@ -80,12 +85,18 @@ class PreArtController extends Controller
         $preart->user_id = $user->id;
         $preart->save();
 
-        $options = $request->options;
-        if($options){
-            foreach($options as $option){
-                $choice = new PreChoice();
-                $choice->choice = $option;
-                $preart->choices()->save($choice);
+        $uploads = $request->uploads;
+        if($uploads){
+            $i = 0;
+            foreach($uploads as $upload){
+                $download = new PreDownload();
+                $download->name = $preart->title;
+                $path = $upload->store(
+                    'downloads/'.uniqid(), 's3'
+                );
+                $download->url = $path;
+                $preart->downloads()->save($download);
+                $i++;
             }
         }
 
@@ -153,6 +164,10 @@ class PreArtController extends Controller
     public function destroy($id)
     {   
         $preart = PreArt::findOrFail($id);
+        $predownloads = $preart->downloads;
+        foreach($predownloads as $predownload){
+            Storage::cloud()->delete($predownload->url);
+        }
         $preart->delete();
 
         return redirect('admin/dashboard/prearts/')->with('status', 'Art has been deleted!');
@@ -176,8 +191,8 @@ class PreArtController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'string',
             'tags' => 'required|string|max:150',
-            'options' => 'array',
-            'options.*' => 'string|max:200',
+            'upload' => 'array',
+            'uploads.*' => 'string|max:200',
             'user_id' => 'required|integer'
         ]);
 
@@ -191,14 +206,18 @@ class PreArtController extends Controller
 
         $art = $this->makeNewArt($request); 
 
-        if($request->options){
-            $options = $request->options;
-            foreach($options as $option){
-                $choice = new Choice();
-                $choice->choice = $option;
-                $choice->art_id = $art->id;
-                $choice->save();
-            }
+
+        $predownloads = $preart->downloads()->get();
+
+
+        foreach($predownloads as $predownload){
+
+            $download = new Download();
+            $download->name = $predownload->name;
+            $download->url = $predownload->url;
+            $download->art()->associate($art);
+            $download->save();
+
         }
 
         $categories = $request->categories;
@@ -234,16 +253,20 @@ class PreArtController extends Controller
     public function adminAddArt($preart_id){
 
         $preart = PreArt::findOrFail($preart_id);
-        $prechoices = $preart->choices;
+        $predownloads = $preart->downloads;
         $art = $this->makeNewArt($preart);
 
-        if(!empty($prechoices)){
-            foreach($prechoices as $prechoice){
-                $choice = new Choice;
-                $choice->choice = $prechoice->choice;
-                $choice->art_id = $art->id;
-                $choice->save();
-            }
+        
+        $predownloads = $preart->downloads()->get();
+
+        foreach($predownloads as $predownload){
+
+            $download = new Download();
+            $download->name = $predownload->name;
+            $download->url = $predownload->url;
+            $download->art()->associate($art);
+            $download->save();
+
         }
 
         $categories = $preart->categories;

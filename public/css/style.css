@@ -32,7 +32,7 @@
   float: right;
 }
 
-.add-choice-btn {
+.add-download-btn {
   float: left;
 }
 
@@ -126,5 +126,15 @@
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 50%;
+}
+
+/**
+**
+**  Add Ar Page
+**
+**/
+
+.downloads {
+  margin: 30px 0px;
 }
 

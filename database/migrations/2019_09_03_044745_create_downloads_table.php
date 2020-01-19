@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateChoicesTable extends Migration
+class CreateDownloadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateChoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('choices', function (Blueprint $table) {
+        Schema::create('downloads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('choice');
+            $table->text('name');
+            $table->text('description')->nullable();
+            $table->text('url');
             $table->boolean('right')->default(0);
             $table->unsignedBigInteger('art_id');
             $table->timestamps();
@@ -33,6 +35,6 @@ class CreateChoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('choices');
+        Schema::dropIfExists('downloads');
     }
 }

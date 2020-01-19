@@ -111,7 +111,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\project\resources\js\main_page.js */"./resources/js/main_page.js");
+module.exports = __webpack_require__(/*! C:\Firas\xampp\htdocs\laravel\assettorch\resources\js\main_page.js */"./resources/js/main_page.js");
 
 
 /***/ })
