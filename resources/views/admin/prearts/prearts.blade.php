@@ -54,6 +54,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="type" class="col-sm-2 col-form-label">Type:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control enabled-disabled" name="type_id" disabled>
+                                    @foreach($types as $type)
+                                        <option value="{{ $type->id }}" <?php echo $hasCategories->search($type->id) !== false ? 'Selected' : ''; ?>>{{ $type->name }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="tags" class="col-sm-2 col-form-label">Tags:</label>
                                 <div class="col-sm-10">
                                     <div class="selected-tags">

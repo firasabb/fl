@@ -134,7 +134,12 @@
 **
 **/
 
-.downloads {
+.uploads,
+.featured-media {
   margin: 30px 0px;
+}
+
+.featured-media .form-group > label {
+  margin-right: 20px;
 }
 

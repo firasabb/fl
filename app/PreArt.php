@@ -23,6 +23,10 @@ class PreArt extends Model
 
     }
 
+    public function type(){
+        return $this->belongsTo('\App\Type');
+    }
+
     public function tags()
     {
         return $this->morphToMany('\App\Tag', 'taggable');
@@ -31,6 +35,10 @@ class PreArt extends Model
     public function categories()
     {
         return $this->morphToMany('\App\Category', 'categoriable');
+    }
+
+    public function covers(){
+        return $this->hasMany('\App\Cover', 'preart_id');
     }
 
 }

@@ -94,6 +94,16 @@ Route::post('/admin/dashboard/category/', 'CategoryController@adminAdd')->middle
 Route::post('/admin/dashboard/categories/search', 'CategoryController@adminSearchCategories')->middleware('role:admin|moderator')->name('admin.search.categories');
 
 
+// Admin / Types
+
+Route::get('/admin/dashboard/types/', 'TypeController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.types');
+Route::delete('/admin/dashboard/categorie/{id}', 'TypeController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.type');
+Route::get('/admin/dashboard/type/{id}', 'TypeController@adminShow')->middleware('role:admin|moderator')->name('admin.show.type');
+Route::put('/admin/dashboard/type/{id}', 'TypeController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.type');
+Route::post('/admin/dashboard/type/', 'TypeController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.type');
+Route::post('/admin/dashboard/types/search', 'TypeController@adminSearchTypes')->middleware('role:admin|moderator')->name('admin.search.types');
+
+
 // Admin / Comments
 
 Route::get('/admin/dashboard/comments/', 'CommentController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.comments');

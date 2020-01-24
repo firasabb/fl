@@ -40,7 +40,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="art-description">Categories:</label>
+                            <label for="art-type">Art Type:</label>
+                            <select name="type_id" class="form-control">
+                                @foreach($types as $type)
+                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="art-categories">Categories:</label>
                             <select name="categories[]" multiple class="form-control">
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -59,6 +67,16 @@
                                 <input class="form-control" id="tag-input" type="text"/>
                             </div>
                             <ul id="tags" class="list-group">
+                        </div>
+                        <div class="form-row featured-media">
+                            <div class="form-group col-6">
+                                <label for="art-featured">Featured Media:</label>
+                                <input type="file" name="featured" >
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="art-cover">Thumbnail:</label>
+                                <input type="file" name="cover" >
+                            </div>
                         </div>
                         <div class="uploads">
                             <label for="art-uploads">Upload Your Files:</label>

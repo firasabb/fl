@@ -56,6 +56,16 @@
                         </div>
                         <div class="row">
                             <div class="col">
+                                <label for="type">Type:</label>
+                                <select class="form-control enabled-disabled" name="type_id" disabled>
+                                    @foreach($types as $type)
+                                        <option value="{{ $type->id }}" <?php echo $type->id == $art->type_id ? 'Selected' : ''; ?>>{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <label for="categories">Categories:</label>
                                 <select class="form-control enabled-disabled" name="categories[]" multiple disabled>
                                     @foreach($categories as $category)

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use \App\Category;
+use Illuminate\Support\Str;
 
 class CategoriesTableSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class CategoriesTableSeeder extends Seeder
         foreach($categories as $category){
             $exists = Category::where('name', $category)->first();
             if(!$exists){
-                $newCategory = Category::create(['name' => $category, 'url' => $category]);
+                $newCategory = Category::create(['name' => $category, 'url' => Str::slug($category, '-')]);
             }
         }
     }

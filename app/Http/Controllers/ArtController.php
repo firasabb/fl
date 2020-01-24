@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Art;
 use App\Category;
 use App\Tag;
+use App\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
@@ -105,9 +106,10 @@ class ArtController extends Controller
     public function adminShow($id)
     {
         $art = Art::findOrFail($id);
+        $types = Type::all();
         $categories = Category::all();
         $hasCategories = $art->categories->pluck('id');
-        return view('admin.arts.show', ['art' => $art, 'categories' => $categories, 'hasCategories' => $hasCategories]);
+        return view('admin.arts.show', ['art' => $art, 'categories' => $categories, 'hasCategories' => $hasCategories, 'types' => $types]);
     }
 
 
@@ -129,7 +131,8 @@ class ArtController extends Controller
             'categories.*' => 'integer',
             'options' => 'array',
             'options.*' => 'string|max:200',
-            'tags' => 'string|max:150'
+            'tags' => 'string|max:150',
+            'type_id' => 'integer'
         ]);
 
         if($validator->fails()){
@@ -139,6 +142,8 @@ class ArtController extends Controller
         $art->title = $request->title;
         $art->url = $request->url;
         $art->description = $request->description;
+        $type = Type::findOrFail($request->type_id);
+        $art->type()->associate($type);
         $art->categories()->sync($request->categories);
         $tagsArr = array();
         $tags = $request->tags;
@@ -161,6 +166,10 @@ class ArtController extends Controller
         $downloads = $art->downloads;
         foreach($downloads as $download){
             Storage::cloud()->delete($download->url);
+        }
+        $cover = $art->covers->first();
+        if(!empty($cover)){
+            Storage::cloud()->delete($cover->url);
         }
         $art->delete();
         return redirect('/admin/dashboard/arts/')->with('status', 'The art has been deleted!');

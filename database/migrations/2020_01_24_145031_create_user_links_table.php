@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDownloadsTable extends Migration
+class CreateUserLinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateDownloadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('downloads', function (Blueprint $table) {
+        Schema::create('user_links', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('name');
-            $table->text('description')->nullable();
-            $table->text('url');
-            $table->boolean('featured')->default(0);
-            $table->unsignedBigInteger('art_id');
+            $table->string('name');
+            $table->string('url');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('art_id')
-                    ->references('id')->on('arts')
+            $table->foreign('user_id')
+                    ->references('id')->on('users')
                     ->onDelete('cascade');
         });
     }
@@ -35,6 +33,6 @@ class CreateDownloadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('downloads');
+        Schema::dropIfExists('user_links');
     }
 }

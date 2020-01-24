@@ -18,12 +18,17 @@ class CreateArtsTable extends Migration
             $table->text('title');
             $table->text('url')->unique();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('type_id');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')
                     ->references('id')->on('users')
+                    ->onDelete('cascade');
+
+            $table->foreign('type_id')
+                    ->references('id')->on('types')
                     ->onDelete('cascade');
         });
     }

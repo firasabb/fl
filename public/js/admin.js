@@ -180,6 +180,12 @@ $(document).ready(function () {
   $('#delete-form-comments').on('submit', function () {
     return confirm('Are you sure that you want to delete this comment?');
   });
+  $('#edit-form-types').on('submit', function () {
+    return confirm('Are you sure that you want to edit this type?');
+  });
+  $('#delete-form-types').on('submit', function () {
+    return confirm('Are you sure that you want to delete this type?');
+  });
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

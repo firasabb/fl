@@ -30,6 +30,9 @@ class Art extends Model
         return $this->morphToMany('\App\Tag', 'taggable');
     }
 
+    public function type(){
+        return $this->belongsTo('\App\Type');
+    }
 
     public function categories()
     {
@@ -46,6 +49,9 @@ class Art extends Model
         return $this->morphMany('\App\Report', 'reportable');
     }
 
+    public function covers(){
+        return $this->hasMany('\App\Cover');
+    }
 
 
 }

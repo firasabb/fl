@@ -8,6 +8,8 @@ use App\PreDownload;
 use App\Download;
 use App\Tag;
 use App\Category;
+use App\Type;
+use App\Cover;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
@@ -38,7 +40,8 @@ class PreArtController extends Controller
     {
         $prearts = PreArt::orderBy('id', 'asc')->paginate(1);
         $categories = Category::all(); 
-        return view('admin.prearts.prearts', ['prearts' => $prearts, 'categories' => $categories]);
+        $types = Type::all();
+        return view('admin.prearts.prearts', ['prearts' => $prearts, 'categories' => $categories, 'types' => $types]);
     }
 
     /**
@@ -49,7 +52,8 @@ class PreArtController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('prearts.create', ['categories' => $categories]);
+        $types = Type::all();
+        return view('prearts.create', ['categories' => $categories, 'types' => $types]);
     }
 
     /**
@@ -65,9 +69,12 @@ class PreArtController extends Controller
             'description' => 'string|max:500|nullable',
             'categories' => 'required|array',
             'categories.*' => 'integer',
+            'type_id' => 'required|integer',
             'tags' => 'required|string|max:150',
             'uploads' => 'required|array',
-            'uploads.*' => 'file|max:100000'
+            'uploads.*' => 'file|max:100000|clamav',
+            'featured' => 'file|max:20000|mimes:jpeg,bmp,png,mpeg4-generic,ogg,x-wav,x-msvideo,x-ms-wmv|clamav',
+            'cover' => 'file|mimes:jpeg,bmp,png|clamav|nullable'
         ]);
         if($validator->fails()){
             return redirect('/add/art/')->withErrors($validator)->withInput();
@@ -78,25 +85,42 @@ class PreArtController extends Controller
         if(!Arr::has(Storage::cloud()->directories(), 'predownloads')){
             Storage::cloud()->makeDirectory('downloads');
         }
+        if(!Arr::has(Storage::cloud()->directories(), 'featured')){
+            Storage::cloud()->makeDirectory('featured');
+        }
+        if(!Arr::has(Storage::cloud()->directories(), 'covers')){
+            Storage::cloud()->makeDirectory('covers');
+        }
+
+        $type = Type::findOrFail($request->type_id);
+
 
         $preart = new PreArt();
         $preart->title = $request->title;
         $preart->description = $request->description;
         $preart->user_id = $user->id;
+        $preart->type()->associate($type);
         $preart->save();
+    
+        $unique = uniqid();
+
+        $featured = $request->featured;
+        $download = new PreDownload();
+        $download->name = $preart->title;
+        $download->featured = 1;
+        $path = $featured->store('featured/' . $unique, 's3');
+        $download->url = $path;
+        $download->preart()->associate($preart);
+        $download->save();
 
         $uploads = $request->uploads;
         if($uploads){
-            $i = 0;
             foreach($uploads as $upload){
                 $download = new PreDownload();
                 $download->name = $preart->title;
-                $path = $upload->store(
-                    'downloads/'.uniqid(), 's3'
-                );
+                $path = $upload->store('downloads/' . $unique, 's3');
                 $download->url = $path;
                 $preart->downloads()->save($download);
-                $i++;
             }
         }
 
@@ -111,6 +135,15 @@ class PreArtController extends Controller
         foreach($tags as $tag){
             $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
             $preart->tags()->attach($tag);
+        }
+
+        if($request->cover){
+            $cover = new Cover();
+            $uploadedCover = $request->cover;
+            $path = $uploadedCover->store('covers/' . $unique, 's3');
+            $cover->url = $path;
+            $cover->preart()->associate($preart);
+            $cover->save();
         }
 
         if($user->hasAnyRole(['admin', 'moderator'])){
@@ -168,6 +201,10 @@ class PreArtController extends Controller
         foreach($predownloads as $predownload){
             Storage::cloud()->delete($predownload->url);
         }
+        $cover = $preart->covers->first();
+        if(!empty($cover)){
+            Storage::cloud()->delete($cover->url);
+        }
         $preart->delete();
 
         return redirect('admin/dashboard/prearts/')->with('status', 'Art has been deleted!');
@@ -191,6 +228,7 @@ class PreArtController extends Controller
             'categories' => 'required|array',
             'categories.*' => 'string',
             'tags' => 'required|string|max:150',
+            'type_id' => 'required|integer',
             'upload' => 'array',
             'uploads.*' => 'string|max:200',
             'user_id' => 'required|integer'
@@ -209,16 +247,7 @@ class PreArtController extends Controller
 
         $predownloads = $preart->downloads()->get();
 
-
-        foreach($predownloads as $predownload){
-
-            $download = new Download();
-            $download->name = $predownload->name;
-            $download->url = $predownload->url;
-            $download->art()->associate($art);
-            $download->save();
-
-        }
+        $this->predownloadsToDownloads($art, $predownloads);
 
         $categories = $request->categories;
         foreach($categories as $category){
@@ -231,6 +260,13 @@ class PreArtController extends Controller
         foreach($tags as $tag){
             $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
             $art->tags()->attach($tag);
+        }
+        
+        if(!empty($preart->covers)){
+            $cover = new Cover;
+            $cover->url = $preart->cover->first()->url;
+            $cover->art()->associate($art);
+            $cover->save();
         }
 
         $preart->delete();
@@ -256,18 +292,9 @@ class PreArtController extends Controller
         $predownloads = $preart->downloads;
         $art = $this->makeNewArt($preart);
 
-        
         $predownloads = $preart->downloads()->get();
 
-        foreach($predownloads as $predownload){
-
-            $download = new Download();
-            $download->name = $predownload->name;
-            $download->url = $predownload->url;
-            $download->art()->associate($art);
-            $download->save();
-
-        }
+        $this->predownloadsToDownloads($art, $predownloads);
 
         $categories = $preart->categories;
         foreach($categories as $category){
@@ -278,6 +305,14 @@ class PreArtController extends Controller
         foreach($tags as $tag){
             $art->tags()->attach($tag);
         }
+
+        if(!empty($preart->covers)){
+            $cover = new Cover;
+            $cover->url = $preart->covers->first()->url;
+            $cover->art()->associate($art);
+            $cover->save();
+        }
+        
 
         $preart->delete();
 
@@ -331,7 +366,7 @@ class PreArtController extends Controller
 
     /**
      * 
-     * Make new Art
+     * Make new Art Helper Method
      * 
      * @param Object: preart or Request
      * @return New Art
@@ -341,6 +376,7 @@ class PreArtController extends Controller
 
     private function makeNewArt($obj){
 
+        $type = Type::findOrFail($obj->type_id);
         $art = new Art();
         $art->title = $obj->title;
         $art->description = $obj->description;
@@ -351,10 +387,34 @@ class PreArtController extends Controller
         }
         $art->url = $url;
         $art->user_id = $obj->user_id;
+        $art->type()->associate($type);
         $art->save();
         return $art;
 
     }
 
+
+    /**
+     * 
+     * 
+     * PreDownloads to Downloads Helper Method
+     * @param Object Art
+     * @param Objects Predownloads
+     * Void
+     * 
+     */
+
+
+    private function predownloadsToDownloads($art, $predownloads) : void{
+
+        foreach($predownloads as $predownload){
+            $download = new Download();
+            $download->name = $predownload->name;
+            $download->featured = $predownload->featured;
+            $download->url = $predownload->url;
+            $download->art()->associate($art);
+            $download->save();
+        }
+    }
 
 }

@@ -18,7 +18,7 @@ class CreatePreDownloadsTable extends Migration
             $table->text('name');
             $table->text('description')->nullable();
             $table->text('url');
-            $table->boolean('right')->default(0);
+            $table->boolean('featured')->default(0);
             $table->unsignedBigInteger('preart_id');
             $table->timestamps();
 
