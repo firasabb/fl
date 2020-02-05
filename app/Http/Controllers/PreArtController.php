@@ -72,9 +72,9 @@ class PreArtController extends Controller
             'type_id' => 'required|integer',
             'tags' => 'required|string|max:150',
             'uploads' => 'required|array',
-            'uploads.*' => 'file|max:100000|clamav',
-            'featured' => 'file|max:20000|mimes:jpeg,bmp,png,mpeg4-generic,ogg,x-wav,x-msvideo,x-ms-wmv|clamav',
-            'cover' => 'file|mimes:jpeg,bmp,png|clamav|nullable'
+            'uploads.*' => 'file|max:100000',
+            'featured' => 'file|max:20000|mimes:jpeg,bmp,png,mpeg4-generic,ogg,x-wav,x-msvideo,x-ms-wmv',
+            'cover' => 'file|mimes:jpeg,bmp,png|nullable'
         ]);
         if($validator->fails()){
             return redirect('/add/art/')->withErrors($validator)->withInput();

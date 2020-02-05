@@ -76,5 +76,9 @@ class User extends Authenticatable
         return $this->hasMany('\App\Report');
 
     }
+
+    public function links(){
+        return $this->hasMany('\App\UserLink');
+    }
     
 }

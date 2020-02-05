@@ -137,7 +137,9 @@ Route::get('/art/{url}', 'ArtController@show')->name('show.art');
 
 // Users
 
-Route::get('/user/{username}', 'UserController@showProfile')->name('user.profile');
+Route::get('/artist/{username}', 'UserController@showProfile')->name('user.profile');
+Route::get('artist/{username}/setup', 'UserController@setupProfilePage')->name('user.profile.setup');
+Route::post('artist/{username}/setup', 'UserController@setupProfileRequest')->name('user.profile.setup');
 
 // Tags
 

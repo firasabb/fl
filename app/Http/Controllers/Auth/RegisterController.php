@@ -66,7 +66,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $avatar_url = Storage::url('no-avatar.png');
+        $avatar_url = Storage::cloud()->url('profiles/no-avatar.png');
 
         $user = User::create([
             'name' => $data['name'],
