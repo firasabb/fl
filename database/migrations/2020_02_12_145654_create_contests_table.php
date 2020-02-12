@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserLinksTable extends Migration
+class CreateContestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,9 @@ class CreateUserLinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_links', function (Blueprint $table) {
+        Schema::create('contests', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('url')->nullable();
-            $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-            $table->foreign('user_id')
-                    ->references('id')->on('users')
-                    ->onDelete('cascade');
         });
     }
 
@@ -33,6 +26,6 @@ class CreateUserLinksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_links');
+        Schema::dropIfExists('contests');
     }
 }

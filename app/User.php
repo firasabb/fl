@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Storage;
 
 class User extends Authenticatable
 {
@@ -77,8 +78,12 @@ class User extends Authenticatable
 
     }
 
-    public function links(){
+    public function userLinks(){
         return $this->hasMany('\App\UserLink');
+    }
+
+    public function profile_picture($path){
+        return Storage::disk('s3')->url($path);
     }
     
 }

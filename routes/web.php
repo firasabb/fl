@@ -137,9 +137,11 @@ Route::get('/art/{url}', 'ArtController@show')->name('show.art');
 
 // Users
 
-Route::get('/artist/{username}', 'UserController@showProfile')->name('user.profile');
-Route::get('artist/{username}/setup', 'UserController@setupProfilePage')->name('user.profile.setup');
-Route::post('artist/{username}/setup', 'UserController@setupProfileRequest')->name('user.profile.setup');
+Route::get('/artist/{username}', 'UserController@showProfile')->name('user.profile.show');
+Route::get('artist/{username}/setup', 'UserController@setupProfilePage')->name('user.profile.setup.show');
+Route::put('artist/{username}/setup', 'UserController@setupProfileRequest')->name('user.profile.setup.request');
+Route::get('artist/{username}/changepassword', 'UserController@changePasswordPage')->name('user.profile.password.show');
+Route::post('artist/{username}/changepassword', 'UserController@changePasswordRequest')->name('user.profile.password.request');
 
 // Tags
 

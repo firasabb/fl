@@ -17,6 +17,16 @@ body{
     border-radius: 0;
 }
 
+.white-input-group-text{
+    color: #fff; 
+    border: 0;
+}
+
+.input-group-text{
+    border-radius: 0;
+}
+
+
 @media only screen and (min-width: 1080px){
 
     .input-group-text{
@@ -180,6 +190,42 @@ body{
 **
 **/
 
+.profile-navigation{
+    margin: 20px 30px 0 30px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 14px -4px rgba(102,102,102,0.5);
+    -moz-box-shadow: 0px 0px 14px -4px rgba(102,102,102,0.5);
+    box-shadow: 0px 0px 14px -4px rgba(102,102,102,0.5);
+
+}
+
+
+.profile-navigation-link{
+    background-color: #fff;
+    padding: 15px 0;
+    transition: all 1s ease-in-out;
+}
+
+
+.profile-navigation-link:hover{
+    background-color: #ccc;
+}
+
+.profile-navigation a:hover{
+    text-decoration: none;
+}
+
+.profile-navigation-link-active{
+    background-color: #ccc;
+    padding: 15px 0;
+}
+
+.profile-navigation-link-active:hover{
+    color: #3490dc;
+}
+
+
 
 .profile-container{
     background-color: #ffffff;
@@ -197,14 +243,6 @@ body{
 .profile-img{
     margin-right: 50px;
 }
-
-
-.profile-first-row{
-
-    margin-top: 3rem;
-
-}
-
 
 .profile-img img{
 
@@ -282,6 +320,10 @@ a.card-link, a.card-link:hover {
 }
 
 .profile-picture-container{
+    margin-top: 10px;
+}
+
+.profile-info-container{
     margin-top: 50px;
 }
 
@@ -292,9 +334,15 @@ a.card-link, a.card-link:hover {
     margin: 0 auto;
 }
 
+.profile-img-setup{
+    margin: 0 auto;
+    display: block;
+    max-width: 150px;
+    border-radius: 50%;
+}
 
 .setup-btn-container{
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .btn-blue {
