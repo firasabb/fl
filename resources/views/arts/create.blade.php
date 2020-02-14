@@ -4,26 +4,45 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if ($errors->any() || @session('status'))
+                <div class="card">
+                    <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
             <div class="card">
-                <div class="card-header">Add an art</div>
+                <div class="card-header">Select Your Art Type</div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach($types as $type)
+                            <div class="col">
+                                <div class="select-types">
+                                    {{strtoupper($type->name)}}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Add an Art</div>
 
                 <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('create.preart') }}" class="needs-validation" autocomplete="off" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('create.art') }}" class="needs-validation" autocomplete="off" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="arts-title">Art:</label>
@@ -38,14 +57,6 @@
                             <div class="invalid-feedback">
                                     Please provide a valid description: maximum allowed number of characters is 1000.
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="art-type">Art Type:</label>
-                            <select name="type_id" class="form-control">
-                                @foreach($types as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
                         </div>
                         <div class="form-group">
                             <label for="art-categories">Categories:</label>
@@ -82,6 +93,7 @@
                             <label for="art-uploads">Upload Your Files:</label>
                         </div>
                         <div class="create-art-btns">
+                            <input type="hidden" name="type" id="type_field">
                             <button type="submit" class="btn btn-primary submit-art-btn">Submit</button>
                             <button type="button" class="btn btn-success add-download-btn" id="add-download">Add a File</button>
                         </div>

@@ -82,7 +82,7 @@ $(document).ready(function(){
               }
             );
             jQuery.ajax({
-              url: url + "/add/art/tags",
+              url: url + "/suggest/tags",
               type: "POST",
               data: {tag:$('#tag-input').val(), exist: exist},
               success:function(data){
@@ -93,7 +93,9 @@ $(document).ready(function(){
                   } else {
                     clearAllTags();
                   }
-              },
+              }, error: function(e){
+                console.log(e);
+              }
             });
           } else {
             clearAllTags();
@@ -142,5 +144,21 @@ $(document).ready(function(){
         $(this).remove();
       });
     }
-  
+
+
+
+    /**
+     * 
+     * When a type div is clicked in create art or create contest pages
+     * 
+     */
+    $('.select-types').on('click', function(){
+
+      let typeName = $(this).text();
+      let inpt = $('#type_field');
+      if(typeName.length > 0){
+        inpt.val(typeName);
+      }
+
+    });
 });

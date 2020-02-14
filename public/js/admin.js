@@ -132,10 +132,10 @@ $(document).ready(function () {
   $('#delete-form-permissions').on('submit', function () {
     return confirm('Are you sure that you want to delete this permission?');
   });
-  $('#delete-preart').on('submit', function () {
+  $('#delete-art').on('submit', function () {
     return confirm('Are you sure that you want to delete this art?');
   });
-  $('#add-preart').click(function () {
+  $('#add-art').click(function () {
     if (confirm('Are you sure that you want to approve this art?')) {
       forms = $('.enabled-disabled');
 
@@ -145,7 +145,7 @@ $(document).ready(function () {
         }
       }
 
-      $('#add-preart-form').submit();
+      $('#add-art-form').submit();
     } else {
       return false;
     }
@@ -207,7 +207,7 @@ $(document).ready(function () {
         exist.push($(this).text());
       });
       jQuery.ajax({
-        url: url + "/add/art/tags",
+        url: url + "/suggest/tags",
         type: "POST",
         data: {
           tag: $('#tag-input').val(),

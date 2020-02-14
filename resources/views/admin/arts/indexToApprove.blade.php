@@ -3,8 +3,9 @@
 
 @section('content')
 <div class="container">
-    @foreach($prearts as $preart)
-    <?php $hasCategories = $preart->categories->pluck('id'); ?>
+    @foreach($arts as $art)
+    <?php $hasCategories = $art->categories->pluck('id'); ?>
+
     <div class="row justify-content-center">
         <div class="col-lg-12">
             <div class="card">
@@ -27,20 +28,24 @@
                     @endif
 
 
-                        <form method="POST" action="{{ route('admin.approve.preart') }}" id="add-preart-form">
+                        <form method="POST" action="{{ route('admin.approve.art', ['id' => $art->id]) }}" id="add-art-form">
                             @csrf
                             <div class="form-group row">
                                 <label for="art" class="col-sm-2 col-form-label">Art:</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control enabled-disabled" name="title" disabled type="text" value="{{ $preart->title }}"/>
-                                    <input type="hidden" name="art_id" value="{{ $preart->id }}">
-                                    <input type="hidden" name="user_id" value="{{ $preart->user_id }}">
+                                    <input class="form-control enabled-disabled" name="title" disabled type="text" value="{{ $art->title }}"/>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="description" class="col-sm-2 col-form-label">Description:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control enabled-disabled" name="description" disabled>{{ $preart->description }}</textarea>
+                                    <textarea class="form-control enabled-disabled" name="description" disabled>{{ $art->description }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="url" class="col-sm-2 col-form-label">URL:</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control enabled-disabled" name="url" disabled type="text" value="{{ $art->url }}"/>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -58,7 +63,7 @@
                                 <div class="col-sm-10">
                                     <select class="form-control enabled-disabled" name="type_id" disabled>
                                     @foreach($types as $type)
-                                        <option value="{{ $type->id }}" <?php echo $hasCategories->search($type->id) !== false ? 'Selected' : ''; ?>>{{ $type->name }}</option>
+                                        <option value="{{ $type->id }}" <?php echo $art->type->id == $type->id ? 'Selected' : ''; ?>>{{ $type->name }}</option>
                                     @endforeach
                                     </select>
                                 </div>
@@ -68,13 +73,13 @@
                                 <div class="col-sm-10">
                                     <div class="selected-tags">
                                         <ul id="selected-tags-ul" class="selected-tags-ul list-group list-group-horizontal">
-                                        @foreach($preart->tags as $tag)
+                                        @foreach($art->tags as $tag)
                                             <li class="list-group-item list-group-item-primary selected-tags-li">{{ $tag->name }}</li>
                                         @endforeach
                                         </ul>
                                     </div>
                                     <div class="tag-container">
-                                        <input type="hidden" name="tags" id="hidden-tag-input" value="<?php $i=0; foreach($preart->tags as $tag){ $i++; if($i < count($preart->tags)){echo $tag->name . ', ';} else { echo $tag->name; }} ?>"/>
+                                        <input type="hidden" name="tags" id="hidden-tag-input" value="<?php $i=0; foreach($art->tags as $tag){ $i++; if($i < count($art->tags)){echo $tag->name . ', ';} else { echo $tag->name; }} ?>"/>
                                         <input class="form-control" id="tag-input" type="text" required/>
                                     </div>
                                     <ul id="tags" class="list-group">
@@ -82,7 +87,7 @@
                             </div>
                             <p>Options:</p>
                             <div class="row">
-                                @foreach($preart->downloads as $key => $download)
+                                @foreach($art->downloads as $key => $download)
                                     <div class="col-sm-2">
                                     </div>
                                     <div class="col-sm-10">
@@ -98,18 +103,18 @@
 
                     
                     <div class="pagination-container">
-                        {{ $prearts->links() }}
+                        {{ $arts->links() }}
                     </div>
                 </div>
             </div>
             <div class="block-button">
-                <button id="add-preart" type="button" class="btn btn-primary btn-lg btn-block">Approve</button>
+                <button id="add-art" type="button" class="btn btn-primary btn-lg btn-block">Approve</button>
                 <button id="edit-button" type="button" class="btn btn-success btn-lg btn-block">Edit</button>
-                <div class="delete-preart-container">
-                    <form method="POST" action="{{ route('admin.delete.preart', ['id' => $preart->id]) }}" id="delete-preart">
+                <div class="delete-art-container">
+                    <form method="POST" action="{{ route('admin.delete.art', ['id' => $art->id]) }}" id="delete-art">
                         @csrf
                         {!! method_field('DELETE') !!}
-                        <button id="delete-preart" type="submit" class="btn btn-danger btn-lg btn-block">Delete</button>
+                        <button id="delete-art" type="submit" class="btn btn-danger btn-lg btn-block">Delete</button>
                     </form>
                 </div>
             </div>

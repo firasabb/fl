@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaggablesTable extends Migration
+class CreateMediaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateTaggablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('taggables', function (Blueprint $table) {
+        Schema::create('mediables', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer("tag_id");
-            $table->integer("taggable_id");
-            $table->string("taggable_type");
+            $table->integer("media_id");
+            $table->integer("mediable_id");
+            $table->string("mediable_type");
             $table->timestamps();
             $table->index('tag_id');
-            $table->index('taggable_id');
-            $table->index('taggable_type');
+            $table->index('mediable_id');
+            $table->index('mediable_type');
+            $table->timestamps();
         });
     }
 
@@ -32,6 +33,6 @@ class CreateTaggablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taggables');
+        Schema::dropIfExists('mediables');
     }
 }

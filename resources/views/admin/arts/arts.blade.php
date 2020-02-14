@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div class="block-button">
-                <a href="{{route('create.preart')}}" target="_blank" class="btn btn-primary btn-lg btn-block">Add Art</a>
+                <a href="{{route('create.art')}}" target="_blank" class="btn btn-primary btn-lg btn-block">Add Art</a>
             </div>
 
         </div>

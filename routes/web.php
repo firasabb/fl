@@ -19,10 +19,6 @@ Auth::routes();
 
 Route::post('/register/checkusername', 'Auth\RegisterController@checkusername')->name('checkusername');
 
-// Get Tags AJAX
-
-Route::post('/add/art/tags', 'PreArtController@suggestTags')->name('suggesttags');
-
 //
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -56,14 +52,6 @@ Route::put('/admin/dashboard/permission/{id}', 'AdminController@editPermission')
 Route::post('/admin/dashboard/permissions', 'AdminController@addPermission')->name('admin.add.permission');
 
 
-
-// Admin / PreArts
-
-Route::get('/admin/dashboard/prearts/', 'PreArtController@index')->middleware('role:admin|moderator')->name('admin.index.prearts');
-Route::delete('/admin/dashboard/preart/{id}', 'PreArtController@destroy')->middleware('role:admin|moderator')->name('admin.delete.preart');
-Route::post('/admin/dashboard/prearts/', 'PreArtController@approve')->middleware('role:admin|moderator')->name('admin.approve.preart');
-
-
 // Admin / Arts
 
 Route::get('/admin/dashboard/arts/', 'ArtController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.arts');
@@ -72,6 +60,21 @@ Route::get('/admin/dashboard/art/{id}', 'ArtController@adminShow')->middleware('
 Route::put('/admin/dashboard/art/{id}', 'ArtController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.art');
 Route::post('/admin/dashboard/art/', 'ArtController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.art');
 Route::post('/admin/dashboard/arts/search', 'ArtController@adminSearchArts')->middleware('role:admin|moderator')->name('admin.search.arts');
+
+// Admin Approve Arts
+
+Route::get('/admin/dashboard/approve/arts', 'ArtController@indexToApprove')->middleware('role:admin|moderator')->name('admin.index.approve.arts');
+Route::post('/admin/dashboard/approve/arts/{id}', 'ArtController@adminApprove')->middleware('role:admin|moderator')->name('admin.approve.art');
+
+
+// Admin / Contests
+
+Route::get('/admin/dashboard/contests/', 'ContestController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.contests');
+Route::delete('/admin/dashboard/contest/{id}', 'ContestController@adminDestroy')->middleware('role:admin|moderator')->name('admin.delete.contest');
+Route::get('/admin/dashboard/contest/{id}', 'ContestController@adminShow')->middleware('role:admin|moderator')->name('admin.show.contest');
+Route::put('/admin/dashboard/contest/{id}', 'ContestController@adminEdit')->middleware('role:admin|moderator')->name('admin.edit.contest');
+Route::post('/admin/dashboard/contest/', 'ContestController@adminAdd')->middleware('role:admin|moderator')->name('admin.add.contest');
+Route::post('/admin/dashboard/contests/search', 'ContestController@adminSearchContests')->middleware('role:admin|moderator')->name('admin.search.contests');
 
 
 // Admin / Tags
@@ -114,6 +117,7 @@ Route::post('/admin/dashboard/comment/', 'CommentController@adminAdd')->middlewa
 Route::post('/admin/dashboard/comments/search', 'CommentController@adminSearchcomments')->middleware('role:admin|moderator')->name('admin.search.comments');
 
 
+
 // Admin / Reports
 
 Route::get('/admin/dashboard/reports/', 'ReportController@adminIndex')->middleware('role:admin|moderator')->name('admin.index.reports');
@@ -124,15 +128,21 @@ Route::post('/admin/dashboard/report/', 'ReportController@adminAdd')->middleware
 Route::post('/admin/dashboard/report/search', 'ReportController@adminSearchReports')->middleware('role:admin|moderator')->name('admin.search.reports');
 
 
-// PreArts
+// Arts to get approved
+Route::get('/add/art', 'ArtController@create')->middleware('role:user')->name('create.art');
+Route::post('/add/art', 'ArtController@store')->middleware('role:user')->name('store.art');
 
-Route::get('/add/art', 'PreArtController@create')->name('create.preart');
-Route::post('/add/art', 'PreArtController@store')->name('store.preart');
+
+// Contest
+
+Route::get('/add/contest', 'ContestController@create')->name('create.contest');
+Route::post('/add/contest', 'ContestController@store')->name('store.contest');
 
 
 // Art
 
 Route::get('/art/{url}', 'ArtController@show')->name('show.art');
+
 
 
 // Users
@@ -143,9 +153,10 @@ Route::put('artist/{username}/setup', 'UserController@setupProfileRequest')->nam
 Route::get('artist/{username}/changepassword', 'UserController@changePasswordPage')->name('user.profile.password.show');
 Route::post('artist/{username}/changepassword', 'UserController@changePasswordRequest')->name('user.profile.password.request');
 
+
 // Tags
 
-Route::get('/tags', 'TagController@index')->name('index.tags');
+Route::get('/tags', 'TagController@index')->middleware('role:user')->name('index.tags');
 
 // Comments
 
@@ -155,3 +166,8 @@ Route::post('/comment/create/{encryptedId}', 'CommentController@store')->middlew
 // Reports
 
 Route::post('/reports/add/{type}', 'ReportController@store')->middleware('role:user')->name('add.report');
+
+
+// Get Tags AJAX
+
+Route::post('/suggest/tags/', 'TagController@suggestTags')->middleware('role:user')->name('suggest.tags');

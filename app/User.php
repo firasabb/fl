@@ -85,5 +85,38 @@ class User extends Authenticatable
     public function profile_picture($path){
         return Storage::disk('s3')->url($path);
     }
+
+    public function contests(){
+        return $this->hasMany('\App\Contest');
+    }
+
+
+    /**
+     * 
+     * Change status numbers to text and check if deleted or not
+     * 
+     */
+    public function statusToText(){
+
+        if($this->trashed()){
+            return 'deleted';
+        }
+        switch($this->status){
+
+            case 0:
+                return 'inactive';
+
+            case 1:
+                return 'active';
+            
+            case 2:
+                return 'blocked';
+
+            default:
+                return 'unknown';
+
+        }
+        return 'unknown';
+    }
     
 }

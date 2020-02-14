@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar_url');
             $table->text('bio')->nullable();
             $table->string('username')->unique();
+            $table->unsignedInteger('status')->default(1);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

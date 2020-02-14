@@ -17,5 +17,9 @@ class Type extends Model
         return $this->hasMany('\App\Art');
     }
 
+    public function contests(){
+        return $this->hasMany('\App\Contest');
+    }
+
 
 }

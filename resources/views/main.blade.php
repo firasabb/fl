@@ -20,7 +20,7 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{$art->title}}</h5>
-                            <img src="{{ Storage::cloud()->url($art->downloads->where('featured', 1)->first()->url) }}">
+                            <img src="{{ Storage::cloud()->url($art->downloads->where('featured', 1)) }}">
                             @if($art->description)
                                 <p class="card-text">{{$art->description}}</p>
                             @endif

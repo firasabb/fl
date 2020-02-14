@@ -6,13 +6,21 @@ use App\Art;
 use App\Category;
 use App\Tag;
 use App\Type;
+use App\Download;
+use App\Cover;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
 use Storage;
+use Auth;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 
 class ArtController extends Controller
 {
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -23,14 +31,30 @@ class ArtController extends Controller
         //
     }
 
+
     /**
+     * Display arts that are not approved yet.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexToApprove()
+    {
+        $arts = Art::where('status', 1)->orderBy('id', 'asc')->paginate(1);
+        $categories = Category::all();
+        $types = Type::all();
+        return view('admin.arts.indexToApprove', ['arts' => $arts, 'categories' => $categories, 'types' => $types]);
+    }
+
+        /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        $types = Type::all();
+        return view('arts.create', ['categories' => $categories, 'types' => $types]);
     }
 
     /**
@@ -39,56 +63,122 @@ class ArtController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:15|max:200',
+            'description' => 'string|max:500|nullable',
+            'categories' => 'required|array',
+            'categories.*' => 'integer',
+            'tags' => 'string|max:150',
+            'type' => 'required|string|exists:types,name',
+            'uploads' => 'required|array',
+            'uploads.*' => 'file|max:100000',
+            'featured' => 'file|max:20000|mimes:jpeg,bmp,png,mpeg4-generic,ogg,x-wav,x-msvideo,x-ms-wmv',
+            'cover' => 'file|mimes:jpeg,bmp,png|nullable'
+        ]);
+        if($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user = Auth::user();
+
+        if(!Arr::has(Storage::cloud()->directories(), 'downloads')){
+            Storage::cloud()->makeDirectory('downloads');
+        }
+        if(!Arr::has(Storage::cloud()->directories(), 'featured')){
+            Storage::cloud()->makeDirectory('featured');
+        }
+        if(!Arr::has(Storage::cloud()->directories(), 'covers')){
+            Storage::cloud()->makeDirectory('covers');
+        }
+
+
+        $type = Type::where('name', $request->type)->firstOrFail();
+
+        $unique = uniqid();
+
+        $art = new Art();
+        $art->title = $request->title;
+        $art->description = $request->description;
+        $art->user_id = $user->id;
+        $url = Str::slug($art->title, '-');
+        $checkIfUrlExists = Art::where('url', 'LIKE', $url)->first();
+        if($checkIfUrlExists){
+            $url = $url . '-' . $unique;
+        }
+        $art->url = $url;
+        if($user->hasAnyRole('admin', 'moderator')){
+            $art->status = 2;
+        }
+        $art->type()->associate($type);
+        $art->save();
+
+        $featured = $request->featured;
+
+        $download = new Download();
+        $download->name = $art->title;
+        $download->featured = 1;
+        $path = $featured->store('featured/' . $unique, 's3');
+        $download->url = $path;
+        $download->art()->associate($art);
+        $download->save();
+
+        $uploads = $request->uploads;
+        if($uploads){
+            foreach($uploads as $upload){
+                $download = new Download();
+                $download->name = $art->title;
+                $path = $upload->store('downloads/' . uniqid(), 's3');
+                $download->url = $path;
+                $art->downloads()->save($download);
+            }
+        }
+
+        $categories = $request->categories;
+        foreach($categories as $category){
+            $category = Category::findOrFail($category);
+            $art->categories()->attach($category);
+        }
+
+        $tags = $request->tags;
+        $tags = explode(', ', $tags);
+        foreach($tags as $tag){
+            $tag = Tag::Where('name', 'LIKE', $tag)->firstOrFail();
+            $art->tags()->attach($tag);
+        }
+
+        if($request->cover){
+            $cover = new Cover();
+            $uploadedCover = $request->cover;
+            $path = $uploadedCover->store('covers/' . $unique, 's3');
+            $cover->url = $path;
+            $cover->art()->associate($art);
+            $cover->save();
+        }
+
+        if($user->hasAnyRole('admin', 'moderator')){
+            return redirect()->route('admin.index.arts')->with('status', 'A New Art Has Been Created');
+        }
+
+        return redirect('/home')->with('status', 'Your Art Has Been Created! Once it is approved, it is going to be public...');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Art  $art
-     * @return \Illuminate\Http\Response
-     */
-    public function show($url)
-    {
-        $art = Art::where('url', $url)->firstOrFail();
-        
-        return view('art.show', ['art' => $art]);
-    }
+    /** 
+    *
+    * Approve the preart for users not admins
+    *
+    * @param Request
+    * @return Response
+    *
+    */
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Art $art
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Art $art)
-    {
-        //
-    }
+    public function adminApprove(Request $request, $id){
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Art  $art
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Art $art)
-    {
-        //
-    }
+        $this->editOrApprove($id, $request, 2);
+        return redirect('/admin/dashboard/approve/arts')->with('status', 'The Art has been approved!');
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Art  $art
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(art $art)
-    {
-        //
     }
 
 
@@ -122,40 +212,7 @@ class ArtController extends Controller
      */
     public function adminEdit(Request $request, $id)
     {
-        $art = Art::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|min:15|max:200',
-            'description' => 'string|max:500|nullable',
-            'categories' => 'required|array',
-            'categories.*' => 'integer',
-            'options' => 'array',
-            'options.*' => 'string|max:200',
-            'tags' => 'string|max:150',
-            'type_id' => 'integer'
-        ]);
-
-        if($validator->fails()){
-            return redirect()->route('admin.show.art', ['id' => $id])->withErrors($validator)->withInput();
-        } 
-
-        $art->title = $request->title;
-        $art->url = $request->url;
-        $art->description = $request->description;
-        $type = Type::findOrFail($request->type_id);
-        $art->type()->associate($type);
-        $art->categories()->sync($request->categories);
-        $tagsArr = array();
-        $tags = $request->tags;
-        $tags = explode(', ', $tags);
-        foreach($tags as $tag){
-            $tag = Tag::where('name', 'LIKE', $tag)->first();
-            array_push($tagsArr, $tag->id);
-        }
-        $art->tags()->sync($tagsArr);
-        //$art->options = $request->options;
-        $art->save();
-
+        $this->editOrApprove($id, $request);
         return redirect()->route('admin.show.art', ['id' => $id])->with('status', 'This category has been edited');
     }
 
@@ -219,5 +276,55 @@ class ArtController extends Controller
         return $this->adminIndex($arts);
     }
 
+
+
+    /**
+     * 
+     * Helper Method To Approve Or Edit The Art
+     * @param Integer id
+     * @param Integer status
+     * 
+     */
+    private function editOrApprove($id, $request, $status = null){
+
+        $art = Art::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:15|max:200',
+            'description' => 'string|max:500|nullable',
+            'categories' => 'required|array',
+            'categories.*' => 'integer',
+            'url' => ['string', Rule::unique('arts', 'url')->ignore($art->url, 'url')],
+            'tags' => 'string|max:150',
+            'type_id' => 'integer',
+            'upload' => 'array',
+            'uploads.*' => 'string|max:200'
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('admin.show.art', ['id' => $id])->withErrors($validator)->withInput();
+        } 
+
+        $art->title = $request->title;
+        $art->url = $request->url;
+        $art->description = $request->description;
+        $type = Type::findOrFail($request->type_id);
+        $art->type()->associate($type);
+        $art->categories()->sync($request->categories);
+        $tagsArr = array();
+        $tags = $request->tags;
+        $tags = explode(', ', $tags);
+        foreach($tags as $tag){
+            $tag = Tag::where('name', 'LIKE', $tag)->first();
+            array_push($tagsArr, $tag->id);
+        }
+        $art->tags()->sync($tagsArr);
+        //$art->options = $request->options;
+
+        if($status){
+            $art->status = $status;
+        }
+        $art->save();
+
+    }
 
 }

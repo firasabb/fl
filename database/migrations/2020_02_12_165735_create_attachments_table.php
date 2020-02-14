@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaggablesTable extends Migration
+class CreateAttachmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateTaggablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('taggables', function (Blueprint $table) {
+        Schema::create('attachments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer("tag_id");
-            $table->integer("taggable_id");
-            $table->string("taggable_type");
+            $table->string('url');
+            $table->unsignedBigInteger('contest_id');
             $table->timestamps();
-            $table->index('tag_id');
-            $table->index('taggable_id');
-            $table->index('taggable_type');
+
+            $table->foreign('contest_id')
+                    ->references('id')->on('contests')
+                    ->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateTaggablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taggables');
+        Schema::dropIfExists('attachments');
     }
 }

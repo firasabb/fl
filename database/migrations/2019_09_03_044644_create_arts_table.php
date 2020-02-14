@@ -17,6 +17,7 @@ class CreateArtsTable extends Migration
             $table->bigIncrements('id');
             $table->text('title');
             $table->text('url')->unique();
+            $table->unsignedInteger('status')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('type_id');
             $table->text('description')->nullable();
